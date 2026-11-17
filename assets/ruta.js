@@ -79,6 +79,9 @@
       title: "Proveedores", verb: "A quién comprarle todo, en un solo lugar",
       keywords: ["proveedores", "dónde comprar", "contacto", "tienda"] },
 
+    { id: "atencion-al-cliente", paso: 4, url: "atencion-al-cliente/",
+      title: "Atención al cliente", verb: "Recibir, vender, revisar, entregar y responder reclamos",
+      keywords: ["atención", "atencion", "cliente", "recepción", "recepcion", "guion", "mostrador", "venta", "precios", "escalera", "calidad", "lista de calidad", "inspección", "entrega", "cobro", "reseña", "reclamos", "quejas", "membresía", "casco", "lavador", "capacitación"] },
     { id: "pauta-meta", paso: 4, url: "pauta-meta/",
       title: "Pauta en Meta", verb: "Anuncios en Facebook e Instagram, de cero a publicado",
       keywords: ["pauta", "meta", "facebook", "instagram", "anuncios", "publicidad", "ads"] },

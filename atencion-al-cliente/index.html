@@ -1,0 +1,2273 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atención al cliente</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="El guion de atención de punta a punta: recibir, vender, revisar, entregar y responder reclamos.">
+<link rel="stylesheet" href="../assets/mapa.css">
+<script src="../assets/ruta.js" defer></script>
+<style>
+  /* Estilo Mónaco tipo Apple: blanco, Helvetica Neue, #f5f5f7 y dorado de marca */
+  :root {
+    --t:#1d1d1f; --t2:#424245; --g:#6e6e73; --s:#f5f5f7; --l:#e5e5ea;
+    --a:#c0a44d; --a-osc:#8a6d1f; --a-suave:#f8f3e4; --a-linea:#eadfbf;
+    --r:#b3261e; --r-suave:#fbeceb; --v:#1d7a46; --v-suave:#eaf5ee;
+    --wa:#d9fdd3; --wa-fondo:#efeae2;
+    --f:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color-scheme: light;
+  }
+  html, body { background:#fff; color:var(--t); font-family:var(--f) }
+  body { margin:0; font-size:17px; line-height:1.45; letter-spacing:-0.01em; overflow-x:hidden }
+  .rm-barra { display:none !important }
+  * { box-sizing:border-box }
+  a { color:var(--a-osc) }
+
+  /* Barra superior */
+  .barra-top { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:12px; height:49px;
+    padding:0 max(16px, env(safe-area-inset-left,0px)); background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(12px); -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--l); font-size:14px }
+  .barra-top > a { color:var(--t); text-decoration:none; font-weight:600; white-space:nowrap }
+  .barra-top .titulo { flex:1; min-width:0; text-align:center; font-weight:700; color:var(--t); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .barra-top button { font:inherit; font-size:14px; font-weight:600; color:var(--t); background:var(--s); border:0; border-radius:980px; padding:7px 14px; cursor:pointer; white-space:nowrap }
+  .barra-top button:hover { background:var(--l) }
+  .progreso { position:absolute; left:0; bottom:-1px; height:2px; background:var(--a); width:0; transition:width .2s }
+
+  /* Índice de secciones */
+  .indice { position:sticky; top:49px; z-index:15; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--l); overflow-x:auto; scrollbar-width:none }
+  .indice::-webkit-scrollbar { display:none }
+  .indice div { display:flex; gap:4px; max-width:1080px; margin:0 auto; padding:8px 16px; width:max-content; min-width:100% }
+  @media (min-width:1112px) { .indice div { width:auto; min-width:0 } }
+  .indice a { flex:none; padding:6px 12px; border-radius:980px; font-size:14px; font-weight:600; color:var(--t2); text-decoration:none }
+  .indice a.activo { background:var(--a-osc); color:#fff }
+
+  .sec { max-width:1080px; margin:0 auto; padding:56px max(16px, env(safe-area-inset-left,0px)) 56px; border-bottom:1px solid var(--l); scroll-margin-top:100px }
+  .buscable { scroll-margin-top:120px }
+  .kick { font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--a-osc); margin:0 0 10px }
+  h1, h2 { font-weight:800; letter-spacing:-0.025em; text-wrap:balance; margin:0 0 16px; border:0; padding:0; color:var(--t) }
+  h1 { font-size:clamp(38px, 7vw, 76px); line-height:1.02 }
+  h2 { font-size:clamp(30px, 4.6vw, 52px); line-height:1.05 }
+  h3 { font-size:20px; font-weight:800; margin:0 0 6px; letter-spacing:-0.01em }
+  h4 { font-size:13px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--g); margin:28px 0 10px }
+  .lead { font-size:clamp(19px, 2.2vw, 25px); line-height:1.3; color:var(--t2); max-width:34em; margin:0 0 28px }
+  .chico { font-size:14px; color:var(--g) }
+  p { margin:0 0 12px }
+  ul.lista { margin:0; padding-left:20px } ul.lista li { margin:0 0 6px }
+
+  .grid { display:grid; gap:14px }
+  .g2 { grid-template-columns:repeat(2, minmax(0,1fr)) }
+  .g3 { grid-template-columns:repeat(3, minmax(0,1fr)) }
+  .g4 { grid-template-columns:repeat(4, minmax(0,1fr)) }
+  @media (max-width:860px) { .g4 { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  @media (max-width:760px) { .g2, .g3 { grid-template-columns:1fr } }
+  @media (max-width:460px) { .g4 { grid-template-columns:1fr } }
+  .card { background:var(--s); border-radius:18px; padding:20px; min-width:0 }
+  .card p:last-child { margin:0 }
+  .card.oro { background:var(--a-suave) }
+  .card.mal { background:var(--r-suave) } .card.bien { background:var(--v-suave) }
+  .card.blanca { background:#fff; border:1px solid var(--l) }
+  .etq { display:inline-block; font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin:0 0 10px; color:var(--g) }
+  .mal .etq { color:var(--r) } .bien .etq { color:var(--v) } .oro .etq { color:var(--a-osc) }
+
+  /* Frase destacada (lo que se dice) */
+  .frase { position:relative; background:var(--a-suave); border:1px solid var(--a-linea); border-radius:20px 20px 20px 6px; padding:14px 18px;
+    font-size:19px; line-height:1.4; font-weight:500; color:var(--t); margin:0 0 10px; max-width:40em }
+  .frase::before { content:"Lo que dice"; display:block; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--a-osc); margin:0 0 4px }
+  .frase.sin-etq::before { display:none }
+  .frase .sub { display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--g); margin:0 0 4px }
+  .frase.wa { background:var(--wa); border-color:#bfe8b8; border-radius:18px 18px 6px 18px; margin-left:auto }
+  .frase.wa::before { content:"WhatsApp"; color:#1d6b3a }
+  .frase.cliente { background:var(--s); border-color:var(--l); font-style:italic }
+  .frase.cliente::before { content:"El cliente dice"; color:var(--g) }
+  .m { background:#fff3cf; color:#6b5313; border-radius:5px; padding:0 3px; font-weight:600; white-space:normal }
+  .m.lleno { background:#e9f6ee; color:#14532d }
+
+  .hace { background:#fff; border:1px solid var(--l); border-radius:16px; padding:14px 18px; margin:0 0 10px }
+  .hace > b { display:block; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t2); margin:0 0 6px }
+  .hace ul { margin:0; padding-left:18px } .hace li { margin:0 0 4px } .hace li:last-child { margin:0 }
+  .error-comun { border:1px solid #f1c7c3; background:var(--r-suave); border-radius:16px; padding:12px 18px; margin:0 0 10px; font-size:16px }
+  .error-comun > b { display:block; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--r); margin:0 0 4px }
+  .porque { font-size:15px; color:var(--t2); border-top:1px dashed var(--l); padding-top:10px; margin-top:6px }
+  .porque b { color:var(--t) }
+
+  .silencio { display:flex; align-items:center; gap:14px; border:2px dashed var(--a); background:#fffdf6; border-radius:16px; padding:14px 18px; margin:6px 0 12px }
+  .silencio .ic { font-size:28px; line-height:1; flex:none }
+  .silencio b { display:block; font-size:17px; color:var(--a-osc) }
+  .silencio span { font-size:15px; color:var(--t2) }
+  .silencio .puntos i { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--a); margin:0 2px; animation:pulso 1.4s infinite ease-in-out }
+  .silencio .puntos i:nth-child(2) { animation-delay:.2s } .silencio .puntos i:nth-child(3) { animation-delay:.4s }
+  .silencio.grande { border-width:3px; padding:18px 20px }
+  .silencio.grande b { font-size:20px }
+  @keyframes pulso { 0%,80%,100% { opacity:.25 } 40% { opacity:1 } }
+
+  /* Buscador */
+  .buscador { position:relative; max-width:640px; margin:0 0 24px }
+  .buscador input { width:100%; font:inherit; font-size:18px; padding:14px 18px 14px 46px; border-radius:14px; border:1px solid var(--l); background:var(--s); color:var(--t) }
+  .buscador input:focus { outline:2px solid var(--a); background:#fff; border-color:transparent }
+  .buscador svg { position:absolute; left:16px; top:17px; width:20px; height:20px; stroke:var(--g); fill:none; stroke-width:2 }
+  .resultados { list-style:none; margin:8px 0 0; padding:0; background:#fff; border:1px solid var(--l); border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.08); overflow:hidden }
+  .resultados:empty { display:none }
+  .resultados button { all:unset; box-sizing:border-box; display:block; width:100%; padding:12px 16px; cursor:pointer; border-bottom:1px solid var(--l) }
+  .resultados li:last-child button { border:0 }
+  .resultados button:hover, .resultados button:focus-visible { background:var(--a-suave) }
+  .resultados b { display:block; font-size:16px }
+  .resultados small { display:block; font-size:13px; color:var(--g); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .resultados .vacio { padding:12px 16px; color:var(--g); font-size:15px }
+  .destello { animation:destello 1.6s ease }
+  @keyframes destello { 0%,40% { box-shadow:0 0 0 4px var(--a) } 100% { box-shadow:0 0 0 0 transparent } }
+  .atajos { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 28px }
+  .atajos a { font-size:14px; font-weight:600; color:var(--t2); background:var(--s); border-radius:980px; padding:7px 14px; text-decoration:none }
+  .atajos a:hover { background:var(--a-suave); color:var(--a-osc) }
+
+  /* Datos del lavadero */
+  details.datos { background:var(--s); border-radius:18px; padding:0; margin:24px 0 0 }
+  details.datos summary { cursor:pointer; list-style:none; padding:16px 20px; font-weight:700; display:flex; justify-content:space-between; gap:12px }
+  details.datos summary::-webkit-details-marker { display:none }
+  details.datos summary::after { content:"+"; font-size:22px; line-height:1; color:var(--a-osc) }
+  details.datos[open] summary::after { content:"−" }
+  .datos-cuerpo { padding:0 20px 20px }
+  .campos { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px }
+  @media (max-width:760px) { .campos { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  @media (max-width:420px) { .campos { grid-template-columns:1fr } }
+  .campos label { display:block; font-size:13px; font-weight:600; color:var(--t2) }
+  .campos input { display:block; width:100%; margin-top:4px; font:inherit; font-size:16px; padding:9px 12px; border-radius:10px; border:1px solid var(--l); background:#fff; color:var(--t) }
+  .campos input:focus { outline:2px solid var(--a); border-color:transparent }
+
+  /* Botones */
+  .btn { font:inherit; font-size:15px; font-weight:600; border:0; border-radius:980px; padding:10px 18px; cursor:pointer; background:var(--a-osc); color:#fff; text-decoration:none; display:inline-flex; align-items:center; gap:6px }
+  .btn:hover { background:#735a17 }
+  .btn.gris { background:var(--s); color:var(--t) } .btn.gris:hover { background:var(--l) }
+  .btn:disabled { opacity:.4; cursor:default }
+  .copiar { font:inherit; font-size:13px; font-weight:700; color:var(--a-osc); background:var(--a-suave); border:0; border-radius:980px; padding:6px 12px; cursor:pointer; white-space:nowrap }
+  .copiar:hover { background:#f1e6c6 }
+  .copiar.ok { background:var(--v); color:#fff }
+  .acciones { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0 }
+
+  /* Recorrido de la moto */
+  .recorrido { list-style:none; margin:0 0 18px; padding:0; display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:8px; counter-reset:r }
+  .recorrido button { all:unset; box-sizing:border-box; cursor:pointer; display:flex; flex-direction:column; gap:6px; height:100%; width:100%;
+    padding:14px; border-radius:16px; background:var(--s); transition:background .2s, transform .2s; position:relative }
+  .recorrido button:hover { transform:translateY(-2px) }
+  .recorrido button:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .recorrido .n { width:30px; height:30px; border-radius:50%; background:#fff; color:var(--a-osc); font-weight:800; display:flex; align-items:center; justify-content:center; font-size:14px }
+  .recorrido b { font-size:16px; line-height:1.15 }
+  .recorrido small { font-size:13px; color:var(--g); line-height:1.25 }
+  .recorrido button[aria-pressed="true"] { background:var(--a-osc); color:#fff }
+  .recorrido button[aria-pressed="true"] small { color:rgba(255,255,255,.85) }
+  .recorrido li.clave button { box-shadow:inset 0 0 0 2px var(--a) }
+  .recorrido li.clave button[aria-pressed="true"] { box-shadow:none }
+  @media (max-width:860px) { .recorrido { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  .ficha { background:var(--s); border-radius:22px; padding:22px; animation:entra .25s ease }
+  .ficha-cab { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 14px }
+  .ficha-cab h3 { font-size:26px; margin:0 }
+  .ficha-cab span { font-size:13px; font-weight:700; color:var(--a-osc) }
+  .ficha .btn.gris { background:#fff } .ficha .btn.gris:hover { background:var(--l) }
+  .ficha .cols { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px; align-items:start }
+  @media (max-width:760px) { .ficha .cols { grid-template-columns:1fr } }
+  @keyframes entra { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+
+  /* Tono */
+  .principio { all:unset; box-sizing:border-box; cursor:pointer; display:flex; flex-direction:column; gap:8px; background:var(--s); border-radius:18px; padding:20px; min-height:170px; transition:background .2s }
+  .principio:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .principio .num { font-size:40px; font-weight:800; color:var(--a-osc); line-height:1; letter-spacing:-.03em }
+  .principio b { font-size:19px; line-height:1.2 }
+  .principio .mas { display:none; font-size:15px; color:var(--t2) }
+  .principio .ver { margin-top:auto; font-size:13px; font-weight:700; color:var(--a-osc) }
+  .principio[aria-expanded="true"] { background:var(--a-suave) }
+  .principio[aria-expanded="true"] .mas { display:block }
+  .principio[aria-expanded="true"] .ver { display:none }
+  .si-no { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px }
+  @media (max-width:520px) { .si-no { grid-template-columns:1fr } }
+  .palabras { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 0 }
+  .palabras span { background:#fff; border-radius:980px; padding:4px 10px; font-size:14px; font-weight:600 }
+  .bien .palabras span { color:var(--v) } .mal .palabras span { color:var(--r); text-decoration:line-through }
+
+  /* Simulador de recepción */
+  .sim { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:24px; align-items:start }
+  @media (max-width:900px) { .sim { grid-template-columns:1fr } }
+  .camino-ini { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:0 0 18px }
+  @media (max-width:760px) { .camino-ini { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  .camino-ini button { all:unset; box-sizing:border-box; cursor:pointer; background:var(--s); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:4px; transition:background .2s }
+  .camino-ini button:hover { background:var(--a-suave) }
+  .camino-ini button:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .camino-ini button[aria-pressed="true"] { background:var(--a-osc); color:#fff }
+  .camino-ini button[aria-pressed="true"] small { color:rgba(255,255,255,.85) }
+  .camino-ini b { font-size:16px } .camino-ini small { font-size:13px; color:var(--g); line-height:1.25 }
+  .pantalla { background:#fff; border:1px solid var(--l); border-radius:24px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,.05); min-width:0 }
+  .pantalla .anim { animation:entra .25s ease }
+  .nodo-cab { display:flex; align-items:center; gap:10px; margin:0 0 14px }
+  .nodo-num { min-width:32px; height:32px; padding:0 8px; border-radius:10px; background:var(--a-osc); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; flex:none }
+  .nodo-num.aparte { background:var(--s); color:var(--t2) }
+  .nodo-num.fin { background:var(--v) }
+  .nodo-cab h3 { margin:0; font-size:22px; line-height:1.2 }
+  .escalera-mini { display:flex; gap:6px; margin:0 0 14px }
+  .escalera-mini span { flex:1; text-align:center; font-size:12px; font-weight:700; padding:6px 4px; border-radius:8px; background:var(--s); color:var(--g) }
+  .escalera-mini span.hecho { background:var(--a-suave); color:var(--a-osc) }
+  .escalera-mini span.aqui { background:var(--a-osc); color:#fff }
+  .ops { margin:18px 0 0; display:grid; gap:8px }
+  .ops .opl { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--g); margin:0 0 2px }
+  .op { all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; padding:14px 16px; border-radius:14px;
+    border:1.5px solid var(--l); background:#fff; font-size:16px; font-weight:600; transition:border-color .15s, background .15s }
+  .op::after { content:"→"; margin-left:auto; color:var(--g) }
+  .op:hover { border-color:var(--a); background:var(--a-suave) }
+  .op:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .op .ico { flex:none; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; background:var(--s); color:var(--t2) }
+  .op.ok .ico { background:var(--v-suave); color:var(--v) }
+  .op.obj .ico { background:var(--r-suave); color:var(--r) }
+  .op.fin { background:var(--s) }
+  .nav-sim { display:flex; gap:8px; margin:18px 0 0; padding-top:14px; border-top:1px solid var(--l) }
+  .rastro { display:flex; flex-wrap:wrap; gap:4px; margin:0 0 14px; padding:0; list-style:none }
+  .rastro button { all:unset; cursor:pointer; font-size:12px; font-weight:600; color:var(--t2); background:var(--s); border-radius:980px; padding:3px 9px }
+  .rastro button:hover { background:var(--a-suave) }
+  .rastro button:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .rastro li:last-child button { background:var(--a-suave); color:var(--a-osc) }
+  .lateral { position:sticky; top:120px; display:grid; gap:12px }
+  @media (max-width:900px) { .lateral { position:static } }
+  .lateral .card h3 { font-size:17px }
+  .mapa-caminos { list-style:none; margin:0; padding:0; display:grid; gap:6px; font-size:15px }
+  .mapa-caminos li { display:flex; gap:8px; align-items:baseline }
+  .mapa-caminos li > b { flex:none; width:22px; height:22px; border-radius:6px; background:#fff; color:var(--a-osc); font-size:12px; display:inline-flex; align-items:center; justify-content:center }
+
+  /* Escalera */
+  .escalera { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; align-items:end; margin:0 0 20px }
+  .peldano { background:var(--s); border-radius:18px; padding:18px; display:flex; flex-direction:column; gap:6px }
+  .peldano:nth-child(1) { min-height:170px } .peldano:nth-child(2) { min-height:220px; background:var(--a-suave) } .peldano:nth-child(3) { min-height:270px; background:#f1e6c6 }
+  .peldano .esc { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--a-osc) }
+  .peldano b { font-size:20px; line-height:1.15 }
+  .peldano .precio { margin-top:auto; font-size:15px; font-weight:700 }
+  .peldano .sh { font-size:13px; color:var(--a-osc); font-weight:700 }
+  @media (max-width:640px) { .escalera { grid-template-columns:1fr } .peldano:nth-child(n) { min-height:0 } }
+  .flecha-sube { text-align:center; font-size:14px; font-weight:700; color:var(--a-osc); margin:-8px 0 20px }
+  .tabla { width:100%; border-collapse:collapse; font-size:15px; background:#fff; border-radius:14px; overflow:hidden }
+  .tabla th, .tabla td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--l); vertical-align:top }
+  .tabla th { font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--g); background:var(--s) }
+  .tabla tr:last-child td { border-bottom:0 }
+  .tabla-env { overflow-x:auto; border:1px solid var(--l); border-radius:14px }
+  .objs { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:10px }
+  .objs .obj { all:unset; box-sizing:border-box; cursor:pointer; background:var(--r-suave); border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:6px }
+  .objs .obj:hover { background:#f7dcd9 }
+  .objs .obj:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .objs .obj b { font-size:17px } .objs .obj small { font-size:14px; color:var(--t2) } .objs .obj span { font-size:13px; font-weight:700; color:var(--r); margin-top:auto }
+  .qa { display:grid; gap:8px }
+  .qa details { background:var(--s); border-radius:14px; padding:0 }
+  .qa summary { cursor:pointer; padding:14px 16px; font-weight:700; list-style:none }
+  .qa summary::-webkit-details-marker { display:none }
+  .qa summary::before { content:"+ "; color:var(--a-osc) }
+  .qa details[open] summary::before { content:"− " }
+  .qa details p { padding:0 16px 14px; margin:0 }
+
+  /* Inspección */
+  .puntos8 { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px }
+  @media (max-width:760px) { .puntos8 { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  .p8 { all:unset; box-sizing:border-box; cursor:pointer; background:var(--s); border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:6px; min-height:120px; transition:background .2s }
+  .p8:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .p8 .n { font-size:13px; font-weight:800; color:var(--a-osc) }
+  .p8 b { font-size:17px; line-height:1.2 }
+  .p8 small { display:none; font-size:14px; color:var(--t2) }
+  .p8[aria-pressed="true"] { background:var(--v-suave) }
+  .p8[aria-pressed="true"] small { display:block }
+  .p8[aria-pressed="true"] .n::after { content:" · revisado ✓"; color:var(--v) }
+  .contador-8 { font-weight:700; color:var(--a-osc); margin:12px 0 0 }
+  ol.pasos { list-style:none; margin:0; padding:0; display:grid; gap:12px; counter-reset:ps }
+  ol.pasos > li { display:grid; grid-template-columns:34px minmax(0,1fr); gap:12px; align-items:start; counter-increment:ps }
+  ol.pasos > li::before { content:counter(ps); width:28px; height:28px; border-radius:50%; background:var(--a-osc); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; margin-top:1px }
+  .regla { border-radius:18px; padding:18px 22px; background:var(--t); color:#fff; font-size:19px; font-weight:700; line-height:1.3; margin:20px 0 }
+  .regla small { display:block; font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--a); margin:0 0 6px }
+
+  /* Lavado paso a paso */
+  .video-caja { position:relative; width:100%; aspect-ratio:16 / 9; border-radius:20px; overflow:hidden; background:#000; scroll-margin-top:120px }
+  .video-caja iframe { position:absolute; inset:0; width:100%; height:100%; border:0 }
+  .video-portada { all:unset; box-sizing:border-box; position:absolute; inset:0; cursor:pointer; display:block }
+  .video-portada img { width:100%; height:100%; object-fit:cover; display:block }
+  .video-portada::after { content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 55%) }
+  .video-portada .play { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center; z-index:1; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:transform .2s }
+  .video-portada:hover .play { transform:translate(-50%,-50%) scale(1.06) }
+  .video-portada .play svg { width:28px; height:28px; fill:var(--a-osc); margin-left:4px }
+  .video-portada .rotulo { position:absolute; left:16px; right:16px; bottom:14px; z-index:1; color:#fff; font-weight:700; font-size:16px; line-height:1.25 }
+  .video-portada .rotulo small { display:block; font-size:13px; font-weight:600; opacity:.85 }
+  .video-portada:focus-visible { outline:3px solid var(--a); outline-offset:-3px }
+  .capitulos { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 0; padding:0; list-style:none }
+  .capitulos button { font:inherit; font-size:14px; font-weight:600; border:1px solid var(--l); background:#fff; color:var(--t2); border-radius:980px; padding:7px 12px; cursor:pointer; text-align:left; max-width:100% }
+  .capitulos button b { color:var(--a-osc); font-variant-numeric:tabular-nums; margin-right:4px }
+  .capitulos button:hover { border-color:var(--a); background:var(--a-suave) }
+  .capitulos button[aria-pressed="true"] { background:var(--a-osc); border-color:var(--a-osc); color:#fff }
+  .capitulos button[aria-pressed="true"] b { color:#fff }
+  .pasos-l { display:grid; gap:10px }
+  details.paso-l { background:var(--s); border-radius:18px; scroll-margin-top:120px }
+  details.paso-l > summary { cursor:pointer; list-style:none; padding:14px 18px; display:grid; grid-template-columns:34px minmax(0,1fr) 18px; gap:12px; align-items:center }
+  details.paso-l > summary::-webkit-details-marker { display:none }
+  details.paso-l > summary::after { content:"+"; font-size:22px; line-height:1; color:var(--a-osc); text-align:right }
+  details.paso-l[open] > summary::after { content:"−" }
+  details.paso-l > summary:focus-visible { outline:2px solid var(--a); outline-offset:2px; border-radius:18px }
+  details.paso-l.cero { background:var(--a-suave) }
+  .paso-l .pn { width:34px; height:34px; border-radius:50%; background:var(--a-osc); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center }
+  .paso-l summary h3 { margin:0; font-size:18px; line-height:1.2 }
+  .paso-l summary small { display:block; font-size:13px; font-weight:700; color:var(--g); margin-top:2px; font-variant-numeric:tabular-nums }
+  .paso-l .cuerpo { padding:0 18px 18px }
+  .salto { font:inherit; font-size:14px; font-weight:700; border:0; border-radius:980px; padding:8px 14px; cursor:pointer; background:var(--a-osc); color:#fff; display:inline-flex; gap:6px; align-items:center; margin:0 0 12px; font-variant-numeric:tabular-nums }
+  .salto:hover { background:#735a17 }
+  .sin-video { display:inline-block; font-size:13px; font-weight:700; color:var(--a-osc); background:#fff; border-radius:980px; padding:7px 12px; margin:0 0 12px }
+  .dato-l { font-size:15px; color:var(--t2); background:#fff; border-radius:14px; padding:10px 14px; margin:0 0 10px }
+  .dato-l b { color:var(--t) }
+  .revisa { border:1px solid #bfe0cb; background:var(--v-suave); border-radius:16px; padding:12px 18px; font-size:16px; margin:0 }
+  .revisa > b { display:block; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--v); margin:0 0 4px }
+
+  /* Lista de calidad */
+  .hoja-lista { background:#fff; border:1px solid var(--l); border-radius:22px; padding:22px; }
+  .hl-cab { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin:0 0 14px }
+  .hl-cab h3 { margin:0; font-size:22px }
+  .hl-campos { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; margin:0 0 14px }
+  @media (max-width:640px) { .hl-campos { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  .hl-campos label { font-size:12px; font-weight:700; color:var(--g); text-transform:uppercase; letter-spacing:.08em }
+  .hl-campos input { display:block; width:100%; font:inherit; font-size:16px; border:0; border-bottom:1px solid var(--l); padding:6px 0; background:transparent; color:var(--t); border-radius:0 }
+  .hl-campos input:focus { outline:none; border-bottom-color:var(--a) }
+  .contador { position:sticky; top:104px; z-index:5; display:flex; align-items:center; gap:14px; background:rgba(255,255,255,.95); border:1px solid var(--l); border-radius:16px; padding:10px 14px; margin:0 0 14px }
+  .contador .num { font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap }
+  .contador .barra { flex:1; height:8px; background:var(--s); border-radius:8px; overflow:hidden; min-width:40px }
+  .contador .barra i { display:block; height:100%; width:0; background:var(--a); transition:width .2s }
+  .contador.listo .barra i { background:var(--v) }
+  .contador .estado { font-size:14px; font-weight:700; color:var(--r); white-space:nowrap }
+  .contador.listo .estado { color:var(--v) }
+  @media (max-width:520px) { .contador .estado { display:none } }
+  .bloque-l { margin:0 0 14px }
+  .bloque-l h5 { font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--a-osc); margin:0 0 6px; display:flex; justify-content:space-between }
+  .bloque-l.seguridad h5 { color:var(--r) }
+  .items { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px }
+  @media (max-width:700px) { .items { grid-template-columns:1fr } }
+  .items label { display:grid; grid-template-columns:26px minmax(0,1fr); gap:10px; align-items:start; padding:10px 12px; border-radius:12px; background:var(--s); cursor:pointer; font-size:15px; line-height:1.3 }
+  .items input { width:22px; height:22px; margin:0; accent-color:var(--v); cursor:pointer }
+  .items label:has(input:checked) { background:var(--v-suave) }
+  .seguridad .items label { background:var(--r-suave) }
+  .seguridad .items label:has(input:checked) { background:var(--v-suave) }
+  .items small { display:block; color:var(--g); font-size:13px; margin-top:2px }
+  .items .aplica { font-size:11px; font-weight:800; color:var(--a-osc); text-transform:uppercase; letter-spacing:.06em }
+  .resultado-lista { border-radius:16px; padding:14px 18px; font-weight:700; margin:6px 0 0; background:var(--r-suave); color:var(--r) }
+  .resultado-lista.pasa { background:var(--v-suave); color:var(--v) }
+  .pie-lista { display:none }
+
+  /* Tiempos */
+  .tiempos { display:grid; gap:6px }
+  .t-fila { display:grid; grid-template-columns:minmax(0,1fr) 72px; gap:10px; align-items:center; font-size:15px }
+  .t-fila .barra { grid-column:1 / -1; height:8px; border-radius:8px; background:var(--s); overflow:hidden }
+  .t-fila .barra i { display:block; height:100%; background:var(--a) }
+  .t-fila b { text-align:right; font-variant-numeric:tabular-nums }
+
+  /* Entrega */
+  .linea-e { list-style:none; margin:0; padding:0; display:grid; gap:0; counter-reset:e }
+  .linea-e > li { display:grid; grid-template-columns:44px minmax(0,1fr); gap:16px; position:relative; padding:0 0 28px }
+  .linea-e > li::before { content:attr(data-n); width:40px; height:40px; border-radius:50%; background:var(--a-osc); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; position:relative; z-index:1 }
+  .linea-e > li::after { content:""; position:absolute; left:19px; top:40px; bottom:0; width:2px; background:var(--a-linea) }
+  .linea-e > li:last-child::after { display:none }
+  .linea-e .quien { font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--g); margin:0 0 6px }
+  .linea-e h3 { margin:8px 0 6px }
+  .decide { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px }
+  .decide button { font:inherit; font-size:14px; font-weight:600; border:1px solid var(--l); background:#fff; color:var(--t2); border-radius:980px; padding:7px 14px; cursor:pointer }
+  .decide button[aria-pressed="true"] { background:var(--a-osc); border-color:var(--a-osc); color:#fff }
+
+  /* Segmentos */
+  .seg { display:inline-flex; flex-wrap:wrap; background:var(--s); border-radius:12px; padding:3px; gap:2px; margin:0 0 20px }
+  .seg button { font:inherit; font-size:15px; font-weight:600; border:0; background:transparent; color:var(--t2); padding:8px 16px; border-radius:9px; cursor:pointer }
+  .seg button[aria-selected="true"] { background:#fff; color:var(--t); box-shadow:0 1px 3px rgba(0,0,0,.12) }
+  .panel[hidden] { display:none }
+
+  /* Reclamos */
+  .plantilla { background:#fff; border:1px solid var(--l); border-radius:18px; padding:16px 18px; display:flex; flex-direction:column; gap:8px; min-width:0 }
+  .plantilla .cab { display:flex; justify-content:space-between; align-items:center; gap:10px }
+  .plantilla .cab span { font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--g) }
+  .plantilla .texto { font-size:17px; line-height:1.4; margin:0 }
+  .plantilla.publico { border-color:var(--a-linea) }
+  .chat { background:var(--wa-fondo); border-radius:20px; padding:14px; display:flex; flex-direction:column; gap:8px; max-width:440px }
+  .burbuja { max-width:88%; padding:9px 13px; border-radius:18px; font-size:15px; line-height:1.35 }
+  .burbuja.yo { align-self:flex-end; background:var(--wa); border-bottom-right-radius:6px }
+  .burbuja.el { align-self:flex-start; background:#fff; border-bottom-left-radius:6px }
+  .casos { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:10px; margin:0 0 16px }
+  .caso { all:unset; box-sizing:border-box; cursor:pointer; background:#fff; border:1px solid var(--l); border-radius:18px; padding:14px; display:flex; gap:10px; align-items:flex-start; transition:border-color .2s, background .2s }
+  .caso:hover { border-color:var(--a) }
+  .caso:focus-visible { outline:2px solid var(--a); outline-offset:2px }
+  .caso[aria-pressed="true"] { border-color:var(--a-osc); background:var(--a-suave) }
+  .caso .av { flex:none; width:32px; height:32px; border-radius:50%; background:#bbb; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center }
+  .caso b { display:block; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--a-osc); margin:0 0 2px }
+  .caso span.txt { font-size:15px; line-height:1.3 }
+  .estrellas { color:#e0a400; font-size:12px; letter-spacing:1px }
+  .respuesta { animation:entra .25s ease }
+  .nunca { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; counter-reset:nn }
+  @media (max-width:700px) { .nunca { grid-template-columns:1fr } }
+  .nunca li { counter-increment:nn; display:grid; grid-template-columns:30px minmax(0,1fr); gap:10px; background:var(--r-suave); border-radius:14px; padding:12px 14px; font-size:15px }
+  .nunca li::before { content:counter(nn, decimal-leading-zero); font-weight:800; color:var(--r); font-size:14px }
+  .nunca.verde li { background:var(--s) } .nunca.verde li::before { color:var(--a-osc) }
+
+  /* Rúbrica */
+  .rub-cab { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr); gap:10px; margin:0 0 16px }
+  @media (max-width:640px) { .rub-cab { grid-template-columns:1fr 1fr } .rub-cab .nombre { grid-column:1 / -1 } }
+  .rub-cab label { font-size:12px; font-weight:700; color:var(--g); text-transform:uppercase; letter-spacing:.08em }
+  .rub-cab input, .rub-cab select { display:block; width:100%; margin-top:4px; font:inherit; font-size:16px; padding:9px 12px; border-radius:10px; border:1px solid var(--l); background:#fff; color:var(--t) }
+  .rub-grupo { margin:0 0 16px }
+  .rub-grupo h5 { font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--a-osc); margin:0 0 6px }
+  .rub-item { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center; padding:12px 14px; border-radius:14px; background:var(--s); margin:0 0 6px }
+  .rub-item b { font-size:16px } .rub-item small { display:block; font-size:14px; color:var(--t2); margin-top:2px }
+  .rub-item .estrella { color:var(--a-osc); font-weight:800 }
+  .rub-item.si { background:var(--v-suave) } .rub-item.no { background:var(--r-suave) }
+  .sino { display:flex; background:#fff; border-radius:10px; padding:3px; gap:2px }
+  .sino button { font:inherit; font-size:14px; font-weight:700; border:0; background:transparent; color:var(--t2); padding:7px 14px; border-radius:8px; cursor:pointer }
+  .sino button.s[aria-pressed="true"] { background:var(--v); color:#fff }
+  .sino button.n[aria-pressed="true"] { background:var(--r); color:#fff }
+  @media (max-width:520px) { .rub-item { grid-template-columns:1fr } .sino { justify-self:start } }
+  .marcador { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; margin:0 0 14px }
+  @media (max-width:640px) { .marcador { grid-template-columns:1fr } }
+  .marcador .card b { display:block; font-size:32px; letter-spacing:-.02em; font-variant-numeric:tabular-nums }
+  .veredicto { border-radius:18px; padding:18px 22px; font-size:20px; font-weight:800; background:var(--s); color:var(--t2) }
+  .veredicto.aprobado { background:var(--v-suave); color:var(--v) }
+  .veredicto.repasar { background:var(--r-suave); color:var(--r) }
+  .veredicto small { display:block; font-size:15px; font-weight:500; color:var(--t2); margin-top:6px }
+  .sim-tabs { display:inline-flex; background:var(--s); border-radius:12px; padding:3px; gap:2px; margin:0 0 14px }
+  .sim-tabs button { font:inherit; font-size:15px; font-weight:600; border:0; background:transparent; color:var(--t2); padding:8px 16px; border-radius:9px; cursor:pointer }
+  .sim-tabs button[aria-selected="true"] { background:#fff; color:var(--t); box-shadow:0 1px 3px rgba(0,0,0,.12) }
+  .lavador-extra[hidden], .rub-grupo[hidden], .marcador[hidden], .sim-tabs[hidden] { display:none }
+
+  .cierre-frase { font-size:clamp(26px, 4vw, 44px); font-weight:800; letter-spacing:-0.02em; line-height:1.1; margin:0 0 8px }
+  .pie { max-width:1080px; margin:0 auto; padding:24px 16px 48px; color:var(--g); font-size:14px; text-align:left; border:0 }
+
+  @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important } }
+
+  /* Impresión */
+  @page { size:A4; margin:12mm }
+  @media print {
+    html, body { font-size:11pt }
+    .barra-top, .indice, .acciones, .copiar, .buscador, .atajos, .nav-sim, .camino-ini, details.datos, .contador, .video-caja, .capitulos, .salto { display:none !important }
+    details.paso-l { break-inside:avoid }
+    .sec { padding:18px 0; border:0; break-inside:auto }
+    .frase, .card, .plantilla { break-inside:avoid }
+    .principio .mas, .p8 small { display:block !important }
+    /* Página completa: pestañas y respuestas ocultas salen todas */
+    html:not(.imp-lista):not(.imp-rub) .panel[hidden], html:not(.imp-lista):not(.imp-rub) .respuesta[hidden] { display:block !important }
+    .seg, .sim-tabs, .principio .ver { display:none !important }
+    /* Solo la lista de calidad, en una hoja */
+    html.imp-lista main > *:not(#calidad), html.imp-lista .pie, html.imp-lista #calidad > *:not(.hoja-lista) { display:none !important }
+    html.imp-lista #calidad { padding:0 }
+    html.imp-lista .hoja-lista { border:0; padding:0; font-size:9pt }
+    html.imp-lista .hl-cab h3 { font-size:14pt }
+    html.imp-lista .hl-cab .chico { display:none }
+    html.imp-lista .hl-campos { grid-template-columns:repeat(4, 1fr); gap:4px 12px; margin:0 0 6px }
+    html.imp-lista .hl-campos label { font-size:7pt }
+    html.imp-lista .hl-campos input { font-size:9pt; padding:2px 0; border-bottom:1px solid #999 }
+    html.imp-lista .bloque-l { margin:0 0 5px; break-inside:avoid }
+    html.imp-lista .bloque-l h5 { font-size:7.5pt; margin:0 0 2px }
+    html.imp-lista .items { grid-template-columns:1fr 1fr; gap:2px 10px }
+    html.imp-lista .items label { background:none !important; padding:2px 0; font-size:8.5pt; grid-template-columns:14px 1fr; gap:6px; border-bottom:1px solid #eee; border-radius:0 }
+    html.imp-lista .items input { width:11px; height:11px }
+    html.imp-lista .items small { font-size:7pt }
+    html.imp-lista .resultado-lista { display:none }
+    html.imp-lista .pie-lista { display:block; font-size:9pt; margin-top:8px; line-height:2 }
+    /* Solo la rúbrica */
+    html.imp-rub main > *:not(#rubrica), html.imp-rub .pie, html.imp-rub #rubrica > *:not(.hoja-rub) { display:none !important }
+    html.imp-rub #rubrica { padding:0 }
+    html.imp-rub .rub-item { padding:4px 8px; margin:0 0 3px; font-size:9pt }
+    html.imp-rub .rub-item small { font-size:8pt }
+    html.imp-rub .sim-tabs { display:none }
+  }
+</style>
+</head>
+<body data-tarea="atencion-al-cliente">
+
+<header class="barra-top">
+  <a href="../">← Mapa</a>
+  <span class="titulo">Atención al cliente</span>
+  <button type="button" id="abrir-buscar" aria-label="Buscar en el guion">Buscar</button>
+  <span class="progreso" id="progreso" aria-hidden="true"></span>
+</header>
+
+<nav class="indice" aria-label="Secciones">
+  <div>
+    <a href="#recorrido">Recorrido</a>
+    <a href="#tono">Tono</a>
+    <a href="#recepcion">Recepción</a>
+    <a href="#escalera">Precios</a>
+    <a href="#inspeccion">Inspección</a>
+    <a href="#lavado">Lavado</a>
+    <a href="#calidad">Calidad</a>
+    <a href="#entrega">Entrega</a>
+    <a href="#reclamos">Reclamos</a>
+    <a href="#reglas">Reglas</a>
+    <a href="#rubrica">Evaluación</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="sec" id="inicio">
+  <p class="kick">Paso 4 · Conseguir clientes</p>
+  <h1>Atención al cliente,<br>de punta a punta</h1>
+  <p class="lead">Un solo guion para todo el equipo: desde que la moto entra hasta el WhatsApp del día siguiente. Qué se dice, qué se hace y qué error evitar en cada paso.</p>
+
+  <div class="buscador" role="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <label for="buscar" class="chico" style="position:absolute;left:-9999px">Buscar en el guion</label>
+    <input id="buscar" type="search" placeholder="¿Qué necesita? Ej.: está caro, casco, reseña" autocomplete="off" enterkeyhint="search">
+    <ul class="resultados" id="resultados" aria-live="polite"></ul>
+  </div>
+  <div class="atajos" aria-label="Lo más buscado">
+    <a href="#recepcion" data-nodo="obj-caro">«Está caro»</a>
+    <a href="#escalera">La escalera de precios</a>
+    <a href="#calidad">Lista de calidad</a>
+    <a href="#reclamos" data-tab="r-publico">Comentario malo en redes</a>
+    <a href="#rubrica">Evaluar a alguien</a>
+  </div>
+
+  <div class="grid g3">
+    <div class="card oro"><span class="etq">Regla de oro</span><p><b>Tratar al cliente como se trata la moto:</b> con cuidado.</p></div>
+    <div class="card oro"><span class="etq">A las 8:30</span><p>El equipo <b>llega a las 8:30</b>, listo para trabajar. No apenas llegando.</p></div>
+    <div class="card oro"><span class="etq">Sin excepción</span><p>La moto que sale mal <b>se vuelve a lavar antes de llamar al cliente</b>.</p></div>
+  </div>
+
+  <h4>Quién es quién en este guion</h4>
+  <div class="grid g4">
+    <div class="card"><span class="etq">Quien recibe</span><p>Recibe la moto, vende, la entrega y cobra. En un lavadero pequeño es la misma persona de la caja.</p></div>
+    <div class="card"><span class="etq">Lavador</span><p>Lava, revisa su moto con la lista y responde por ella. No discute con el cliente ni promete plata.</p></div>
+    <div class="card"><span class="etq">Encargado</span><p>Revisa la calidad, autoriza cortesías y descuentos y toma los reclamos difíciles. Puede ser el administrador.</p></div>
+    <div class="card"><span class="etq">Dueño</span><p>Decide lo que el encargado no puede: daños en la moto, devolver plata y casos fuera de la regla.</p></div>
+  </div>
+  <p class="chico" style="margin-top:10px">Las redes y el WhatsApp del lavadero los maneja quien recibe o el encargado, según cada lavadero. El lavador nunca responde desde su cuenta.</p>
+
+  <details class="datos" id="datos">
+    <summary>Póngale los datos de su lavadero a este guion</summary>
+    <div class="datos-cuerpo">
+      <p class="chico">Lo que va entre corchetes, como <span class="m">[nombre del lavadero]</span>, lo cambia cada lavadero por su dato real. Escriba aquí los datos fijos de su lavadero (nombres, precios, enlaces) y se llenan solos en todas las frases. Los que cambian con cada cliente, como <span class="m">[nombre del cliente]</span> o <span class="m">[nombre del lavador]</span>, quedan marcados para decirlos en el momento. Queda guardado solo en este celular o computador.</p>
+      <div class="campos" id="campos"></div>
+      <div class="acciones"><button class="btn gris" type="button" id="borrar-datos">Borrar mis datos</button></div>
+    </div>
+  </details>
+</section>
+
+<!-- Recorrido -->
+<section class="sec" id="recorrido">
+  <p class="kick">El recorrido de la moto</p>
+  <h2>Diez momentos, en este orden</h2>
+  <p class="lead">Toque cada paso para ver qué se dice, qué se hace y el error que más se repite.</p>
+  <ol class="recorrido" id="recorrido-lista"></ol>
+  <div class="ficha" id="ficha" aria-live="polite"></div>
+</section>
+
+<!-- Tono -->
+<section class="sec" id="tono">
+  <p class="kick">El tono · los 4 principios</p>
+  <h2>Antes de cualquier frase está la actitud</h2>
+  <p class="lead">Si esto falla, ninguna frase lo salva. Toque cada principio.</p>
+  <div class="grid g4">
+    <button class="principio buscable" type="button" aria-expanded="false"><span class="num">1</span><b>Mire a los ojos y salude primero</b><span class="mas">Levante la vista, sonría y salude <b>antes</b> de que el cliente tenga que hablar. Suelte lo que esté haciendo. El que saluda primero es el lavadero.<br><br><b>Error común:</b> seguir con el celular o la manguera y decir «¿qué necesita?» sin mirar.</span><span class="ver">Ver más →</span></button>
+    <button class="principio buscable" type="button" aria-expanded="false"><span class="num">2</span><b>Trato de usted, siempre</b><span class="mas">A todos de usted, con respeto y cercanía. Ni confianzudos ni distantes. Cercano no es robótico: se puede sonreír y hablar natural. Lo que no cambia es el usted.</span><span class="ver">Ver más →</span></button>
+    <button class="principio buscable" type="button" aria-expanded="false"><span class="num">3</span><b>Ritmo tranquilo, sin afán</b><span class="mas">Despacio y claro, una cosa a la vez. El afán se contagia y resta categoría; la calma dice que sabemos lo que hacemos.<br><br><b>Error común:</b> recitar la carta de corrido, o dar la información caminando hacia el puesto.</span><span class="ver">Ver más →</span></button>
+    <button class="principio buscable" type="button" aria-expanded="false"><span class="num">4</span><b>El silencio que escucha y cierra</b><span class="mas">Después de un precio o una pregunta, <b>nos quedamos callados</b>. Es un silencio incómodo, pero usted sabe que viene; el cliente no. La decisión cae del lado del cliente.<br><br><b>Error común:</b> «…pero si quiere le hago la otra». Eso suena a justificar el precio.</span><span class="ver">Ver más →</span></button>
+  </div>
+  <div class="si-no">
+    <div class="card bien"><span class="etq">Sí se dice</span><div class="palabras"><span>señor</span><span>señora</span><span>caballero</span><span>señorita</span><span>su nombre, si ya lo sabemos</span></div></div>
+    <div class="card mal"><span class="etq">Nunca se dice</span><div class="palabras"><span>parcero</span><span>papi</span><span>mano</span><span>mi rey</span><span>hermano</span></div></div>
+  </div>
+  <div class="card mal" style="margin-top:10px"><span class="etq">Con las clientas, nunca</span><p>«Mi amor», «linda», «reina», «bonita», «mi vida». Se presta para malentendidos y hace que una mujer no se sienta segura. El lavadero tiene que ser un lugar donde cualquier clienta se sienta respetada.</p><p class="chico" style="margin-top:8px">Las frases de esta página van en masculino para leerlas fácil. A una clienta se le dice «Bienvenida», «La esperamos» y «Doña» o «Señora».</p></div>
+</section>
+
+<!-- Recepción: simulador -->
+<section class="sec" id="recepcion">
+  <p class="kick">La recepción · elija su camino</p>
+  <h2>Practique la recepción paso a paso</h2>
+  <p class="lead">Escoja qué cliente llega. En cada pantalla está la frase, lo que se hace y lo que el cliente puede responder. Toque la respuesta y sigue la frase que va.</p>
+  <div class="camino-ini" id="camino-ini">
+    <button type="button" data-ir="preparar"><b>Desde el principio</b><small>Antes de abrir, 8:30</small></button>
+    <button type="button" data-ir="cuanto"><b>Cliente nuevo</b><small>Sin reserva ni membresía: se vende</small></button>
+    <button type="button" data-ir="con-reserva"><b>Con reserva</b><small>Su servicio ya está definido</small></button>
+    <button type="button" data-ir="es-miembro"><b>Con membresía</b><small>Llegó sin reservar</small></button>
+  </div>
+  <div class="sim">
+    <div class="pantalla" id="pantalla" aria-live="polite"></div>
+    <aside class="lateral">
+      <div class="card oro">
+        <h3>Los tres caminos</h3>
+        <ul class="mapa-caminos">
+          <li><b>A</b><span>Tiene reserva: se confirma, <b>no se vende</b>.</span></li>
+          <li><b>B</b><span>Miembro sin reserva: entra si hay espacio y se le enseña a reservar <b>con la moto adentro</b>.</span></li>
+          <li><b>C</b><span>Ni reserva ni membresía: <b>el único que es venta</b>. Escalera de precios.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Recuerde</h3>
+        <ul class="lista" style="font-size:15px">
+          <li>Valor antes del precio.</li>
+          <li>Se empieza por la básica y se sube.</li>
+          <li>🤐 Silencio después de cada precio.</li>
+          <li>El precio es el mismo para toda moto: no se pregunta el cilindraje.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- Escalera -->
+<section class="sec" id="escalera">
+  <p class="kick">La venta · la escalera de precios</p>
+  <h2>Se empieza por la básica y se sube</h2>
+  <p class="lead">Nunca se empieza por la full. Primero todo lo que incluye, al final el número, y después silencio.</p>
+  <div class="escalera">
+    <div class="peldano"><span class="esc">Escalón 1</span><b>[nombre de la básica]</b><span class="chico">Desengrase de motor, rines, mofle, plato, cadena y llantas. Champú pH neutro. Sin silicona ni grafito.</span><span class="precio">[precio básica]</span><span class="sh">🤐 Silencio</span></div>
+    <div class="peldano"><span class="esc">Escalón 2 · dos opciones</span><b>[nombre intermedia A] o [nombre intermedia B]</b><span class="chico">A: + cera hidrofóbica y restaurador de partes negras. B: + kit de arrastre completo.</span><span class="precio">[precio intermedia]</span><span class="sh">🤐 Silencio</span></div>
+    <div class="peldano"><span class="esc">Escalón 3</span><b>[nombre de la full]</b><span class="chico">Todo lo anterior: kit de arrastre, cera y restaurador. Un solo precio, todo incluido.</span><span class="precio">[precio full]</span><span class="sh">🤐 Silencio y esperar</span></div>
+  </div>
+  <p class="flecha-sube">Cada salto es pequeño: [diferencia] más. Suena chico al lado de lo que ya aceptó oír.</p>
+
+  <div class="grid g2">
+    <div class="card"><h3 class="buscable">Por qué de abajo hacia arriba</h3><p>Si se arranca por la full, el cliente oye el precio más alto primero, se asusta y muchas veces se va sin oír el resto. Si se arranca por la básica, ya está dentro de algo que le gusta, y subir [diferencia] le parece poco.</p></div>
+    <div class="card"><h3 class="buscable">Por qué el valor antes del precio</h3><p>El cliente no compra por la razón, compra por la emoción. Primero tiene que imaginarse su moto limpia y cuidada; después, el número.</p></div>
+  </div>
+
+  <h4>Antes del escalón 2: mire la moto con el cliente delante</h4>
+  <div class="grid g3">
+    <div class="card blanca"><span class="etq">Se ve opaca, plásticos grises</span><p>Ofrezca la <b>opción A</b>: brillo y protección.</p></div>
+    <div class="card blanca"><span class="etq">Cadena negra, seca o con mugre</span><p>Ofrezca la <b>opción B</b>: kit de arrastre.</p></div>
+    <div class="card blanca"><span class="etq">No se ve nada claro</span><p>Nombre <b>las dos</b>, al mismo precio.</p></div>
+  </div>
+
+  <h4>Chuleta de mostrador</h4>
+  <div class="tabla-env">
+    <table class="tabla">
+      <thead><tr><th>Escalón</th><th>Qué es</th><th>Precio</th><th>Después</th></tr></thead>
+      <tbody>
+        <tr><td>1 · [nombre de la básica]</td><td>Desengrase de motor, rines, mofle, plato, cadena y llantas. Champú pH neutro. Sin silicona ni grafito</td><td>[precio básica]</td><td>🤐</td></tr>
+        <tr><td>2A · [nombre intermedia A]</td><td>La básica + cera hidrofóbica + restaurador de partes negras</td><td>[precio intermedia]</td><td>🤐</td></tr>
+        <tr><td>2B · [nombre intermedia B]</td><td>La básica + kit de arrastre completo (tapa del piñón, desengrase, lubricado)</td><td>[precio intermedia]</td><td>🤐</td></tr>
+        <tr><td>3 · [nombre de la full]</td><td>Todo lo anterior</td><td>[precio full]</td><td>🤐 y esperar</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Cuando el cliente pone un pero</h4>
+  <p class="chico">Regla para todas: se escucha completa, se responde corto, se vuelve a callar. Nunca se discute ni se baja el precio en el mostrador. Toque una para practicarla.</p>
+  <div class="objs">
+    <button class="obj" type="button" data-nodo="obj-caro"><b>«Está caro»</b><small>No es solo agua y jabón.</small><span>Practicar →</span></button>
+    <button class="obj" type="button" data-nodo="obj-barato"><b>«¿Algo más barato?» · «¿Descuento?»</b><small>Los precios son los mismos para todos.</small><span>Practicar →</span></button>
+    <button class="obj" type="button" data-nodo="obj-afan"><b>«Tengo afán»</b><small>El tiempo real, o una cita.</small><span>Practicar →</span></button>
+    <button class="obj" type="button" data-nodo="obj-basico"><b>«Solo quiero lo básico»</b><small>Se respeta. No se insiste.</small><span>Practicar →</span></button>
+    <button class="obj" type="button" data-nodo="obj-reserva"><b>«¿Luego toca reservar?»</b><small>No necesariamente.</small><span>Practicar →</span></button>
+    <button class="obj" type="button" data-nodo="sin-espacio"><b>No hay espacio</b><small>Nunca un «no» en seco.</small><span>Practicar →</span></button>
+  </div>
+
+  <h4>La membresía: en la entrega y solo si lava seguido</h4>
+  <div class="grid g2">
+    <div class="card bien"><span class="etq">Cuándo sí</span><p><b>En la entrega, después de cobrar</b>, y solo si lava dos veces al mes o más. Primero la pregunta: «¿Cada cuánto suele lavar la moto?» <a href="#entrega">Ver el paso 6 de la entrega</a>.</p></div>
+    <div class="card mal"><span class="etq">Cuándo no</span><p>En la recepción ni en la escalera. Tampoco si lava una vez al mes o menos, o si se le nota el afán. Se ofrece <b>una sola vez por visita</b>.</p></div>
+  </div>
+  <h4>Las preguntas que siempre llegan</h4>
+  <div class="qa">
+    <details><summary>«¿Tiene permanencia?»</summary><p>«No. La cancela cuando quiera.»</p></details>
+    <details><summary>«¿Sirve para dos motos?»</summary><p>«Para una. Va por placa: la moto que registre al comprarla.»</p></details>
+    <details><summary>«¿Cuánto me dura?»</summary><p>«Un mes desde el día que la compra.»</p></details>
+    <details><summary>«¿Cuántas veces puedo lavar?»</summary><p>«Las que quiera. Lo único es reservar antes, para que no haga fila.»</p></details>
+    <details><summary>«¿Incluye la cera o el kit?»</summary><p>«La membresía cubre la [nombre de la básica]. Los adicionales se pagan aparte y se piden al reservar.»</p></details>
+  </div>
+</section>
+
+<!-- Inspección -->
+<section class="sec" id="inspeccion">
+  <p class="kick">Antes de lavar · inspección con foto</p>
+  <h2>Ocho puntos, siempre en el mismo orden</h2>
+  <p class="lead">Antes de tocar la moto con agua o con producto. La hace quien recibe, con el lavador al lado. Unos 2 minutos, con el celular.</p>
+  <div class="puntos8" id="puntos8">
+    <button class="p8" type="button" aria-pressed="false"><span class="n">1</span><b>Cables sueltos</b><small>Colgando, conectores salidos, amarres rotos.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">2</span><b>Cables quemados</b><small>Partes derretidas, olor a quemado, cinta aislante vieja.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">3</span><b>Plásticos</b><small>Partidos, rajados, con piezas faltantes.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">4</span><b>Direccionales y luces</b><small>Rotas, flojas, sin mica. Si se puede, que prendan.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">5</span><b>Tablero o pantalla</b><small>Rayado, empañado, con agua por dentro, con líneas.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">6</span><b>Tornillos faltantes</b><small>Tapas, carenajes, placa, tapa del piñón.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">7</span><b>Espejos</b><small>Rotos, flojos, despegados.</small></button>
+    <button class="p8" type="button" aria-pressed="false"><span class="n">8</span><b>Pintura</b><small>Rayones, golpes, peladuras, calcomanías levantadas, pintura mate.</small></button>
+  </div>
+  <p class="contador-8" id="contador-8" aria-live="polite">Toque cada punto a medida que lo revisa: 0 de 8.</p>
+
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card">
+      <h3 class="buscable">Cómo se toman las fotos</h3>
+      <ol class="pasos">
+        <li><span>La moto completa de lado, <b>con la placa visible</b>.</span></li>
+        <li><span>La moto completa por el otro lado.</span></li>
+        <li><span>Una de cerca por cada cosa encontrada, con el dedo señalando.</span></li>
+        <li><span>Se guarda en la ficha de la moto en [sistema del lavadero] con una nota corta: «Direccional izquierda delantera partida».</span></li>
+        <li><span>Si no hay nada, igual se anota: <b>«Recibida sin novedad»</b>.</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3 class="buscable">La moto entra fría</h3>
+      <ul class="lista">
+        <li>Motor caliente: se esperan <b>10 a 15 minutos</b>, o se enfría con agua poco a poco.</li>
+        <li>Si viene de 2 o 3 horas de carretera: <b>1 hora a 1 hora y media</b>.</li>
+        <li>Se tapa: bolsa en el tablero y las pantallas, vinipel en los conectores y bolsa en el filtro de aire. <b>El mofle no se tapa.</b></li>
+        <li>Siempre en caballete. <b>Nunca recostada en la pata.</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="regla"><small>Lo que no está escrito</small>Lo que no quedó escrito y con foto, no pasó. Sin foto previa, el lavadero pierde siempre el reclamo.</div>
+
+  <h4>Qué se le dice al cliente si se encuentra algo</h4>
+  <p class="chico">Antes de lavar, nunca después. Se le muestra en la moto, con el dedo, y se le enseña la foto.</p>
+  <div class="seg" role="tablist" data-grupo="hallazgo">
+    <button type="button" role="tab" aria-selected="true" data-panel="h-dano">Un daño</button>
+    <button type="button" role="tab" aria-selected="false" data-panel="h-zona">Zona que no se puede lavar bien</button>
+    <button type="button" role="tab" aria-selected="false" data-panel="h-pide">Pide algo que no se hace</button>
+  </div>
+  <div class="panel" id="h-dano">
+    <p class="frase buscable">Don/Doña [nombre del cliente], antes de lavarla le revisamos la moto completa. Le quiero mostrar algo.</p>
+    <p class="frase sin-etq">Aquí vemos que [la direccional está partida / el plástico tiene una rajadura / hay un rayón]. ¿Usted ya lo tenía identificado?</p>
+    <div class="silencio"><span class="ic">🤐</span><div><b>Silencio <span class="puntos"><i></i><i></i><i></i></span></b><span>Deje que conteste.</span></div></div>
+    <p class="frase sin-etq">Perfecto. Le tomé una foto y quedó anotado en su ficha. Así los dos estamos tranquilos.</p>
+    <div class="grid g2">
+      <div class="hace"><b>Si dice que sí lo sabía</b>«Listo, queda anotado.»</div>
+      <div class="hace"><b>Si dice que no lo sabía</b>No se discute ni se adivina cómo pasó: «Quedó anotado tal como llegó. Si quiere, le mando la foto por WhatsApp.»</div>
+    </div>
+  </div>
+  <div class="panel" id="h-zona" hidden>
+    <p class="chico">Ejemplos: un tornillo muy apretado en la tapa del piñón, cables pelados cerca del motor o una pantalla con agua por dentro.</p>
+    <p class="frase buscable">Esta parte la vamos a lavar con cuidado, pero no la vamos a abrir ni le vamos a meter agua a presión, porque [el tornillo está muy apretado y se puede partir / los cables están pelados]. Prefiero decírselo de una vez.</p>
+    <div class="error-comun"><b>Nunca</b>El tornillo no se fuerza. Un tornillo partido cuesta una moto.</div>
+  </div>
+  <div class="panel" id="h-pide" hidden>
+    <p class="chico">Ejemplos: silicona, grafito, llantín, o brillo en los discos.</p>
+    <p class="frase buscable">Eso no lo aplicamos, porque [deja la llanta resbalosa / contamina el freno]. Le cuento qué le podemos hacer en su lugar.</p>
+    <div class="error-comun"><b>La regla que puede costar una vida</b>Los discos y las mordazas salen secos y sin producto. Así lo pida el cliente.</div>
+  </div>
+  <div class="hace" style="margin-top:10px"><b>Lo que el cliente pidió tener en cuenta</b>Lo que dijo en la recepción («ojo con las calcomanías», «la pintura es mate») se anota en la ficha mientras él mira. El lavador lo lee antes de empezar.</div>
+</section>
+
+<!-- Lavado paso a paso -->
+<section class="sec" id="lavado">
+  <p class="kick">El lavado · paso a paso</p>
+  <h2>El lavado paso a paso</h2>
+  <p class="lead">El orden sale del video oficial de Mónaco. Primero se desengrasa la parte baja, luego se lava con champú pieza por pieza y al final va la espuma de champú pH neutro, de arriba hacia abajo. Toque un capítulo para saltar a esa parte del video.</p>
+
+  <div class="video-caja" id="video-lavado">
+    <button class="video-portada" type="button" data-seg="0" aria-label="Reproducir el video «Cómo lavar una moto correctamente»">
+      <img src="https://i.ytimg.com/vi/hZlQgd1CsCQ/hqdefault.jpg" alt="" loading="lazy" decoding="async" width="480" height="360">
+      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+    </button>
+  </div>
+  <ul class="capitulos" id="capitulos" aria-label="Capítulos del video"></ul>
+  <p class="chico" style="margin-top:10px">En el video lavan una Pulsar NS 200 con kit de arrastre. Donde el video y el método del lavadero no coinciden, en los pasos de abajo manda el método.</p>
+
+  <h4>Lo que debe tener listo antes de empezar</h4>
+  <div class="grid g4">
+    <div class="card buscable" data-t="El lavado · Herramientas que debe tener listas">
+      <span class="etq">Herramientas</span>
+      <ul class="lista" style="font-size:15px">
+        <li>Copa 8 (8 mm) o la herramienta que pida la tapa del piñón de esa moto.</li>
+        <li>Destornillador de pala para raspar la grasa.</li>
+        <li>Hidrolavadora de 1.500–1.800 PSI, con pistola y lanza de abanico.</li>
+        <li>Caballete trasero de taller.</li>
+        <li>Brochas de 1,5 pulgadas, de cerdas suaves.</li>
+        <li>Cepillo de cerdas gruesas, solo para el caucho de las llantas.</li>
+        <li>Champucera con 1,5 L de mezcla.</li>
+        <li>Balde con agua y jabón para enjuagar los trapos.</li>
+        <li>Sopladora o manguera de aire.</li>
+        <li>Bolsas y vinipel para tapar tablero, conectores y filtro de aire.</li>
+      </ul>
+    </div>
+    <div class="card buscable" data-t="El lavado · Químicos que debe tener listos">
+      <span class="etq">Químicos</span>
+      <ul class="lista" style="font-size:15px">
+        <li><b>Desengrasante biodegradable:</b> kit de arrastre, motor con grasa, basculante y rines. Nunca en pintura ni tapas.</li>
+        <li><b>Champú</b> para el lavado pieza por pieza.</li>
+        <li><b>Champú pH neutro</b> para la champucera: 1 parte de champú por 9 de agua.</li>
+        <li><b>Lubricante de cadena.</b></li>
+      </ul>
+      <p class="chico" style="margin-top:10px">Sin silicona ni grafito. Nada en la llanta.</p>
+    </div>
+    <div class="card buscable" data-t="El lavado · Los 8 trapos y el trapo de la cadena">
+      <span class="etq">Trapos de microfibra</span>
+      <p style="font-size:15px">Cada lavador tiene un juego de <b>8 trapos, cada uno de un color</b> y con una sola función:</p>
+      <ol class="lista" style="font-size:15px">
+        <li>Desengrase.</li><li>Champú.</li><li>Secado de arriba.</li><li>Secado de abajo.</li>
+        <li>Cera.</li><li>Restaurador de negros.</li><li>Hidratador de motor.</li><li>Espejos.</li>
+      </ol>
+      <p style="font-size:15px;margin-top:8px"><b>Aparte, el trapo de la cadena.</b> No se bota: se lava y se guarda solo para la cadena.</p>
+    </div>
+    <div class="card buscable" data-t="El lavado · Dotación del lavador">
+      <span class="etq">Dotación del lavador</span>
+      <ul class="lista" style="font-size:15px">
+        <li>Guantes de caucho de puño largo.</li>
+        <li>Botas de caucho.</li>
+        <li>Chaqueta impermeable.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Presión y distancia: las dos cosas</h4>
+  <div class="tabla-env">
+    <table class="tabla">
+      <thead><tr><th>Dónde</th><th>Distancia del chorro</th></tr></thead>
+      <tbody>
+        <tr><td>Metal: cadena, piñón, plato, rines</td><td>20–30 cm</td></tr>
+        <tr><td>Motor y chasis</td><td>40–60 cm</td></tr>
+        <tr><td>Mandos y tablero</td><td>80–100 cm</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="chico" style="margin-top:10px">Hidrolavadora de 1.500–1.800 PSI, siempre con el chorro en abanico. <b>Nunca agua de frente al radiador.</b></p>
+
+  <h4>Los pasos · toque cada uno</h4>
+  <div class="pasos-l">
+
+    <details class="paso-l cero buscable" data-t="El lavado · Paso 0 · Preparar la moto">
+      <summary><span class="pn">0</span><span><h3>Preparar la moto</h3><small>Antes de mojarla</small></span></summary>
+      <div class="cuerpo">
+        <span class="sin-video">No sale en el video · va siempre</span>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>La moto entra <b>fría</b>. Motor caliente: se esperan 10 a 15 minutos, o se enfría con agua poco a poco. Si viene de 2 o 3 horas de carretera: 1 hora a 1 hora y media.</li>
+          <li>Se tapan el <b>tablero</b> (bolsa), los <b>conectores</b> (vinipel) y el <b>filtro de aire</b> (bolsa). El exhosto no se tapa.</li>
+          <li>Se sube la moto al <b>caballete desde el inicio</b>, antes del prelavado, para que la rueda trasera quede en el aire. Revise que quede firme.</li>
+          <li>Se lee la nota de la recepción: lo que pidió el cliente y lo que se encontró en la inspección.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> caballete trasero de taller, bolsas y vinipel.</p>
+        <div class="error-comun"><b>Error a evitar</b>Lavar la moto caliente o sin tapar. O trabajarla recostada en la pata lateral: no se puede girar la rueda y la moto queda insegura.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>El motor se puede tocar con la mano, tablero, conectores y filtro están cubiertos, y la rueda trasera gira libre sin que la moto se mueva.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 1 · Retirar la tapa del piñón y raspar la grasa">
+      <summary><span class="pn">1</span><span><h3>Retirar la tapa del piñón y raspar la grasa</h3><small>Video 00:00</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="0">▶ 00:00</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Quite los tornillos de la tapa del piñón y retírela para dejar el piñón delantero a la vista. Deje los tornillos en un lugar fijo.</li>
+          <li>Raspe la grasa acumulada en el piñón y por dentro de la tapa con el <b>destornillador de pala</b>.</li>
+          <li>Hágalo con cuidado, sin apoyar la herramienta contra el motor.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> copa 8 (8 mm) en la Pulsar NS 200, o la que pida esa moto. Destornillador de pala. Guantes de caucho de puño largo.</p>
+        <div class="error-comun"><b>Error a evitar</b>Rayar el motor con el destornillador. Perder los tornillos.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>El piñón y el interior de la tapa quedan sin «tortas» de grasa; solo queda una capa delgada que sale con el desengrasante.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 2 · Prelavado con agua a presión">
+      <summary><span class="pn">2</span><span><h3>Prelavado con agua a presión</h3><small>Video 00:45</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="45">▶ 00:45</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Con la moto ya en caballete, quite el barro pesado: guardabarros trasero, guardabarros delantero, motor y zona del piñón.</li>
+          <li>Chorro en abanico, en diagonal y desde afuera de la moto, respetando las distancias: 20–30 cm en metal, 40–60 cm en motor y chasis.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> hidrolavadora de 1.500–1.800 PSI con lanza de abanico.</p>
+        <div class="error-comun"><b>Error a evitar</b>Acercar el chorro a mandos, tablero o partes eléctricas. Echarle agua de frente al radiador.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Ya no hay barro en bloque en ninguna parte; solo queda la mugre pegada y la grasa.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 3 · Desengrasar el kit de arrastre, el catalizador y el basculante">
+      <summary><span class="pn">3</span><span><h3>Desengrasar el kit de arrastre, el catalizador y el basculante</h3><small>Video 01:36</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="96">▶ 01:36</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Aplique desengrasante con brocha en el piñón delantero, el plato trasero y la cadena. Déjelo actuar un par de minutos.</li>
+          <li>Abrace la cadena con el <b>trapo de la cadena</b> empapado en desengrasante y gire la rueda con la otra mano: el trapo se queda quieto y la cadena pasa.</li>
+          <li>Con brocha, desengrase el catalizador y las zonas bajas junto a la cadena.</li>
+          <li>Con trapo, desengrase la parte interna del basculante, que es una de las zonas más críticas.</li>
+          <li>Al terminar, el trapo de la cadena se lava y se guarda para la cadena. No se bota ni se usa en otra parte.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto y herramientas:</b> desengrasante biodegradable, brocha de 1,5 pulgadas, trapo de la cadena, trapo de desengrase, guantes.</p>
+        <div class="error-comun"><b>Error a evitar</b>Usar cepillo en la cadena: con el trapo la grasa sale más fácil. Aplicar desengrasante en pintura o tapas.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>El trapo sale negro, y al pasar la mano con guante por la cadena ya no queda grasa espesa.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 4 · Enjuagar el kit de arrastre">
+      <summary><span class="pn">4</span><span><h3>Enjuagar el kit de arrastre</h3><small>Video 03:24</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="204">▶ 03:24</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Enjuague la cadena, el piñón y el plato con agua a presión, de lado y en ángulo, a 20–30 cm.</li>
+          <li>Gire la rueda para enjuagar toda la cadena.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> hidrolavadora, chorro en abanico.</p>
+        <div class="error-comun"><b>Error a evitar</b>Dejar el desengrasante secándose sobre la cadena.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La cadena queda gris metálica, el plato limpio y el basculante sin manchas de grasa.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 5 · Zona del piñón y tapa del piñón por separado">
+      <summary><span class="pn">5</span><span><h3>Zona del piñón y tapa del piñón por separado</h3><small>Video 04:07</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="247">▶ 04:07</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Aplique desengrasante en la zona junto al piñón y el motor, que casi nadie lava, y enjuague.</li>
+          <li>Lave la tapa del piñón suelta con brocha y desengrasante, y enjuáguela con poca agua.</li>
+          <li>Para lavarla, <b>apóyela en una superficie limpia o sosténgala con la mano</b>.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramientas:</b> brocha y desengrasante.</p>
+        <div class="error-comun"><b>Error a evitar</b>Pisar la tapa con la bota para lavarla: se raya. Y saltarse esta zona, que es uno de los detalles que diferencian el lavado de Mónaco.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Por dentro de la zona del piñón no queda grasa al mirar con la linterna del celular, y la tapa queda limpia por las dos caras.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 6 · Lavar el motor con champú">
+      <summary><span class="pn">6</span><span><h3>Lavar el motor con champú</h3><small>Video 05:03</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="303">▶ 05:03</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Si el motor no tiene grasa, lávelo solo con champú; si tiene grasa, desengráselo primero.</li>
+          <li>Pase el trapo de champú por la parte de arriba, la de adelante y la de abajo del motor.</li>
+          <li>Donde el trapo no llega (cables, huecos) use la brocha.</li>
+          <li>Puede dejar actuar el jabón y retirarlo al final.</li>
+        </ul></div>
+        <p class="dato-l"><b>Productos y herramientas:</b> champú, trapo de champú, brocha, balde con agua y jabón para enjuagar el trapo.</p>
+        <div class="error-comun"><b>Error a evitar</b>Limpiar solo lo que se ve de lado: la parte de abajo es la que se ve sucia en el detallado.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Al pasar un dedo por las aletas y por debajo del motor, no sale mugre.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 7 · Tapas, guardabarros y placa">
+      <summary><span class="pn">7</span><span><h3>Tapas, guardabarros y placa</h3><small>Video 05:54</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="354">▶ 05:54</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Lave tapas laterales y guardabarros solo con champú y trapo de champú.</li>
+          <li>Lave la placa y su soporte con brocha o trapo: queda con grasa porque está cerca del kit de arrastre.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto:</b> champú. <b>Nunca desengrasante en pintura ni en tapas.</b></p>
+        <div class="error-comun"><b>Error a evitar</b>Dejar la placa sin lavar, que es el olvido más común.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La placa se lee limpia, sin manchas de grasa, y por dentro del guardabarros no queda barro.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 8 · Rueda trasera, mordaza, basculante y catalizador">
+      <summary><span class="pn">8</span><span><h3>Rueda trasera, mordaza, basculante y catalizador</h3><small>Video 06:53</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="413">▶ 06:53</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Lave el rin con <b>desengrasante</b>, radio por radio, girando la rueda en el caballete.</li>
+          <li>Restriegue el caucho con el cepillo de cerdas gruesas mientras gira la rueda.</li>
+          <li>Detalle con trapo los rincones de la mordaza, todo el basculante y el catalizador.</li>
+          <li>Restriegue con brocha los huecos del motor.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto y herramientas:</b> desengrasante, cepillo de cerdas gruesas, trapo de desengrase, brocha.</p>
+        <div class="error-comun"><b>Error a evitar</b>Echarle llantín, glicerina, silicona o cualquier producto a la llanta: nada en la llanta. Dejar mugre en la mordaza y el catalizador. Afanarse.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>El caucho queda negro mate parejo, el rin sin manchas y la mordaza sin mugre acumulada en los rincones.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 9 · Rueda delantera, disco y mordaza">
+      <summary><span class="pn">9</span><span><h3>Rueda delantera, disco y mordaza</h3><small>Video 08:28</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="508">▶ 08:28</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>La moto sigue en el caballete. Nunca recostada en la pata lateral.</li>
+          <li>Lave el rin con <b>desengrasante</b> y gire la llanta con la mano, sin mover la moto hacia adelante ni hacia atrás.</li>
+          <li>Con brocha limpie el guardabarros delantero, las barras de suspensión, la zona del disco y la mordaza delantera.</li>
+          <li>Cepille el caucho hasta dejarlo de su color original.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto y herramientas:</b> desengrasante, trapo de desengrase, brocha, cepillo de cerdas gruesas, balde.</p>
+        <div class="error-comun"><b>Error a evitar</b>Olvidar la mordaza delantera, que «por lo general nadie lava». Usar silicona o abrillantador en el caucho.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Al girar la rueda completa no aparece ninguna zona sucia en rin, disco ni mordaza.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 10 · Radiador, exhosto, parte alta y mandos">
+      <summary><span class="pn">10</span><span><h3>Radiador, exhosto, parte alta y mandos</h3><small>Video 10:19</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="619">▶ 10:19</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Pase el trapo de champú por el radiador y su protector, con cuidado de no cortarse con las aletas.</li>
+          <li>Pase el trapo por el exhosto.</li>
+          <li>Detalle con brocha las zonas altas por los dos lados: cuello de dirección, cables y barras.</li>
+          <li>Limpie mandos, manetas y suiches solo con brocha y trapo de champú.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto:</b> solo champú en estas zonas.</p>
+        <div class="error-comun"><b>Error a evitar</b>Usar cepillos de escoba o de ropa en los mandos: rayan las piezas. Echarle agua de frente al radiador.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Al final solo debería quedar secar; si hay que volver a restregar después, este paso quedó mal.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 11 · Enjuagar el champú de mandos, rines y exhosto">
+      <summary><span class="pn">11</span><span><h3>Enjuagar el champú de mandos, rines y exhosto</h3><small>Video 11:49</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="709">▶ 11:49</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Confirme que el tablero sigue tapado.</li>
+          <li>Enjuague los mandos a 80–100 cm y luego los rines y el exhosto.</li>
+          <li>Haga un enjuague general de la moto, de lado, respetando las distancias.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> hidrolavadora, chorro en abanico.</p>
+        <div class="error-comun"><b>Error a evitar</b>Mojar los mandos de cerca: se daña la parte eléctrica.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>No queda espuma vieja en ninguna parte antes de pasar a la champucera.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 12 · Champucera con champú pH neutro y última pasada">
+      <summary><span class="pn">12</span><span><h3>Champucera con champú pH neutro y última pasada</h3><small>Video 12:13</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="733">▶ 12:13</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Cargue la champucera con <b>1,5 L de mezcla</b>: champú pH neutro y agua, <b>1:9</b> (1 parte de champú por 9 de agua).</li>
+          <li>Cubra toda la moto de espuma.</li>
+          <li>Con el trapo de champú dé la última pasada <b>de arriba hacia abajo</b>: farola, tanque, tapas, guardabarros, basculante, parte de abajo, toda la pintura y el sillín.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto:</b> champú pH neutro activo, que ayuda solo a soltar la mugre.</p>
+        <div class="error-comun"><b>Error a evitar</b>Pasar el trapo de abajo hacia arriba y subir mugre a la pintura.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La espuma escurre casi blanca; si sale oscura, la parte baja no quedó bien desengrasada.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 13 · Enjuague final">
+      <summary><span class="pn">13</span><span><h3>Enjuague final</h3><small>Video 14:13</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="853">▶ 14:13</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Quite todo el jabón de arriba hacia abajo.</li>
+          <li>Chorro en abanico y con las distancias de la tabla: 20–30 cm en metal, 40–60 cm en motor y chasis, 80–100 cm en mandos y tablero.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> hidrolavadora de 1.500–1.800 PSI.</p>
+        <div class="error-comun"><b>Error a evitar</b>Dejar jabón en rincones (mordazas, debajo del tanque, placa): deja manchas al secar. Echarle agua de frente al radiador.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>Al pasar la mano por la pintura no se siente jabón y no salen burbujas de los rincones.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 14 · Soplar mandos, tablero y tapa de la gasolina">
+      <summary><span class="pn">14</span><span><h3>Soplar mandos, tablero y tapa de la gasolina</h3><small>Video 15:24</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="924">▶ 15:24</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Saque la moto a la zona de secado.</li>
+          <li>Quite las bolsas y el vinipel.</li>
+          <li>Sople el agua de mandos, tablero, manetas, suiches y la tapa de la gasolina.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> sopladora o manguera de aire.</p>
+        <div class="error-comun"><b>Error a evitar</b>Secar los suiches con trapo y dejar agua por dentro.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>No sale agua al mover las manetas ni al abrir la tapa de la gasolina.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 15 · Secar con microfibra">
+      <summary><span class="pn">15</span><span><h3>Secar con microfibra</h3><small>Video 15:47</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="947">▶ 15:47</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Seque en este orden: tanque, farola, tapas y, al final, rines y motor.</li>
+          <li>Si hay dos personas, una seca arriba y la otra abajo al mismo tiempo.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramientas:</b> trapo de secado de arriba y trapo de secado de abajo.</p>
+        <div class="error-comun"><b>Error a evitar</b>Usar el trapo del motor y los rines en la pintura. El trapo de abajo no sube nunca.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>No quedan gotas ni marcas de agua en tanque, farola ni tapas, y la parte baja está seca.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 16 · Revisar y sacar brillo">
+      <summary><span class="pn">16</span><span><h3>Revisar y sacar brillo</h3><small>Video 16:23</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="983">▶ 16:23</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Revise llantas, motor, kit de arrastre, plato, cadena, pintura y mordazas.</li>
+          <li>Saque brillo a la pintura con un trapo limpio y bien seco, sin presionar.</li>
+        </ul></div>
+        <p class="dato-l"><b>Regla:</b> sin silicona ni grafito, y nada en la llanta. El resultado sale del champú pH neutro, el desengrasante y el detallado con microfibra.</p>
+        <div class="error-comun"><b>Error a evitar</b>Rayar la pintura con un trapo sucio o húmedo.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La pintura refleja parejo, el caucho queda negro mate (sin brillo artificial) y la mordaza se ve limpia.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 17 · Montar la tapa del piñón">
+      <summary><span class="pn">17</span><span><h3>Montar la tapa del piñón</h3><small>Video 17:37</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="1057">▶ 17:37</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Ponga la tapa del piñón con cuidado y apriete los tornillos.</li>
+          <li>Limpie la tapa ya montada.</li>
+        </ul></div>
+        <p class="dato-l"><b>Herramienta:</b> copa 8 (8 mm) en la Pulsar NS 200, o la que pida esa moto.</p>
+        <div class="error-comun"><b>Error a evitar</b>Apretar duro los tornillos: se parten. Torque mínimo.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La tapa no vibra ni se mueve con la mano y no sobra ningún tornillo.</p>
+      </div>
+    </details>
+
+    <details class="paso-l buscable" data-t="El lavado · Paso 18 · Lubricar la cadena">
+      <summary><span class="pn">18</span><span><h3>Lubricar la cadena (último paso)</h3><small>Video 18:10</small></span></summary>
+      <div class="cuerpo">
+        <button class="salto" type="button" data-seg="1090">▶ 18:10</button>
+        <div class="hace"><b>Qué hacer</b><ul>
+          <li>Con el kit de arrastre ya limpio y seco, aplique lubricante por la parte de adentro de la cadena mientras gira la rueda.</li>
+        </ul></div>
+        <p class="dato-l"><b>Producto:</b> lubricante de cadena.</p>
+        <div class="error-comun"><b>Error a evitar</b>Lubricar antes de limpiar: la grasa nueva atrapa la mugre.</div>
+        <p class="revisa"><b>Cómo se revisa que quedó bien</b>La cadena queda con una capa uniforme, sin goteo sobre el plato ni la llanta.</p>
+      </div>
+    </details>
+
+  </div>
+  <div class="regla"><small>Al terminar</small>La moto pasa a la <a href="#calidad" style="color:#fff">lista de calidad</a>. Discos y mordazas salen secos y sin producto.</div>
+</section>
+
+<!-- Calidad -->
+<section class="sec" id="calidad">
+  <p class="kick">Control de calidad · se usa en S6</p>
+  <h2>Ninguna moto sale sin pasar la lista</h2>
+  <p class="lead">El cliente no revisa por donde usted mira. Se agacha y le mete la mano al soporte de la mordaza del freno. Si el dedo le sale sucio, para él la moto quedó mal lavada.</p>
+
+  <div class="grid g4" style="margin:0 0 24px">
+    <div class="card"><span class="etq">1 · Antes</span><p>Inspección con foto, mostrada al cliente.</p></div>
+    <div class="card"><span class="etq">2 · Lavado</span><p>Con el <a href="#lavado">método paso a paso</a>, dentro del tiempo.</p></div>
+    <div class="card"><span class="etq">3 · El lavador</span><p>Revisa la lista dentro del puesto.</p></div>
+    <div class="card oro"><span class="etq">4 · Otra persona</span><p>Revisa otra vez y graba un video corto. Si no pasa, se vuelve a lavar.</p></div>
+  </div>
+
+  <div class="hoja-lista" id="hoja-lista">
+    <div class="hl-cab">
+      <div><h3>Lista de calidad · <span>[nombre del lavadero]</span></h3><p class="chico" style="margin:4px 0 0">Una por moto. ✓ cuando cumple o no aplica. Una sola casilla sin marcar y la moto no sale.</p></div>
+    </div>
+    <div class="hl-campos">
+      <label>Placa<input type="text" data-c="placa" autocomplete="off"></label>
+      <label>Fecha<input type="text" data-c="fecha" autocomplete="off"></label>
+      <label>Servicio<input type="text" data-c="servicio" autocomplete="off"></label>
+      <label>Lavador<input type="text" data-c="lavador" autocomplete="off"></label>
+      <label>Revisó<input type="text" data-c="reviso" autocomplete="off"></label>
+      <label>Entrada / salida<input type="text" data-c="horas" autocomplete="off" placeholder="--:-- / --:--"></label>
+    </div>
+    <div class="contador" id="contador"><span class="num" id="cuenta">0 / 23</span><span class="barra"><i id="cuenta-barra"></i></span><span class="estado" id="cuenta-estado">Faltan 23</span></div>
+    <div id="bloques-lista"></div>
+    <p class="resultado-lista" id="resultado-lista" aria-live="polite">Todavía no pasa: faltan casillas.</p>
+    <div class="pie-lista">
+      RESULTADO: ☐ PASA &nbsp;&nbsp; ☐ NO PASA → se vuelve a lavar<br>
+      Qué se corrigió: ______________________________________________________<br>
+      Video antes de llamar al cliente: ☐ Sí &nbsp;&nbsp;&nbsp; Firma de quien revisó: ____________________
+    </div>
+    <div class="acciones">
+      <button class="btn" type="button" id="imprimir-lista">Imprimir la lista</button>
+      <button class="btn gris" type="button" id="reiniciar-lista">Reiniciar (otra moto)</button>
+    </div>
+  </div>
+
+  <div class="regla"><small>La regla de rehacer</small>La moto que sale mal se vuelve a lavar antes de llamar al cliente.</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3 class="buscable">Cómo se rehace</h3>
+      <ul class="lista">
+        <li><b>La rehace el mismo lavador.</b> Si otro la termina, el que la lavó no aprende.</li>
+        <li><b>Se rehace la zona completa</b>, con su enjuague y su secado. No basta un trapo encima.</li>
+        <li><b>No se discute.</b> Devolver una moto no es un regaño: es la política, igual para todos.</li>
+        <li><b>Se anota</b> qué se corrigió, para saber qué falla más.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="buscable">Si rehacerla atrasa la entrega</h3>
+      <p>Se le avisa al cliente con una hora real. Nunca «ya casi».</p>
+      <p class="frase">Don/Doña [nombre del cliente], le estamos dando un último repaso a su moto para entregársela bien. En [10 minutos] se la tengo lista.</p>
+    </div>
+  </div>
+  <h4>¿Se vuelve a lavar sin cobrar?</h4>
+  <div class="grid g2">
+    <div class="card bien"><span class="etq">Sí, sin cobrar</span><ul class="lista"><li>Falla cualquier punto de la lista.</li><li>La moto salió mojada.</li><li>Quedó producto donde no va.</li></ul></div>
+    <div class="card mal"><span class="etq">No sin cobrar</span><ul class="lista"><li>El daño estaba en las fotos de la recepción.</li><li>La moto rodó y se ensució después de salir.</li><li>Pide algo que no incluye su servicio: se cotiza aparte.</li></ul></div>
+  </div>
+
+  <h4>Tiempos objetivo · lavada base</h4>
+  <div class="grid g2">
+    <div class="card blanca">
+      <div class="tiempos" id="tiempos"></div>
+      <p class="chico" style="margin:12px 0 0"><b>La lavada dura 45 min.</b> Con inspección, caballete y entrega, la moto ocupa el puesto 50 min.</p>
+    </div>
+    <div class="card">
+      <h3 class="buscable">Con adicionales</h3>
+      <ul class="lista">
+        <li>Lavada base: <b>50 min</b> en el puesto.</li>
+        <li>Con 1 adicional ([nombre intermedia A] o [nombre intermedia B]): <b>60 min</b>.</li>
+        <li>Con 2 adicionales: <b>75 min</b>. Cada adicional suma 15 minutos.</li>
+        <li><b>Alerta:</b> si una lavada base pasa de 60 minutos, se cronometra por etapas.</li>
+        <li><b>Rápido no es mejor.</b> Una moto de 20 minutos es una moto que no se estregó.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Entrega -->
+<section class="sec" id="entrega">
+  <p class="kick">Entrega, cobro y despedida</p>
+  <h2>El momento que el cliente recuerda</h2>
+  <p class="lead">Una buena entrega vende la próxima lavada. Una mala borra todo lo bueno de la recepción.</p>
+  <ol class="linea-e">
+    <li data-n="0">
+      <div>
+        <p class="quien">Lavador + quien recibe</p>
+        <h3 class="buscable">Antes de llamar al cliente, la moto se revisa</h3>
+        <div class="hace"><b>Qué se hace</b><ul><li>Se pasa la lista de calidad de esa placa.</li><li>Se revisa <b>grabando con el celular</b>: ese video es la prueba.</li><li>La parte baja tiene que estar seca. Si queda húmeda, la mugre se pega al arrancar.</li></ul></div>
+        <div class="error-comun"><b>Error común</b>Entregarla «así» esperando que no se dé cuenta. Se dará cuenta, y lo va a contar en redes.</div>
+      </div>
+    </li>
+    <li data-n="1">
+      <div>
+        <p class="quien">Quien recibe</p>
+        <h3 class="buscable">Avisar que está lista</h3>
+        <p class="frase">[nombre del cliente], ya quedó lista su moto. Acompáñeme y le muestro cómo quedó.</p>
+        <p class="chico">Se acerca donde está sentado. No se le grita desde el puesto. Si no está en el local:</p>
+        <p class="frase wa">¡Hola, [nombre del cliente]! 👋 Su moto ya está lista en [nombre del lavadero]. Puede pasar por ella cuando quiera 🏍️</p>
+        <div class="acciones" style="margin:0 0 6px"><button class="copiar" type="button" data-de="prev">Copiar WhatsApp</button></div>
+      </div>
+    </li>
+    <li data-n="2">
+      <div>
+        <p class="quien">Quien recibe</p>
+        <h3 class="buscable">El recorrido por la moto</h3>
+        <p class="frase">Mire, le hicimos la desengrasada completa de motor, cadena, plato trasero, rines y mofle, que son las partes que más acumulan mugre. Todo con champú pH neutro, sin silicona ni grafito.</p>
+        <p class="frase sin-etq"><span class="sub">Si tomó adicionales</span>Y como escogió [nombre del adicional], también le aplicamos [cera / restaurador de partes negras / limpieza y lubricada del kit de arrastre]. Mire cómo quedó.</p>
+        <div class="hace"><b>El gesto que convence</b>Se le pasa la mano al kit de arrastre y a los soportes <b>delante del cliente</b>. Es el mismo sitio donde él iba a meter la mano. Si se hizo el kit: «Le mando por WhatsApp la foto de cómo tenía la tapa del piñón y cómo le quedó.»</div>
+      </div>
+    </li>
+    <li data-n="3">
+      <div>
+        <p class="quien">Quien recibe · solo si se anotó algo al recibir</p>
+        <h3 class="buscable">Recordar el detalle anotado</h3>
+        <p class="frase">Aprovecho para recordarle que cuando recibimos la moto notamos que [descripción del detalle]. Se lo anotamos y le tomamos foto. Le recomendamos revisarlo pronto para evitar inconvenientes.</p>
+        <p class="porque"><b>Por qué:</b> lo que se dice al entregar, el cliente ya no lo puede reclamar como daño del lavadero. Lo que no se dijo, sí. Tono de cuidado, no de reclamo.</p>
+      </div>
+    </li>
+    <li data-n="4">
+      <div>
+        <p class="quien">Quien recibe</p>
+        <h3 class="buscable">Preguntar si quedó satisfecho</h3>
+        <p class="frase">Revise la moto y me dice si quedó satisfecho con el servicio.</p>
+        <div class="silencio"><span class="ic">🤐</span><div><b>Silencio <span class="puntos"><i></i><i></i><i></i></span></b><span>Deje que mire la moto. Si señala algo, no se discute: vaya a <a href="#reclamos">reclamos en el local</a>.</span></div></div>
+      </div>
+    </li>
+    <li data-n="5">
+      <div>
+        <p class="quien">Quien recibe · en la caja</p>
+        <h3 class="buscable">Cobrar y registrar en el mismo movimiento</h3>
+        <p class="frase">Listo, entonces lo invito a pasar a caja. El valor total es de [precio total].</p>
+        <div class="silencio"><span class="ic">🤐</span><div><b>Silencio</b><span>Acaba de decir un precio.</span></div></div>
+        <p class="frase sin-etq"><span class="sub">El medio de pago</span>¿Cómo desea pagar? Puede ser en efectivo, por transferencia o con el QR que tenemos aquí.</p>
+        <p class="frase sin-etq buscable"><span class="sub">La propina, una sola vez</span>¿Desea dejarle una propina a [nombre del lavador]?</p>
+        <div class="regla" style="margin:10px 0"><small>Regla visible</small>La moto se lava igual con o sin propina.</div>
+        <p class="chico">Se pregunta una vez, sin insistir. Si dice que no: «Listo, con mucho gusto.» Nada cambia en el trato.</p>
+        <div class="hace"><b>Qué se hace</b><ul><li>Antes de decir el valor, se revisa qué lavado y qué adicionales escogió.</li><li>Promoción solo con la frase escrita que tiene todo el equipo. Un descuento que nadie escribió no existe.</li><li>Se recibe el pago y <b>en ese mismo momento</b> se registra: placa, servicio, valor y medio de pago.</li><li>Transferencia o QR: se confirma que entró <b>antes</b> de entregar la moto. No vale «ya le mandé».</li></ul></div>
+        <div class="error-comun"><b>Error común</b>Dejar el registro para después «porque es conocido» o porque tiene afán. Lo que no se registra, no se cobró.</div>
+      </div>
+    </li>
+    <li data-n="6">
+      <div>
+        <p class="quien">Quien recibe · solo si le sirve</p>
+        <h3 class="buscable">La membresía, una sola vez</h3>
+        <p class="chico">Es el único momento en que se ofrece: la moto está limpia y el cliente sabe cuánto acaba de pagar. En la recepción no se toca.</p>
+        <p class="frase">Una pregunta: ¿cada cuánto suele lavar la moto?</p>
+        <div class="decide" id="decide-memb" role="group" aria-label="Qué responde el cliente">
+          <button type="button" data-r="m-mas" aria-pressed="false">Dos veces al mes o más</button>
+          <button type="button" data-r="m-menos" aria-pressed="false">Una vez al mes o menos</button>
+          <button type="button" data-r="m-ya" aria-pressed="false">Ya es miembro</button>
+        </div>
+        <div id="m-mas" class="respuesta" hidden>
+          <p class="frase sin-etq">Le cuento: tenemos [nombre de la membresía] por [precio membresía] al mes, con lavadas ilimitadas. Usted hoy pagó [precio total]. Desde la tercera lavada del mes ya le sale más barato. ¿Le mando la información?</p>
+          <div class="silencio"><span class="ic">🤐</span><div><b>Silencio</b><span>Él hace la cuenta solo.</span></div></div>
+          <div class="grid g2">
+            <div class="hace"><b>Si dice que sí</b>«Listo, le mando el link por WhatsApp. Ahí ve todo lo que incluye y la puede comprar desde el celular. Solo necesita la placa y el comprobante del pago.» Se manda la página ([link de la membresía]), no el formulario de pago.</div>
+            <div class="hace"><b>Si dice que no</b>«Listo, no hay problema. Cualquier cosa, aquí estamos.» No se insiste. Si vuelve una segunda vez en el mes, se le escribe una vez.</div>
+          </div>
+        </div>
+        <div id="m-menos" class="respuesta" hidden><div class="hace"><b>No se le ofrece</b>No le conviene, y ofrecérsela igual hace que no vuelva a creerle. Ofrézcale agendar la próxima lavada (abajo).</div></div>
+        <div id="m-ya" class="respuesta" hidden><p class="frase sin-etq">Para la próxima, recuerde reservar antes y así no espera nada.</p><p class="chico">Al miembro no se le vende nada.</p></div>
+        <p class="frase sin-etq buscable" style="margin-top:12px"><span class="sub">A todo el que no tiene membresía</span>¿Le dejo agendada su próxima lavada? Así llega a su hora y no hace fila.</p>
+        <p class="chico">Si dice que sí, se agenda ahí mismo en el sistema, con nombre, placa y celular. Si dice que no, no se insiste.</p>
+      </div>
+    </li>
+    <li data-n="7">
+      <div>
+        <p class="quien">Quien recibe o el encargado · nunca el lavador</p>
+        <h3 class="buscable">Pedir la reseña con el QR y recordar la encuesta</h3>
+        <p class="frase">[nombre del cliente], ¿nos regala un minuto? Si le gustó cómo quedó su moto, nos ayuda muchísimo una reseña en Google. Es solo escanear este código. Para nosotros vale mucho.</p>
+        <p class="frase sin-etq buscable"><span class="sub">La encuesta</span>Y le recuerdo la encuesta del servicio: le llega por WhatsApp y es un minuto. Nos ayuda mucho a mejorar.</p>
+        <p class="chico">La encuesta se le manda a todos, también al que no quiso dejar reseña: [link de la encuesta].</p>
+        <div class="hace"><b>Reglas</b><ul><li>Solo si dijo que quedó bien. A un cliente molesto, primero se le arregla.</li><li>No se le dice qué escribir ni cuántas estrellas.</li><li>Ni descuento ni regalo a cambio.</li><li>Si dice que después, no se insiste: se le manda el link al día siguiente.</li></ul></div>
+      </div>
+    </li>
+    <li data-n="8">
+      <div>
+        <p class="quien">Quien recibe</p>
+        <h3 class="buscable">Devolver el casco y despedirse por nombre</h3>
+        <p class="chico">El casco se entrega antes de que se suba a la moto. Que nunca tenga que pedirlo.</p>
+        <p class="frase">Muchas gracias, [nombre del cliente]. Mi nombre es [nombre de quien recibe] y quedo a su disposición. Si nota cualquier detalle con la moto, me avisa, con mucho gusto le ayudamos.</p>
+        <p class="frase sin-etq">Que tenga un excelente día, nos vemos la próxima semana.</p>
+        <p class="porque">Si el lavador está libre, que salga a despedirse también: es la persona que respondió por la moto.</p>
+      </div>
+    </li>
+    <li data-n="9">
+      <div>
+        <p class="quien">Quien recibe o el encargado · al día siguiente, a media mañana</p>
+        <h3 class="buscable">El WhatsApp del día siguiente</h3>
+        <div class="grid g2">
+          <div class="plantilla"><div class="cab"><span>Si dejó la reseña</span><button class="copiar" type="button">Copiar</button></div><p class="texto">¡Hola, [nombre del cliente]! 👋 Le escribimos de [nombre del lavadero]. Gracias por venir ayer y por su reseña 🙌 ¿Cómo le ha ido con la moto?</p></div>
+          <div class="plantilla"><div class="cab"><span>Si no la dejó</span><button class="copiar" type="button">Copiar</button></div><p class="texto">¡Hola, [nombre del cliente]! 👋 Le escribimos de [nombre del lavadero]. ¿Qué le pareció cómo quedó su moto? Si le gustó, nos ayudaría mucho una reseña aquí: [link de reseñas] 🙏</p></div>
+        </div>
+        <p class="chico" style="margin-top:10px">Un solo mensaje. Sin audios. Si contesta con una queja, <a href="#reclamos" data-tab="r-wa">guion de reclamos por WhatsApp</a>.</p>
+      </div>
+    </li>
+  </ol>
+  <p class="cierre-frase" style="font-size:clamp(22px,3vw,32px)">La despedida es tan importante como la bienvenida.</p>
+</section>
+
+<!-- Reclamos -->
+<section class="sec" id="reclamos">
+  <p class="kick">Reclamos</p>
+  <h2>Casi siempre son los mismos ocho</h2>
+  <p class="lead">Si se reclama algo de esta lista, es una falla del lavado, no del cliente. Lo que no quedó escrito y con foto, no pasó.</p>
+  <ol class="nunca verde" style="margin:0 0 28px">
+    <li>Guardabarros sucio.</li><li>Partes bajas con residuos.</li><li>Direccionales mal lavadas.</li><li>Motor sin detallar.</li>
+    <li>Cadena y piñón con grasa.</li><li>Manchones o exceso de cera.</li><li>Restaurador que no se aplicó.</li><li>Espejos secados con un trapo sucio.</li>
+  </ol>
+
+  <div class="seg" role="tablist" data-grupo="reclamo" id="tabs-reclamo">
+    <button type="button" role="tab" aria-selected="true" data-panel="r-local">En el local</button>
+    <button type="button" role="tab" aria-selected="false" data-panel="r-wa">WhatsApp</button>
+    <button type="button" role="tab" aria-selected="false" data-panel="r-publico">Comentario público</button>
+  </div>
+
+  <div class="panel" id="r-local">
+    <div class="grid g2">
+      <div>
+        <ol class="pasos">
+          <li><span><b>Escuchar completo, sin interrumpir.</b> Mirarlo a los ojos. No defenderse mientras habla.</span></li>
+          <li><span><b>No discutir.</b> Nunca «eso venía así» ni «eso no se puede».</span></li>
+          <li><span><b>Revisar juntos.</b> Ir a la moto y que señale lo que no le gustó.</span></li>
+          <li><span><b>Si es una falla del lavado</b> (uno de los ocho o un punto de la lista), <b>ofrecer volver a lavar en el momento, sin costo</b>. Si no lo es, se dice con calma, sin culpar al cliente.</span></li>
+          <li><span><b>La corrección se hace adentro</b>, en el puesto, nunca delante del cliente con un trapo.</span></li>
+          <li><span><b>Anotar el reclamo</b> y cerrarlo con fecha.</span></li>
+        </ol>
+      </div>
+      <div>
+        <p class="frase buscable"><span class="sub">Al escuchar</span>Tiene toda la razón en decírmelo. Muéstreme, por favor, qué fue lo que no le gustó.</p>
+        <p class="frase sin-etq"><span class="sub">Si sí quedó mal</span>Sí, eso no debió salir así. Le pido disculpas. Se la volvemos a pasar ya mismo, sin ningún costo. Me da [minutos], por favor. Tome asiento, ¿le provoca algo de tomar?</p>
+        <p class="frase sin-etq"><span class="sub">Al entregarla corregida</span>[nombre del cliente], ya quedó. Mire. ¿Así sí quedó bien?</p>
+        <p class="frase sin-etq"><span class="sub">Si es por un daño</span>Entiendo. Déjeme revisar con usted la foto que le tomamos cuando la recibimos, para mirarlo juntos.</p>
+        <p class="chico">Si el daño ya venía y está anotado, se le muestra la foto con calma. Si no venía o no hay foto: no se promete ni se niega nada. Se llama al encargado.</p>
+        <p class="frase sin-etq"><span class="sub">Si pide algo que su servicio no incluye</span>Eso no viene incluido en la [nombre de la básica]. Con gusto se lo hacemos por [precio adicional].</p>
+        <p class="frase sin-etq"><span class="sub">Si se ensució después de salir</span>Mire, en el video de salida se ve así. Con gusto le damos una pasada rápida a esa parte.</p>
+        <p class="chico">Nunca «eso es culpa suya» ni «eso ya venía así» en tono de pelea. Se muestra la foto o el video y se ofrece una salida.</p>
+      </div>
+    </div>
+    <h4>Quién decide</h4>
+    <div class="tabla-env"><table class="tabla">
+      <thead><tr><th>Situación</th><th>Decide</th></tr></thead>
+      <tbody>
+        <tr><td>Volver a lavar una parte o la moto completa</td><td>Quien recibe o el encargado, en el momento. Sin pedir permiso. Solo si es falla del lavado.</td></tr>
+        <tr><td>Devolver dinero, hacer un descuento o regalar una lavada</td><td>Solo el encargado o el dueño.</td></tr>
+        <tr><td>Un daño en la moto (roto, rayado, quemado)</td><td>Solo el encargado o el dueño, con las fotos de recepción en la mano.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="chico" style="margin-top:10px">El lavador nunca discute con el cliente ni promete plata. Si el cliente se pone bravo con el lavador, el encargado toma la conversación.</p>
+    <h4>Qué se anota</h4>
+    <div class="card"><p>Fecha y hora · placa y nombre · qué reclamó, con sus palabras · cuál de los ocho es (o «otro») · quién lavó · qué se hizo · si quedó conforme o no · fecha de cierre. El encargado lo revisa cada semana: si un reclamo se repite, se corrige en la capacitación, no regañando en el patio.</p></div>
+  </div>
+
+  <div class="panel" id="r-wa" hidden>
+    <div class="grid g2">
+      <div>
+        <ol class="pasos">
+          <li><span><b>Responder rápido</b>, en menos de una hora. Un reclamo sin respuesta crece.</span></li>
+          <li><span><b>Agradecer y pedir disculpas</b>, sin discutir.</span></li>
+          <li><span><b>Pedir una foto</b> si es de lavado o de daño.</span></li>
+          <li><span><b>Invitarlo a volver</b> para corregirlo sin costo.</span></li>
+          <li><span><b>Anotar el reclamo</b> igual que en el local.</span></li>
+        </ol>
+        <div class="error-comun" style="margin-top:16px"><b>Reglas</b>Sin audios: por escrito queda la prueba. Nunca en caliente. No se le echa la culpa al cliente por chat.</div>
+      </div>
+      <div class="chat" aria-label="Ejemplo de conversación">
+        <div class="burbuja el">La moto quedó sucia por debajo 😡</div>
+        <div class="burbuja yo">Hola, [nombre del cliente]. Muchas gracias por escribirnos y por decírnoslo. Lamentamos mucho que no haya quedado como esperaba. ¿Nos puede mandar una foto de lo que vio, por favor? Así lo revisamos bien.</div>
+        <div class="burbuja el">📷 Foto</div>
+        <div class="burbuja yo">Tiene razón, eso no debió salir así. Queremos corregírselo: tráiganos la moto cuando le quede bien y se la volvemos a lavar sin ningún costo. ¿Qué día le sirve?</div>
+      </div>
+    </div>
+    <h4>Respuestas listas</h4>
+    <div class="grid g2">
+      <div class="plantilla"><div class="cab"><span>Primera respuesta</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Hola, [nombre del cliente]. Muchas gracias por escribirnos y por decírnoslo. Lamentamos mucho que no haya quedado como esperaba. ¿Nos puede mandar una foto de lo que vio, por favor? Así lo revisamos bien.</p></div>
+      <div class="plantilla"><div class="cab"><span>Manda la foto · es de lavado</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Tiene razón, eso no debió salir así. Queremos corregírselo: tráiganos la moto cuando le quede bien y se la volvemos a lavar sin ningún costo. ¿Qué día le sirve?</p></div>
+      <div class="plantilla"><div class="cab"><span>Es por un daño</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Gracias por la foto. Vamos a revisarla junto con las fotos que le tomamos al recibir la moto. Le respondo hoy mismo antes de las [hora].</p></div>
+      <div class="plantilla"><div class="cab"><span>Es por la atención</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Lamentamos mucho que se haya sentido así. No es la forma en que queremos atender. Ya lo hablamos con el equipo. Nos gustaría que nos diera otra oportunidad: la próxima lavada corre por nuestra cuenta.</p></div>
+      <div class="plantilla"><div class="cab"><span>Cierre, ya resuelto</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Gracias por darnos la oportunidad de corregirlo, [nombre del cliente]. Cualquier cosa, aquí estamos.</p></div>
+      <div class="card"><p class="chico" style="margin:0">Lo del daño lo responde el encargado o el dueño, y se cumple la hora. La lavada de cortesía la autoriza el encargado o el dueño.</p></div>
+    </div>
+  </div>
+
+  <div class="panel" id="r-publico" hidden>
+    <p>Un comentario malo en público lo lee mucha más gente que el que lo escribió. <b>La respuesta no es para ganarle la discusión al cliente: es para que los demás vean cómo responde el lavadero.</b></p>
+    <div class="error-comun"><b>Quién responde</b>Solo quien maneja las redes del lavadero o el encargado. Nunca el lavador desde su cuenta.</div>
+    <div class="grid g4" style="margin:0 0 20px">
+      <div class="card oro"><span class="etq">1 · En público</span><p>Rápido: menos de 24 h en Google, menos de 1 hora en Instagram o TikTok. Corto y con respeto.</p></div>
+      <div class="card oro"><span class="etq">2 · A privado</span><p>Por mensaje directo o WhatsApp se resuelven los detalles.</p></div>
+      <div class="card oro"><span class="etq">3 · Corregir</span><p>Si fue falla del lavado, volver a lavarla gratis. Si es un daño, lo revisa el encargado.</p></div>
+      <div class="card oro"><span class="etq">4 · Cerrar en público</span><p>Una línea final en el comentario cuando se resolvió.</p></div>
+    </div>
+    <h4>Toque el comentario que le llegó</h4>
+    <div class="casos" id="casos"></div>
+    <div id="respuesta-caso"></div>
+    <h4>Si el comentario es falso o es un ataque</h4>
+    <div class="grid g2">
+      <div class="plantilla publico"><div class="cab"><span>No está en el registro</span><button class="copiar" type="button">Copiar</button></div><p class="texto">Hola, [nombre del cliente]. No encontramos su visita en nuestro registro. Nos gustaría revisarlo: ¿nos escribe por mensaje directo con la placa y la fecha? Con gusto lo revisamos.</p></div>
+      <div class="card"><p>Si es un insulto sin contenido o un perfil falso, no se discute. En Google se puede <b>reportar</b> la reseña. En Instagram y TikTok se puede ocultar un comentario con groserías, pero solo si de verdad es un insulto, <b>nunca porque es una crítica</b>.</p></div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:36px">Lo que nunca se hace</h4>
+  <ol class="nunca">
+    <li>Borrar un comentario negativo o una reseña mala. Se ve peor que el comentario.</li>
+    <li>Pelear en público. Ni con el cliente ni con nadie.</li>
+    <li>Culpar al lavador en público. «Fue el muchacho nuevo» no existe.</li>
+    <li>Decir «eso ya venía así» en público. Eso va en privado, con la foto.</li>
+    <li>Responder en caliente o con ironía. Si da rabia, se esperan diez minutos.</li>
+    <li>Hablar mal de otro lavadero para defenderse.</li>
+    <li>Prometer plata sin que lo autorice el encargado o el dueño.</li>
+    <li>Corregir la moto delante del cliente con un trapo.</li>
+    <li>Entregar una moto que no pasó la revisión.</li>
+    <li>Pedirle reseña a un cliente molesto.</li>
+    <li>Contestar un reclamo con audios.</li>
+    <li>Dejar un reclamo sin anotar. Lo que no se anota, se repite.</li>
+  </ol>
+</section>
+
+<!-- Reglas -->
+<section class="sec" id="reglas">
+  <p class="kick">Reglas no negociables del equipo</p>
+  <h2>No cambian según el turno, el día ni el cliente</h2>
+  <div class="grid g2" id="reglas-lista"></div>
+  <div class="regla"><small>Para recordar</small>Una lavada mal hecha nunca cuesta solo una lavada. Cuesta el año entero de ese cliente.</div>
+  <h4>Los 10 errores que más se repiten en el mostrador</h4>
+  <ol class="nunca">
+    <li>No saludar primero, o saludar sin mirar.</li>
+    <li>Tutear o decirle «parcero», «papi», «mi amor».</li>
+    <li>No recibir el casco, o recibirlo tarde.</li>
+    <li>Saltarse las tres preguntas e ir directo a precios.</li>
+    <li>Empezar por la full y bajar.</li>
+    <li>Dar el precio antes del valor.</li>
+    <li>Hablar después del precio en vez de callarse.</li>
+    <li>Ofrecer la membresía a todo el mundo, o antes de la entrega.</li>
+    <li>No presentar al lavador por su nombre.</li>
+    <li>Prometer que se anota y no anotarlo.</li>
+  </ol>
+</section>
+
+<!-- Rúbrica -->
+<section class="sec" id="rubrica">
+  <p class="kick">Evaluación por persona</p>
+  <h2>¿Ya puede atender sin ayuda?</h2>
+  <p class="lead">Simulacro de punta a punta, con un compañero que hace de cliente. Se aprueba con todos los ★ en Sí y al menos 13 de 15, en <b>2 simulacros seguidos</b> con clientes distintos (nuevo, miembro, el que pregunta «¿cuánto?» de entrada, el que llega con un reclamo).</p>
+  <div class="hoja-rub" id="hoja-rub">
+    <div class="rub-cab">
+      <label class="nombre">Nombre<input type="text" id="rub-nombre" autocomplete="off" placeholder="Quién se evalúa"></label>
+      <label>Rol<select id="rub-rol"><option value="recepcion">Recepción</option><option value="lavador">Lavador</option></select></label>
+      <label>Fecha<input type="text" id="rub-fecha" autocomplete="off"></label>
+    </div>
+    <div class="sim-tabs" role="tablist" id="rub-tabs" aria-label="Simulacro">
+      <button type="button" role="tab" aria-selected="true" data-s="1">Simulacro 1</button>
+      <button type="button" role="tab" aria-selected="false" data-s="2">Simulacro 2</button>
+    </div>
+    <div id="rub-items"></div>
+    <div class="lavador-extra" id="lavador-extra" hidden>
+      <div class="rub-grupo"><h5>Para el lavador, además · medido en 5 motos seguidas</h5><div id="rub-lav"></div></div>
+    </div>
+    <div class="marcador" id="marcador">
+      <div class="card"><span class="etq">Simulacro 1</span><b id="pt-1">0 / 15</b><span class="chico" id="st-1">★ pendientes</span></div>
+      <div class="card"><span class="etq">Simulacro 2</span><b id="pt-2">0 / 15</b><span class="chico" id="st-2">★ pendientes</span></div>
+      <div class="card"><span class="etq">Para aprobar</span><b>13 / 15</b><span class="chico">y todos los ★ en Sí</span></div>
+    </div>
+    <div class="veredicto" id="veredicto" aria-live="polite">Marque Sí o No en cada punto.</div>
+    <div class="acciones">
+      <button class="btn" type="button" id="imprimir-rub">Imprimir la evaluación</button>
+      <button class="btn gris" type="button" id="nueva-rub">Evaluar a otra persona</button>
+    </div>
+    <p class="chico" style="margin-top:10px">Se guarda en este celular o computador mientras no la borre.</p>
+  </div>
+</section>
+
+<section class="sec" id="final" style="border-bottom:0">
+  <p class="cierre-frase">El cliente vuelve por cómo lo hicimos sentir al irse.<br><span style="color:var(--a-osc)">Recibir bien no cuesta más.</span></p>
+  <p class="chico">Relacionado: <a href="../mensajes-redes/" style="font-weight:700">qué contestar en comentarios, mensajes directos y WhatsApp</a>. Ojo: esa guía todavía está escrita en tú; con el cliente, siempre de usted.</p>
+  <div id="ruta-cierre" style="margin-top:24px"></div>
+</section>
+
+</main>
+
+<footer class="pie"><p>Mónaco · Moto Detailing · Guion de atención al cliente · v1 · noviembre de 2026</p></footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function leer(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+
+  /* ---------- Marcadores [ ... ] que se llenan con los datos del lavadero ---------- */
+  var CAMPOS = [
+    ["nombre del lavadero", "Nombre del lavadero"], ["nombre de la básica", "Nombre de la básica"],
+    ["nombre intermedia a", "Intermedia A (brillo)"], ["nombre intermedia b", "Intermedia B (kit)"],
+    ["nombre de la full", "Nombre de la full"], ["precio básica", "Precio básica"],
+    ["precio intermedia", "Precio intermedia"], ["precio full", "Precio full"],
+    ["diferencia", "Lo que sube cada escalón"], ["nombre de la membresía", "Nombre de la membresía"],
+    ["precio membresía", "Precio membresía"], ["tiempo de la básica", "Tiempo de la básica"],
+    ["link de reservas", "Enlace de reservas"], ["link de reseñas", "Enlace de reseñas"],
+    ["link de la membresía", "Enlace de la membresía"], ["sistema del lavadero", "Sistema o app del lavadero"],
+    ["promo de primera visita", "Promo de primera visita"], ["adicional 1", "Adicional 1 (ej.: cera)"],
+    ["adicional 2", "Adicional 2 (ej.: kit de arrastre)"], ["precio adicional", "Precio de un adicional"],
+    ["link de la encuesta", "Enlace de la encuesta"]
+  ];
+  var CLAVE_DATOS = "monaco-atencion-datos-v1";
+  var datos = leer(CLAVE_DATOS, {}) || {};
+  var RX = /\[([^\[\]\n]{2,90})\]/g;
+  function marcar(raiz) {
+    var w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        var p = n.parentNode;
+        if (!p || /^(SCRIPT|STYLE|INPUT|TEXTAREA|OPTION|SELECT)$/.test(p.nodeName) || (p.classList && p.classList.contains("m"))) return NodeFilter.FILTER_REJECT;
+        RX.lastIndex = 0;
+        return RX.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    var lista = []; while (w.nextNode()) lista.push(w.currentNode);
+    lista.forEach(function (n) {
+      var frag = document.createDocumentFragment(), txt = n.nodeValue, ult = 0, m;
+      RX.lastIndex = 0;
+      while ((m = RX.exec(txt))) {
+        if (m.index > ult) frag.appendChild(document.createTextNode(txt.slice(ult, m.index)));
+        var s = document.createElement("span"); s.className = "m"; s.dataset.m = norm(m[1]); s.dataset.o = m[0];
+        frag.appendChild(s); ult = m.index + m[0].length;
+      }
+      if (ult < txt.length) frag.appendChild(document.createTextNode(txt.slice(ult)));
+      n.parentNode.replaceChild(frag, n);
+    });
+    pintarMarcas(raiz);
+  }
+  function pintarMarcas(raiz) {
+    $$("span.m", raiz || document).forEach(function (s) {
+      if (!s.dataset.o) return;
+      var v = datos[s.dataset.m];
+      s.textContent = v ? v : s.dataset.o;
+      s.classList.toggle("lleno", !!v);
+    });
+  }
+  var cajaCampos = $("#campos");
+  CAMPOS.forEach(function (c) {
+    var l = document.createElement("label"); l.textContent = c[1];
+    var i = document.createElement("input"); i.type = "text"; i.value = datos[norm(c[0])] || ""; i.placeholder = "[" + c[0].replace(/ a$/, " A").replace(/ b$/, " B") + "]";
+    i.addEventListener("input", function () { var v = i.value.trim(); if (v) datos[norm(c[0])] = v; else delete datos[norm(c[0])]; guardar(CLAVE_DATOS, datos); pintarMarcas(); });
+    l.appendChild(i); cajaCampos.appendChild(l);
+  });
+  $("#borrar-datos").addEventListener("click", function () { datos = {}; guardar(CLAVE_DATOS, datos); $$("input", cajaCampos).forEach(function (i) { i.value = ""; }); pintarMarcas(); });
+
+  /* ---------- Barra de avance y sección activa ---------- */
+  var barra = $("#progreso");
+  var links = $$(".indice a");
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  function avance() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    barra.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + "%";
+    var act = -1;
+    secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < 140) act = i; });
+    links.forEach(function (a, i) {
+      var on = i === act;
+      if (on !== a.classList.contains("activo")) {
+        a.classList.toggle("activo", on);
+        if (on) { var nav = a.parentNode.parentNode; nav.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" }); }
+      }
+    });
+  }
+  addEventListener("scroll", avance, { passive: true });
+
+  /* ---------- Copiar ---------- */
+  function copiar(txt, b) {
+    var hecho = function () { var t = b.textContent; b.textContent = "Copiado ✓"; b.classList.add("ok");
+      setTimeout(function () { b.textContent = t; b.classList.remove("ok"); }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(hecho, hecho);
+    else { var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (e) {} ta.remove(); hecho(); }
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".copiar"); if (!b) return;
+    var txt = "";
+    if (b.dataset.de === "prev") { var li = b.closest("li"); var f = li.querySelector(".frase.wa"); txt = f ? f.textContent : ""; }
+    else { var p = b.closest(".plantilla"); txt = p ? p.querySelector(".texto").textContent : ""; }
+    copiar(txt.trim(), b);
+  });
+
+  /* ---------- Recorrido de la moto ---------- */
+  var REC = [
+    { t: "Llega", s: "Saludo y casco", ir: "#recepcion", nodo: "llegada",
+      dice: ["Buenos días. Bienvenido a [nombre del lavadero].", "¿Me permite el casco? Se lo guardo aquí mientras tanto."],
+      hace: ["Usted se acerca: saluda primero, mira a los ojos, suelta lo que está haciendo.", "A una clienta: «Bienvenida».", "Lo guía a donde se deja la moto. No se da información caminando.", "Recibe el casco apenas se lo quite y lo guarda en el lugar fijo, a la vista.", "Lo invita al escritorio: ahí se habla, no caminando."],
+      err: "Gritar el saludo desde el fondo, o decir «¿qué le vamos a hacer?» sin el «bienvenido»." },
+    { t: "Recepción", s: "Las tres preguntas", ir: "#recepcion", nodo: "preguntas",
+      dice: ["¿Ya había venido antes?", "¿Tiene reserva?", "¿Tiene membresía con nosotros?"],
+      hace: ["Una a una, sin interrogar.", "Mírele la placa y anótela: con ella se confirma si es miembro o si ya vino.", "Las respuestas deciden el camino: reserva, miembro o venta."],
+      err: "Saltarse las preguntas e ir directo a precios. O preguntar el cilindraje: el precio es el mismo para toda moto." },
+    { t: "Venta", s: "Solo si no tiene reserva ni membresía", ir: "#escalera", nodo: "escalon-1", clave: true,
+      dice: ["Todas las lavadas que manejamos acá vienen con desengrasado de motor, rines, mofle, plato trasero, cadena y llantas… Esa es la [nombre de la básica] y la tenemos en [precio básica]."],
+      hace: ["Solo para el cliente sin reserva ni membresía. Al que reservó o es miembro no se le vende.", "Empieza por la básica y sube un escalón a la vez.", "El valor antes del precio, señalando cada parte de la moto.", "🤐 Silencio después de cada precio."],
+      err: "Empezar por la full y bajar. O seguir hablando después del precio." },
+    { t: "Lavador e inspección", s: "Presentarlo, anotar y revisar con foto", ir: "#recepcion", nodo: "lavador", clave: true,
+      dice: ["La persona que le va a lavar su moto es [nombre del lavador]. ¿Alguna cosa que quiere que tengamos en cuenta?", "Perfecto, lo vamos a anotar.", "Aquí vemos que [detalle]. ¿Usted ya lo tenía identificado?"],
+      hace: ["Presenta al lavador por su nombre y anota de verdad lo que pide el cliente.", "Con el cliente al lado y antes de mojar la moto: los 8 puntos, siempre en el mismo orden.", "Fotos con la placa visible y una de cerca por cada hallazgo. Si no hay nada: «Recibida sin novedad»."],
+      err: "«Ya se la van a lavar», sin nombre. O lavar sin foto previa: si después hay reclamo, el lavadero lo pierde siempre." },
+    { t: "Datos y espera", s: "Nombre, celular y algo de tomar", ir: "#recepcion", nodo: "datos",
+      dice: ["¿Me regala su nombre y su celular, por favor?", "Tome asiento, por favor, y apenas esté lista la moto le aviso. ¿Le provoca algo de tomar mientras espera?"],
+      hace: ["Los datos, solo si es primera vez. La placa ya quedó anotada: solo se confirma.", "Lo acompaña a la sala de espera. Si quiere algo de tomar, se lo lleva usted."],
+      err: "Pedirle los datos a un cliente frecuente. O ofrecer la bebida y no llevarla nunca." },
+    { t: "Lavado y calidad", s: "Paso a paso, con video, y la lista de 23", ir: "#lavado", ir2: "#calidad", ir2t: "La lista de calidad", clave: true,
+      dice: ["Don/Doña [nombre del cliente], le estamos dando un último repaso a su moto para entregársela bien. En [10 minutos] se la tengo lista."],
+      hace: ["El lavador lee la nota de la recepción antes de empezar. Moto fría, en caballete desde el inicio, tablero, conectores y filtro de aire tapados.", "El lavado sigue el paso a paso del video. Lavada base: 45 minutos. Discos y mordazas, secos y sin producto.", "El lavador revisa la lista en el puesto. Otra persona la revisa otra vez y graba un video corto.", "Si una casilla no pasa, la moto se vuelve a lavar antes de llamar al cliente."],
+      err: "Apurar la moto para cumplirle al que tiene afán, o entregarla «así» esperando que el cliente no se dé cuenta." },
+    { t: "Entrega", s: "El recorrido por la moto", ir: "#entrega",
+      dice: ["[nombre del cliente], ya quedó lista su moto. Acompáñeme y le muestro cómo quedó.", "Revise la moto y me dice si quedó satisfecho con el servicio."],
+      hace: ["Si no está en el local, se le avisa por WhatsApp que la moto está lista.", "Lo acompaña a la moto y le muestra lo que se hizo, parte por parte.", "Le pasa la mano al kit de arrastre delante de él.", "Le recuerda el detalle que se anotó al recibir."],
+      err: "Gritarle desde el puesto que ya está, o entregar sin mostrar lo que se hizo." },
+    { t: "Cobro", s: "Cobrar, registrar y membresía", ir: "#entrega",
+      dice: ["Listo, entonces lo invito a pasar a caja. El valor total es de [precio total]."],
+      hace: ["🤐 Silencio después del valor.", "Cobro y registro en el mismo movimiento: placa, servicio, valor y medio de pago.", "Se le pregunta el medio de pago y, una sola vez, si desea dejar propina para el lavador. La moto se lava igual con o sin propina.", "Transferencia o QR: confirmar que entró antes de entregar.", "Membresía, solo si lava seguido (dos veces al mes o más). Se ofrece aquí, una sola vez.", "Al que no tiene membresía se le ofrece agendar la próxima lavada."],
+      err: "Negociar el precio en el mostrador, o creer el «ya le mandé» sin confirmar." },
+    { t: "Despedida", s: "Reseña, encuesta, casco y nombre", ir: "#entrega",
+      dice: ["Muchas gracias, [nombre del cliente]. Mi nombre es [nombre de quien recibe] y quedo a su disposición.", "Que tenga un excelente día, nos vemos la próxima semana."],
+      hace: ["Quien recibe o el encargado pide la reseña con el QR, solo si quedó contento. Nunca el lavador.", "Le recuerda la encuesta del servicio.", "Se le entrega el casco antes de que se suba a la moto.", "Si el lavador está libre, sale a despedirse."],
+      err: "Pedirle reseña a un cliente molesto, o que tenga que pedir su casco." },
+    { t: "Seguimiento", s: "WhatsApp al otro día", ir: "#entrega",
+      dice: ["¡Hola, [nombre del cliente]! 👋 Le escribimos de [nombre del lavadero]. ¿Qué le pareció cómo quedó su moto?"],
+      hace: ["Al día siguiente, a media mañana.", "Un solo mensaje, corto y con pregunta. Sin audios.", "Si contesta con una queja: guion de reclamos por WhatsApp."],
+      err: "Insistir con un segundo y un tercer mensaje." }
+  ];
+  var recLista = $("#recorrido-lista"), ficha = $("#ficha");
+  REC.forEach(function (r, i) {
+    var li = document.createElement("li"); if (r.clave) li.className = "clave";
+    li.innerHTML = '<button type="button" aria-pressed="false"><span class="n">' + (i + 1) + "</span><b>" + esc(r.t) + "</b><small>" + esc(r.s) + "</small></button>";
+    li.firstChild.addEventListener("click", function () { verPaso(i, true); });
+    recLista.appendChild(li);
+  });
+  function verPaso(i, foco) {
+    var r = REC[i];
+    $$("button", recLista).forEach(function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+    var h = '<div class="ficha-cab"><h3>' + (i + 1) + " · " + esc(r.t) + "</h3><span>" + (r.clave ? "Punto donde más se falla" : "Paso " + (i + 1) + " de " + REC.length) + "</span></div>";
+    h += '<div class="cols"><div>' + r.dice.map(function (d) { return '<p class="frase">' + esc(d) + "</p>"; }).join("") + "</div><div>";
+    h += '<div class="hace"><b>Qué se hace</b><ul>' + r.hace.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
+    h += '<div class="error-comun"><b>Error común</b>' + esc(r.err) + "</div></div></div>";
+    h += '<div class="acciones">';
+    if (i > 0) h += '<button class="btn gris" type="button" data-p="' + (i - 1) + '">← Anterior</button>';
+    if (i < REC.length - 1) h += '<button class="btn gris" type="button" data-p="' + (i + 1) + '">Siguiente →</button>';
+    h += '<a class="btn" href="' + r.ir + '"' + (r.nodo ? ' data-nodo="' + r.nodo + '"' : "") + ">" + (r.nodo ? "Practicarlo" : (r.ir === "#lavado" ? "Ver el lavado paso a paso" : "Ver el detalle")) + " →</a>";
+    if (r.ir2) h += '<a class="btn gris" href="' + r.ir2 + '">' + esc(r.ir2t) + " →</a>";
+    h += "</div>";
+    ficha.innerHTML = h; marcar(ficha);
+    $$("[data-p]", ficha).forEach(function (b) { b.addEventListener("click", function () { verPaso(+b.dataset.p); }); });
+  }
+  verPaso(0);
+
+  /* ---------- Principios, inspección ---------- */
+  $$(".principio").forEach(function (b) { b.addEventListener("click", function () { b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "true" ? "false" : "true"); }); });
+  var p8 = $$(".p8"), c8 = $("#contador-8");
+  p8.forEach(function (b) { b.addEventListener("click", function () {
+    b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    var n = p8.filter(function (x) { return x.getAttribute("aria-pressed") === "true"; }).length;
+    c8.textContent = n === 8 ? "Los 8 revisados. Ahora sí: fotos guardadas y a lavar." : "Toque cada punto a medida que lo revisa: " + n + " de 8.";
+  }); });
+
+  /* ---------- Pestañas ---------- */
+  function abrirTab(seg, id) {
+    $$("button", seg).forEach(function (o) { var on = o.dataset.panel === id; o.setAttribute("aria-selected", on ? "true" : "false"); document.getElementById(o.dataset.panel).hidden = !on; });
+  }
+  $$(".seg").forEach(function (seg) { $$("button", seg).forEach(function (b) { b.addEventListener("click", function () { abrirTab(seg, b.dataset.panel); }); }); });
+  $$('[role="tablist"]').forEach(function (tl) {
+    var bs = $$('[role="tab"]', tl);
+    bs.forEach(function (b, i) {
+      var pid = b.dataset.panel || "rub-items", p = document.getElementById(pid);
+      b.setAttribute("aria-controls", pid);
+      if (p && b.dataset.panel) p.setAttribute("role", "tabpanel");
+      b.addEventListener("keydown", function (e) {
+        var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!d) return;
+        e.preventDefault(); var o = bs[(i + d + bs.length) % bs.length]; o.focus(); o.click();
+      });
+    });
+  });
+
+  /* ---------- Membresía en la entrega ---------- */
+  $$("#decide-memb button").forEach(function (b) { b.addEventListener("click", function () {
+    $$("#decide-memb button").forEach(function (o) { var on = o === b; o.setAttribute("aria-pressed", on ? "true" : "false"); document.getElementById(o.dataset.r).hidden = !on; });
+  }); });
+
+  /* ---------- Simulador de recepción ---------- */
+  var N = {
+    "preparar": { p: "0", t: "Antes de abrir · 8:30",
+      hace: ["El personal llega a las 8:30. A esa hora no se está desayunando ni cambiándose: se está listo.", "Mostrador limpio, carta de servicios a la vista, celular con el sistema abierto.", "Lugar fijo para los cascos, limpio y a la vista del cliente.", "Bebidas listas y la sala de espera ordenada.", "Se sabe quién recibe hoy y qué lavador está libre."],
+      err: "Abrir y «ir acomodando» mientras ya llegan clientes. La primera moto se recibe con afán.",
+      op: [["Abrimos: llega la primera moto", "llegada"]] },
+    "llegada": { p: "1", t: "Llega la moto",
+      dice: ["Buenos días. Bienvenido a [nombre del lavadero]."],
+      hace: ["Se acerca usted, no espera a que el cliente vaya al mostrador.", "Saluda primero, mira a los ojos y suelta lo que esté haciendo.", "Lo guía: «Siga, por favor, déjela aquí.»", "No se da información caminando: primero la moto quieta y el cliente abajo."],
+      nota: "Buenos días, buenas tardes o buenas noches, según la hora. A una clienta: «Bienvenida».",
+      err: "Gritar el saludo desde el fondo, o saludar con «¿qué le vamos a hacer?» sin el «bienvenido».",
+      op: [["Moto quieta, cliente abajo", "casco"]] },
+    "casco": { p: "2", t: "Recibir el casco",
+      dice: ["¿Me permite el casco? Se lo guardo aquí mientras tanto."],
+      hace: ["Lo recibe apenas se lo quite, antes de hablar de lavadas. También guantes o chaqueta.", "Lo guarda en el lugar fijo, a la vista del cliente. Nunca en el piso ni en el sillín de otra moto.", "Se le devuelve en la entrega.", "Con el casco guardado, lo invita al escritorio. No se da información caminando: se habla ya sentados o en el escritorio."],
+      nota: "Recibirle el casco le dice «aquí lo vamos a cuidar» y le da el momento natural para conversar.",
+      err: "Quitárselo de las manos sin pedir permiso, o guardarlo donde no lo ve.",
+      op: [["Entregó el casco", "preguntas", "ok"], ["Prefiere quedarse con él", "casco-no"]] },
+    "casco-no": { p: "2", t: "Prefiere quedarse con el casco",
+      dice: ["Con gusto, como usted prefiera. Sigamos al escritorio, por favor."], hace: ["No se insiste.", "Igual lo invita al escritorio: no se da información caminando."], op: [["Seguir", "preguntas"]] },
+    "preguntas": { p: "3", t: "Las tres preguntas",
+      dice: ["¿Ya había venido antes?", "¿Tiene reserva?", "¿Tiene membresía con nosotros?"],
+      hace: ["Una a una, sin interrogar.", "Mírele la placa y anótela. Si dice que es miembro, la placa lo confirma en el sistema.", "Si ya había venido, búsquelo por placa: no le vuelva a pedir datos."],
+      nota: "Con esas tres respuestas sabe a quién atiende. <b>Solo uno de los tres caminos es una venta.</b>",
+      err: "Hacerlas de corrido como un formulario, o saltárselas e ir a precios. Y no se pregunta el cilindraje: el precio es el mismo para toda moto.",
+      op: [["Tiene reserva", "con-reserva"], ["Es miembro, pero sin reserva", "es-miembro"], ["Ni reserva ni membresía", "cuanto"], ["Pregunta: «¿Luego toca reservar?»", "obj-reserva", "obj"]] },
+    "con-reserva": { p: "A", t: "Camino A · Tiene reserva",
+      dice: ["Perfecto. ¿Qué lavado reservó?"],
+      hace: ["Confirma contra la agenda del sistema.", "Si la reserva es de membresía, verifica la placa: cubre una sola moto.", "Aquí no se vende. Su servicio ya está definido."],
+      err: "Volver a recitarle la carta a alguien que ya reservó. Lo hace sentir que la reserva no sirvió.",
+      op: [["Confirmado", "lavador", "ok"], ["Pregunta por un adicional", "adicionales"]] },
+    "es-miembro": { p: "B", t: "Camino B · Miembro sin reserva",
+      hace: ["Verifica la placa contra la membresía.", "Si hay espacio, lo deja ingresar."],
+      nota: "Lo de reservar se le explica con la moto ya adentro, no en la puerta.",
+      err: "Regañarlo por no reservar, o explicarle las reglas en la puerta con la moto afuera.",
+      op: [["Hay espacio", "pedagogia", "ok"], ["No hay espacio", "sin-espacio", "obj"]] },
+    "pedagogia": { p: "B", t: "Enseñarle a reservar",
+      dice: ["Para la próxima le recomiendo reservar: elige el día y la hora que le sirva y no espera nada."],
+      hace: ["Se dice con la moto ya adentro.", "Le muestra cómo se reserva en [link de reservas] antes de que se vaya."],
+      nota: "Con el servicio andando escucha; en la entrada solo quiere pasar.",
+      op: [["Seguir", "lavador", "ok"], ["Quiere un adicional", "adicionales"]] },
+    "adicionales": { p: "·", t: "Adicionales · solo miembros o con reserva",
+      dice: ["A su lavada le puedo agregar [adicional 1] o [adicional 2], cada uno por [precio adicional]."],
+      sil: "Deje que escoja.",
+      hace: ["Lo agrega en el sistema y lo anota para el lavador."],
+      nota: "Al que paga lavada individual no se le ofrecen adicionales sueltos: se le ofrece la escalera.",
+      op: [["Seguir", "lavador"]] },
+    "cuanto": { p: "C", t: "Camino C · «¿Cuánto vale?»",
+      dice: ["Con mucho gusto le cuento. Le explico qué incluye y le digo el precio."],
+      hace: ["Es el único camino donde se explica y se vende.", "No suelte el número de primero: arranque por la básica."],
+      err: "Responder el precio en seco. Así lo comparan solo por precio con el lavadero de la esquina.",
+      op: [["Empezar la escalera", "escalon-1", "ok"]] },
+    "escalon-1": { p: "4", esc: 1, t: "Escalón 1 · La básica",
+      dice: ["Todas las lavadas que manejamos acá vienen con desengrasado de motor, rines, mofle, plato trasero, cadena y llantas, y se lava con champú pH neutro. No utilizamos ni silicona ni grafito.", "Esa es la [nombre de la básica] y la tenemos en [precio básica]."],
+      sil: "Dijo un precio. Ahora se calla y espera.",
+      hace: ["Dígalo mirando la moto y señalando cada parte con la mano: motor, rines, plato, cadena.", "«Todas las lavadas» va al principio: hasta la más sencilla es una lavada completa."],
+      err: "Llamarla «la barata» o «la sencillita», o recortar la lista. Cada parte que se nombra es una razón más para pagar.",
+      op: [["Acepta la básica", "eligio", "ok"], ["Sigue escuchando", "mirar-moto"], ["Pide algo más barato", "obj-barato", "obj"], ["Dice que está caro", "obj-caro", "obj"], ["Tiene afán", "obj-afan", "obj"], ["«¿Por qué sin silicona?»", "silicona", "obj"]] },
+    "silicona": { p: "·", esc: 1, t: "«¿Por qué sin silicona ni grafito?»",
+      dice: ["La silicona atrae el polvo y daña los empaques de la cadena. Y el grafito, si llega a los discos, la moto se queda sin frenos. Por eso acá no los usamos.", { et: "Si la pintura es mate", d: "El champú pH neutro es especial para pintura mate: no se la mancha." }],
+      err: "Nombrar a la competencia («allá le echan silicona»). Se dice qué hacemos nosotros, nunca qué hacen los otros.",
+      op: [["Volver al escalón 1", "escalon-1"]] },
+    "mirar-moto": { p: "5", esc: 2, t: "Antes del escalón 2 · Mire la moto",
+      hace: ["¿Se ve opaca, con los plásticos grises? → opción A, brillo y protección.", "¿La cadena está negra, seca o con mugre? → opción B, kit de arrastre.", "Si no ve nada claro, nombre las dos."],
+      nota: "Se ofrece lo que esa moto necesita. Si ofrece lo que no necesita, el cliente lo nota y deja de creer.",
+      op: [["Se ve opaca", "escalon-2a"], ["La cadena está sucia", "escalon-2b"], ["Nada claro", "escalon-2-ambas"]] },
+    "escalon-2a": { p: "5", esc: 2, t: "Escalón 2 · Brillo y protección",
+      dice: ["Ahora, por [diferencia] más, le aplicamos cera y restaurador de partes negras. La cera es hidrofóbica: repele el agua y el polvo y le protege la pintura. El restaurador le deja todos los plásticos negros otra vez. Eso hace que la lavada le dure más.", "Esa es la [nombre intermedia A] y le queda en [precio intermedia]."],
+      sil: "Otro precio, otro silencio.",
+      hace: ["Muéstrele un plástico gris mientras lo dice."],
+      err: "Decir «restaurador de partes negras» y ya. Suena pelado: diga qué le hace a su moto.",
+      op: [["Acepta esta", "eligio", "ok"], ["Sigue escuchando", "escalon-3"], ["Pide algo más barato", "obj-barato", "obj"], ["Dice que está caro", "obj-caro", "obj"], ["«Solo quiero lo básico»", "obj-basico", "obj"], ["Tiene afán", "obj-afan", "obj"]] },
+    "escalon-2b": { p: "5", esc: 2, t: "Escalón 2 · Kit de arrastre",
+      dice: ["Ahora, por [diferencia] más, le hacemos el kit de arrastre completo: se le quita la tapa del piñón, se le desengrasa el piñón delantero, el plato trasero y la cadena, y se vuelve a lubricar.", "Le mando una foto de cómo estaba la tapa del piñón y cómo le quedó.", "Esa es la [nombre intermedia B] y le queda en [precio intermedia]."],
+      sil: "Otro precio, otro silencio.",
+      hace: ["Muéstrele la cadena con el dedo mientras lo dice."],
+      err: "Ofrecer el kit a una moto con la cadena limpia. El cliente lo nota.",
+      op: [["Acepta esta", "eligio", "ok"], ["Sigue escuchando", "escalon-3"], ["Pide algo más barato", "obj-barato", "obj"], ["Dice que está caro", "obj-caro", "obj"], ["«Solo quiero lo básico»", "obj-basico", "obj"], ["Tiene afán", "obj-afan", "obj"]] },
+    "escalon-2-ambas": { p: "5", esc: 2, t: "Escalón 2 · Las dos opciones",
+      dice: ["Ahora, por [diferencia] más, tiene dos opciones. La [nombre intermedia A], que le suma cera y restaurador de partes negras. O la [nombre intermedia B], que es el kit de arrastre completo, desengrasado y lubricado. Cualquiera de las dos le queda en [precio intermedia]."],
+      sil: "Deje que escoja.",
+      err: "No hacer pausa entre escalón y escalón: el cliente se pierde con los nombres.",
+      op: [["Escoge una de las dos", "eligio", "ok"], ["Sigue escuchando", "escalon-3"], ["Pide algo más barato", "obj-barato", "obj"], ["Dice que está caro", "obj-caro", "obj"], ["«Solo quiero lo básico»", "obj-basico", "obj"]] },
+    "escalon-3": { p: "6", esc: 3, t: "Escalón 3 · La full",
+      dice: ["Y tenemos la [nombre de la full] por [diferencia] más, que le incluye todo lo anterior: el kit de arrastre completo, la cera y el restaurador de partes negras. Es la moto completa. Esa le quedaría en [precio full]."],
+      sil: "Aquí se queda callado. El cliente es el que toma la decisión.", silG: true,
+      hace: ["Espera. Si pregunta algo, responde solo eso y se vuelve a callar."],
+      err: "Presentarla como «un ahorro» o «un combo». Se presenta como comodidad: un solo precio, todo incluido. Y nada de «…pero la más pedida es la otra».",
+      op: [["Acepta la full", "eligio", "ok"], ["Se queda con la intermedia", "eligio", "ok"], ["Pide algo más barato", "obj-barato", "obj"], ["Dice que está caro", "obj-caro", "obj"], ["«¿Me hace un descuento?»", "obj-barato", "obj"], ["Tiene afán", "obj-afan", "obj"]] },
+    "obj-caro": { p: "·", t: "«Está caro»",
+      dice: ["Le entiendo. Lo que pasa es que acá no es solo agua y jabón: le desengrasamos toda la parte de abajo, motor, cadena y plato, con productos que no le dañan la moto. Por eso le dura más limpia.", { et: "Si sigue en duda", d: "Si quiere, empiece con la [nombre de la básica] y usted mismo ve la diferencia." }],
+      sil: "Respondió corto. Ahora, callado otra vez.",
+      hace: ["Escucha completo, responde corto y se vuelve a callar.", "No se baja el precio. Quien recibe no tiene autorización para descuentos; si hay excepción, la decide el encargado y queda escrita."],
+      err: "«Bueno, se la dejo en tanto.» Se pierde la confianza de ese cliente y de todos los que se enteran.",
+      op: [["Acepta la básica", "eligio", "ok"], ["Se va sin lavar", "se-va", "obj"]] },
+    "obj-barato": { p: "·", t: "«¿Algo más barato?» · «¿Me hace un descuento?»",
+      dice: ["Los precios son los mismos para todos, así es justo con cada cliente. La [nombre de la básica] ya es nuestra lavada de entrada, y es completa: [precio básica].", { et: "Si es primera vez y hay promo", d: "Como es su primera vez, tiene [promo de primera visita]." }],
+      sil: "Dijo un precio: silencio.",
+      hace: ["No se negocia en el mostrador."],
+      err: "Ponerse a la defensiva: «es que acá todo es de calidad, allá le cobran menos pero…»",
+      op: [["Acepta la básica", "eligio", "ok"], ["Dice que está caro", "obj-caro", "obj"], ["Se va sin lavar", "se-va", "obj"]] },
+    "obj-basico": { p: "·", t: "«Solo quiero lo básico»",
+      dice: ["Perfecto, con mucho gusto. La [nombre de la básica] le queda muy bien.", { et: "Solo si vio algo claro, una sola vez", d: "Le cuento, porque la vi: la cadena está bastante sucia. Si algún día quiere, el kit de arrastre se la deja como nueva." }],
+      hace: ["Se respeta. No se insiste con los escalones."],
+      err: "Volver a ofrecer la full dos y tres veces. El cliente se siente presionado y no vuelve.",
+      op: [["Seguir", "eligio", "ok"]] },
+    "obj-afan": { p: "·", t: "«Tengo afán»",
+      dice: ["Claro que sí. La [nombre de la básica] se demora más o menos [tiempo de la básica]. ¿Le sirve, o prefiere que le deje una cita a la hora que le quede mejor?"],
+      sil: "Hizo una pregunta: deje que decida.",
+      hace: ["Le dice el tiempo real, no uno menor para no perderlo.", "Si se queda: la escalera va corta y los datos solo si es primera vez."],
+      err: "Prometer «en 20 minutos se la tengo» sabiendo que no. Y apurar el lavado: la moto que sale mal se vuelve a lavar.",
+      op: [["Se queda", "eligio", "ok"], ["Prefiere una cita", "sin-espacio"]] },
+    "obj-reserva": { p: "·", t: "«¿Luego toca reservar?»",
+      dice: ["No necesariamente, pero tratamos de manejar las reservas. Es para que sea mucho más organizado y usted no haga fila."],
+      hace: ["Si hay espacio, que ingrese de una. Lo de reservar se explica con la moto adentro."],
+      op: [["Hay espacio", "cuanto", "ok"], ["No hay espacio", "sin-espacio", "obj"]] },
+    "sin-espacio": { p: "·", t: "No hay espacio · dejarle cita",
+      dice: ["En este momento no tengo espacio para atenderlo bien. Le puedo dejar una cita para hoy más tarde o para mañana, a la hora que le sirva."],
+      hace: ["Le agenda la cita ahí mismo en el sistema, con nombre, placa y celular.", "Le manda el [link de reservas] por WhatsApp para la próxima vez.", "Si puede esperar y el tiempo es razonable, le dice la espera real y lo deja decidir."],
+      nota: "No se dice «no» en seco. La cita convierte un cliente perdido en uno agendado.",
+      err: "«No hay cupo, vuelva otro día.» O recibirle la moto sin espacio y entregarla tarde o mal lavada.",
+      fin: true, op: [["Atender otra moto", "llegada", "fin"]] },
+    "se-va": { p: "·", t: "Se va sin lavar",
+      dice: ["Con mucho gusto, aquí lo esperamos. Le dejo el link para reservar cuando quiera."],
+      hace: ["Le devuelve el casco.", "Si le da el celular, le manda el [link de reservas]."],
+      err: "Ponerse a la defensiva o hablar mal del lavadero de al lado.",
+      fin: true, op: [["Atender otra moto", "llegada", "fin"]] },
+    "eligio": { p: "7", t: "Ya eligió",
+      dice: ["Perfecto, entonces le hacemos la [servicio que eligió].", { et: "Si es primera vez y hay promo", d: "Y como es su primera vez, le aplicamos [promo de primera visita]." }, { et: "Como llegó sin reserva", d: "Le cuento que manejamos reservas para evitar filas: usted elige el día y la hora, llega y no espera. Para la próxima puede reservar en [link de reservas]." }],
+      hace: ["Lo registra en el sistema en ese momento, no «ahorita».", "Al que llegó sin reserva se le explica el sistema de reservas con calma, ya decidida la lavada. No es un regaño."],
+      nota: "Aquí no se ofrece la membresía. Se ofrece una sola vez, en la entrega, después de cobrar, y solo si lava seguido.",
+      op: [["Seguir: presentar al lavador", "lavador", "ok"]] },
+    "lavador": { p: "8", t: "Presentar al lavador",
+      dice: ["Perfecto. La persona que le va a lavar su moto es [nombre del lavador].", "¿Alguna cosa que quiere que tengamos en cuenta para el lavado?"],
+      sil: "Deje que piense.",
+      hace: ["Llama al lavador y se acerca. Saluda de usted y mira a los ojos.", "Si está en otra moto, igual lo nombra y lo señala: «es él, el que está allá»."],
+      nota: "Con nombre hay un responsable con cara: deja de ser «el lavadero» y pasa a ser una persona que responde por la moto.",
+      err: "«Ya se la van a lavar.» Sin nombre, nadie responde. O el lavador saluda sin mirar, con guantes y celular en la mano.",
+      op: [["Pide algo para el lavado", "anotar"], ["No tiene nada", "anotar"]] },
+    "anotar": { p: "9", t: "Escuchar y anotar",
+      dice: ["Perfecto, lo vamos a anotar."],
+      hace: ["Lo anota de verdad, en el sistema, mientras el cliente lo ve.", "Se lo repite al lavador delante del cliente: «[nombre del lavador], ojo con [lo que pidió].»", "Si vio un detalle en la moto, no lo diga de pasada: se lo muestra en la inspección, que viene ahora, con foto."],
+      nota: "Lo que se anota antes de lavar es lo que protege al lavadero si después hay un reclamo.",
+      err: "Decir «listo, listo» y no anotar nada. O que el cliente encuentre un daño en la entrega que nadie le había dicho.",
+      op: [["Anotado: revisar la moto con el cliente", "revisar", "ok"]] },
+    "revisar": { p: "10", t: "Inspección con el cliente al lado",
+      dice: ["Antes de lavarla le revisamos la moto completa. Si encuentro algo, se lo muestro.", { et: "Si encuentra algo", d: "Aquí vemos que [detalle]. ¿Usted ya lo tenía identificado?" }],
+      sil: "Deje que conteste.",
+      hace: ["Los 8 puntos, siempre en el mismo orden, antes de mojar la moto. Unos 2 minutos.", "Se le muestra en la moto, con el dedo, y se le enseña la foto: «Le tomé una foto y quedó anotado en su ficha».", "Fotos con la placa visible y una de cerca por cada hallazgo. Si no hay nada: «Recibida sin novedad»."],
+      nota: "Lo que se le muestra antes de lavar ya no lo puede reclamar como daño del lavadero.",
+      err: "Revisar la moto cuando el cliente ya se sentó, o encontrar el daño después de lavar.",
+      op: [["Revisada y con fotos", "datos", "ok"], ["Ver los 8 puntos de inspección", "#inspeccion", "link"]] },
+    "datos": { p: "11", t: "Los datos · solo si es primera vez",
+      dice: ["Como es la primera vez que viene, le voy a pedir unos datos. ¿Me regala su nombre y su celular, por favor?", { et: "Si ya es cliente", d: "Usted es [nombre del cliente], ¿cierto? Perfecto." }],
+      hace: ["Dos datos: nombre y celular. La placa ya quedó anotada en las tres preguntas: solo se confirma.", "Le confirma el celular leyéndoselo: «¿3XX XXX XXXX, cierto?»"],
+      err: "Pedirle los datos a un cliente frecuente: le dice que no lo recordamos. O anotar mal el celular.",
+      op: [["Listo", "acomodar", "ok"]] },
+    "acomodar": { p: "12", t: "Acomodar y ofrecer algo de tomar",
+      dice: ["Tome asiento, por favor, y apenas esté lista la moto le aviso.", "¿Le provoca algo de tomar mientras espera?"],
+      hace: ["Lo acompaña a la sala de espera, no le señala desde lejos.", "Si dice que sí, le lleva la bebida usted. No «allá hay agua, sírvase».", "Si se va a ir mientras lavan, confirma el celular."],
+      nota: "Recibir bien no cuesta más, pero vale muchísimo.",
+      err: "Ofrecer la bebida y no llevarla nunca, o dejar al cliente de pie sin saber dónde esperar.",
+      op: [["Cliente sentado", "ingresa", "ok"]] },
+    "ingresa": { p: "✓", t: "Moto adentro, cliente sentado",
+      hace: ["La moto pasa al puesto con las recomendaciones y las fotos.", "La moto que sale mal se vuelve a lavar antes de llamar al cliente."],
+      fin: true, op: [["Ver la lista de calidad", "#calidad", "link"], ["Ver la entrega", "#entrega", "link"], ["Atender otra moto", "llegada", "fin"]] }
+  };
+  var pila = [], pant = $("#pantalla");
+  function pintarNodo(id) {
+    var n = N[id]; if (!n) return;
+    var h = '<div class="anim">';
+    h += '<ul class="rastro" aria-label="Camino recorrido">' + pila.slice(-6).map(function (x, i, arr) {
+      return '<li><button type="button" data-volver="' + (pila.length - arr.length + i) + '">' + esc(N[x].t.split(" · ")[0]) + "</button></li>"; }).join("") + "</ul>";
+    var clase = n.p === "✓" ? "fin" : (n.p === "·" ? "aparte" : "");
+    h += '<div class="nodo-cab"><span class="nodo-num ' + clase + '">' + esc(n.p) + "</span><h3>" + esc(n.t) + "</h3></div>";
+    if (n.esc) {
+      h += '<div class="escalera-mini" aria-label="Escalera de precios">' + ["1 · Básica", "2 · Intermedia", "3 · Full"].map(function (e, i) {
+        return '<span class="' + (i + 1 < n.esc ? "hecho" : (i + 1 === n.esc ? "aqui" : "")) + '">' + e + "</span>"; }).join("") + "</div>";
+    }
+    (n.dice || []).forEach(function (d) {
+      if (typeof d === "string") h += '<p class="frase">' + esc(d) + "</p>";
+      else h += '<p class="frase sin-etq"><span class="sub">' + esc(d.et) + "</span>" + esc(d.d) + "</p>";
+    });
+    if (n.sil) h += '<div class="silencio' + (n.silG ? " grande" : "") + '"><span class="ic">🤐</span><div><b>Silencio <span class="puntos"><i></i><i></i><i></i></span></b><span>' + esc(n.sil) + "</span></div></div>";
+    if (n.hace) h += '<div class="hace"><b>Qué se hace</b><ul>' + n.hace.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
+    if (n.err) h += '<div class="error-comun"><b>Error común</b>' + esc(n.err) + "</div>";
+    if (n.nota) h += '<p class="porque"><b>Por qué:</b> ' + n.nota + "</p>";
+    h += '<div class="ops"><p class="opl">' + (n.fin ? "Siguiente" : (n.esc || /^obj/.test(id) ? "¿Qué responde el cliente?" : "¿Qué pasa?")) + "</p>";
+    n.op.forEach(function (o, i) {
+      var tipo = o[2] || "", ico = tipo === "ok" ? "✓" : tipo === "obj" ? "!" : tipo === "fin" ? "↺" : tipo === "link" ? "↓" : "›";
+      h += '<button type="button" class="op ' + tipo + '" data-op="' + i + '"><span class="ico">' + ico + "</span>" + esc(o[0]) + "</button>";
+    });
+    h += "</div>";
+    h += '<div class="nav-sim"><button class="btn gris" type="button" id="sim-atras"' + (pila.length < 2 ? " disabled" : "") + '>← Atrás</button><button class="btn gris" type="button" id="sim-inicio">Volver a empezar</button></div></div>';
+    pant.innerHTML = h; marcar(pant);
+    $$(".op", pant).forEach(function (b) { b.addEventListener("click", function () {
+      var o = n.op[+b.dataset.op];
+      if (o[2] === "link") { irA(document.querySelector(o[1])); return; }
+      if (o[2] === "fin") pila = [];
+      ir(o[1], true);
+    }); });
+    $$("[data-volver]", pant).forEach(function (b) { b.addEventListener("click", function () { var k = +b.dataset.volver; var dest = pila[k]; pila = pila.slice(0, k); ir(dest, true); }); });
+    $("#sim-atras").addEventListener("click", function () { if (pila.length > 1) { pila.pop(); var d = pila.pop(); ir(d, true); } });
+    $("#sim-inicio").addEventListener("click", function () { pila = []; ir("llegada", true); });
+  }
+  function ir(id, subir) {
+    if (!N[id]) return;
+    pila.push(id); pintarNodo(id);
+    $$("#camino-ini button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.ir === pila[0] ? "true" : "false"); });
+    if (subir) { var top = pant.getBoundingClientRect().top; if (top < 100 || top > innerHeight * .6) pant.scrollIntoView({ block: "start" }); }
+  }
+  pant.style.scrollMarginTop = "110px";
+  $$("#camino-ini button").forEach(function (b) { b.addEventListener("click", function () { pila = []; ir(b.dataset.ir, false); }); });
+  ir("llegada", false); pila = ["llegada"];
+  $$("#camino-ini button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+
+  /* Enlaces que abren un nodo o una pestaña */
+  function irA(el) { if (!el) return; el.scrollIntoView({ behavior: "smooth", block: "start" }); el.classList.remove("destello"); void el.offsetWidth; el.classList.add("destello"); }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-nodo], [data-tab]"); if (!a) return;
+    if (a.dataset.nodo && N[a.dataset.nodo]) { e.preventDefault(); pila = []; ir(a.dataset.nodo, false); irA(pant); }
+    else if (a.dataset.tab) { e.preventDefault(); abrirTab($("#tabs-reclamo"), a.dataset.tab); irA($("#tabs-reclamo")); }
+  });
+
+  /* ---------- Lista de calidad ---------- */
+  var LISTA = [
+    ["A · Parte baja (donde el cliente mete la mano)", "", [
+      ["Rines: sin grasa ni mugre, por fuera y por dentro", "Pasar la mano por el interior del rin"],
+      ["Llantas: flanco limpio y banda sin producto", "Mano seca sobre la banda: no queda resbalosa"],
+      ["Motor, las 4 caras: lados, frente y por debajo", "Agacharse y mirar el frente y abajo"],
+      ["Cadena: sin grasa vieja entre los eslabones", "Trapo limpio sobre la cadena"],
+      ["Kit de arrastre: piñón y tapa del piñón limpios", "Mirar detrás de la tapa", true],
+      ["Plato trasero: limpio por delante y por detrás", "Brocha seca: no sale negra"],
+      ["Mofle: todo el recorrido, uniones limpias", "Brocha seca en las uniones"],
+      ["Tijeras: limpias por dentro y por fuera, los dos lados", "Pasar la mano por dentro"],
+      ["Zonas escondidas: soporte de la mordaza, pata, posapiés, placa por detrás, guardabarros por dentro", "La prueba del dedo"]]],
+    ["B · Parte de arriba", "", [
+      ["Pintura: sin manchones ni rayones nuevos", "Mirar contra la luz"],
+      ["Plásticos negros: restaurador solo en lo mate, sin chorreados", "Si hay manchón, la pieza no estaba seca"],
+      ["Sillín limpio y seco", "Mano abierta: no queda húmeda"],
+      ["Espejos limpios con alcohol, sin marcas ni pelusa", "Mirar contra la luz"],
+      ["Tablero, mandos y direccionales sin mugre en las ranuras", "Mirar de cerca"]]],
+    ["C · Acabado", "", [
+      ["Sin manchas de agua en tapas, cromados ni tanque", "Mirar de lado, contra la luz"],
+      ["Sin residuos de químico: espuma seca, desengrasante, champú", "Mirar uniones y bordes"],
+      ["Cera sin exceso", "Pasar la mano: no queda grasosa", true],
+      ["Cadena lubricada", "Mirar la cadena completa", true],
+      ["Lo que pidió el cliente se cumplió", "Leer la nota de la recepción"]]],
+    ["D · Seguridad: si falla, la moto no se entrega", "seguridad", [
+      ["Discos y mordazas secos y sin producto", "Trapo limpio sobre el disco"],
+      ["La moto no sale mojada: parte baja seca", "Revisión desde la caja"],
+      ["Nada nuevo dañado: comparado con las fotos de recepción", "Ver las fotos antes de entregar"]]],
+    ["E · Tiempo", "", [["Dentro del tiempo del servicio", "Hora de entrada contra hora de salida"]]]
+  ];
+  var CLAVE_LISTA = "monaco-atencion-lista-v1";
+  var estLista = leer(CLAVE_LISTA, { c: {}, x: {} });
+  if (!estLista || typeof estLista !== "object") estLista = {};
+  estLista.c = estLista.c || {}; estLista.x = estLista.x || {};
+  var cajaB = $("#bloques-lista"), num = 0, total = 0;
+  LISTA.forEach(function (b) {
+    var d = document.createElement("div"); d.className = "bloque-l " + b[1];
+    var h = "<h5><span>" + esc(b[0]) + "</span></h5><ul class=\"items\">";
+    b[2].forEach(function (it) { num++; total++;
+      h += '<li class="buscable" id="cal-' + num + '" data-t="Lista de calidad · ' + esc(it[0]) + '"><label><input type="checkbox" data-i="' + num + '"><span><b>' + num + ".</b> " + esc(it[0]) + (it[2] ? ' <span class="aplica">si el servicio lo incluye</span>' : "") + "<small>" + esc(it[1]) + "</small></span></label></li>"; });
+    d.innerHTML = h + "</ul>"; cajaB.appendChild(d);
+  });
+  var cajas = $$("#bloques-lista input");
+  var camposL = $$(".hl-campos input");
+  function contar() {
+    var n = cajas.filter(function (c) { return c.checked; }).length, f = total - n;
+    $("#cuenta").textContent = n + " / " + total;
+    $("#cuenta-barra").style.width = (n / total * 100) + "%";
+    $("#contador").classList.toggle("listo", f === 0);
+    $("#cuenta-estado").textContent = f === 0 ? "Pasa ✓" : "Faltan " + f;
+    var segF = $$(".seguridad input").filter(function (c) { return !c.checked; }).length;
+    var r = $("#resultado-lista");
+    r.classList.toggle("pasa", f === 0);
+    r.textContent = f === 0 ? "Pasa. Grabe el video y ahora sí llame al cliente." : (segF ? "No sale: falta seguridad (bloque D). Se corrige antes de cualquier otra cosa." : "Todavía no pasa: faltan " + f + ". Se vuelve a lavar la zona, la rehace el mismo lavador.");
+    estLista.c = {}; cajas.forEach(function (c) { if (c.checked) estLista.c[c.dataset.i] = 1; });
+    estLista.x = {}; camposL.forEach(function (i) { if (i.value) estLista.x[i.dataset.c] = i.value; });
+    guardar(CLAVE_LISTA, estLista);
+  }
+  cajas.forEach(function (c) { c.checked = !!estLista.c[c.dataset.i]; c.addEventListener("change", contar); });
+  camposL.forEach(function (i) { i.value = estLista.x[i.dataset.c] || ""; i.addEventListener("input", contar); });
+  contar();
+  $("#reiniciar-lista").addEventListener("click", function () { cajas.forEach(function (c) { c.checked = false; }); camposL.forEach(function (i) { i.value = ""; }); contar(); });
+  function imprimir(clase) {
+    var h = document.documentElement, mq = window.matchMedia ? window.matchMedia("print") : null;
+    h.classList.remove("imp-lista", "imp-rub"); h.classList.add(clase);
+    var alCambiar = function (m) { if (!m.matches) quitar(); };
+    var quitar = function () {
+      h.classList.remove(clase); removeEventListener("afterprint", quitar);
+      if (mq) { if (mq.removeEventListener) mq.removeEventListener("change", alCambiar); else if (mq.removeListener) mq.removeListener(alCambiar); }
+    };
+    addEventListener("afterprint", quitar);
+    if (mq) { if (mq.addEventListener) mq.addEventListener("change", alCambiar); else if (mq.addListener) mq.addListener(alCambiar); }
+    window.print();
+  }
+  $("#imprimir-lista").addEventListener("click", function () { imprimir("imp-lista"); });
+
+  /* ---------- Tiempos ---------- */
+  [["Prelavado y barro pesado", 5, "5 min"], ["Desengrase de la parte baja", 15, "15 min"], ["Champú de la carrocería", 12, "10–12 min"], ["Enjuague", 5, "3–5 min"], ["Secado", 10, "8–10 min"]].forEach(function (t) {
+    var d = document.createElement("div"); d.className = "t-fila";
+    d.innerHTML = "<span>" + esc(t[0]) + "</span><b>" + t[2] + '</b><span class="barra"><i style="width:' + (t[1] / 15 * 100) + '%"></i></span>';
+    $("#tiempos").appendChild(d);
+  });
+
+  /* ---------- Comentarios públicos ---------- */
+  var CASOS = [
+    { t: "Lavado mal hecho", c: "Pésimo lavado, la moto quedó sucia por debajo. No vuelvo.", e: 1,
+      pub: "Hola, [nombre del cliente]. Tiene razón en decirlo y le pedimos disculpas: la moto debe salir limpia también por debajo. Queremos corregirlo sin ningún costo. Ya le escribimos por mensaje directo. 🙏",
+      pri: "Hola, [nombre del cliente]. Le escribimos de [nombre del lavadero]. Sentimos mucho que la moto no haya quedado como debía. Le ofrecemos volver a lavarla gratis, el día que le quede bien. ¿Nos pasa su WhatsApp para agendarle?" },
+    { t: "Mala atención", c: "Me atendieron de mala gana, ni me saludaron.", e: 2,
+      pub: "Hola, [nombre del cliente]. Lamentamos mucho cómo se sintió. Así no queremos atender a nadie, y ya lo estamos hablando con el equipo. Le escribimos por mensaje directo. 🙏",
+      pri: "Hola, [nombre del cliente]. Le escribimos de [nombre del lavadero]. Gracias por decirnos lo de la atención: nos sirve para mejorar. Nos gustaría darle otra oportunidad. Su próxima lavada corre por nuestra cuenta. ¿Nos pasa su WhatsApp para agendarle?",
+      nota: "La cortesía la autoriza el encargado o el dueño antes de mandar este mensaje." },
+    { t: "Demora", c: "Me dijeron una hora y me tuvieron casi tres. Una falta de respeto.", e: 1,
+      pub: "Hola, [nombre del cliente]. Tiene razón: su tiempo vale y debimos avisarle la hora real. Le pedimos disculpas. Le escribimos por mensaje directo. 🙏",
+      pri: "Hola, [nombre del cliente]. Le escribimos de [nombre del lavadero]. Sentimos mucho la demora. Para la próxima le podemos dejar una cita con hora fija, para que no espere. Y esa lavada corre por nuestra cuenta. ¿Nos pasa su WhatsApp?",
+      nota: "La cortesía la autoriza el encargado o el dueño antes de mandar este mensaje." },
+    { t: "Precio", c: "Carísimo para una lavada, en otro lado me cobran la mitad.", e: 2,
+      pub: "Hola, [nombre del cliente]. Gracias por comentarnos. Nuestras lavadas incluyen desengrasado de motor, cadena, plato, rines y mofle, con champú pH neutro y sin silicona ni grafito. Con gusto le explicamos cada opción por mensaje directo. 🙌",
+      pri: "Hola, [nombre del cliente]. Le escribimos de [nombre del lavadero]. Le cuento: tenemos lavadas desde [precio básica], y si lava seguido, la membresía le sale más barata. ¿Cada cuánto lava la moto? Así le digo qué le conviene.",
+      nota: "Aquí no se ofrece lavada gratis: no hubo una falla. Se explica el valor, sin pelear y sin hablar mal de otro lavadero." },
+    { t: "Daño en la moto", c: "Me rayaron el tanque y nadie se hace responsable.", e: 1,
+      pub: "Hola, [nombre del cliente]. Lamentamos mucho la situación. Queremos revisarlo con usted con calma y con las fotos de recepción. Le escribimos por mensaje directo ya mismo. 🙏",
+      pri: "Hola, [nombre del cliente]. Le escribimos de [nombre del lavadero]. Queremos revisar su caso con seriedad. ¿Nos manda fotos de cómo está el tanque? Las vamos a comparar con las de cuando recibimos la moto, y el encargado le da una respuesta hoy mismo antes de las [hora].",
+      nota: "En público nunca se dice «eso ya venía así». Eso se habla en privado, con la foto en la mano." },
+    { t: "Ya se resolvió", c: "(Respuesta final, cuando ya se le corrigió)", e: 0,
+      pub: "Gracias, [nombre del cliente], por darnos la oportunidad de corregirlo. Lo esperamos pronto. 🏍️",
+      nota: "El cierre en público es una sola línea. Los demás ven que el lavadero respondió y cumplió." }
+  ];
+  var cajaCasos = $("#casos"), resp = $("#respuesta-caso");
+  CASOS.forEach(function (k, i) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "caso buscable"; b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="av">' + (k.e ? "★" : "✓") + "</span><span><b>" + esc(k.t) + "</b>" + (k.e ? '<span class="estrellas">' + "★".repeat(k.e) + "☆".repeat(5 - k.e) + "</span><br>" : "") + '<span class="txt">' + esc(k.c) + "</span></span>";
+    b.addEventListener("click", function () { verCaso(i); });
+    cajaCasos.appendChild(b);
+  });
+  function verCaso(i) {
+    var k = CASOS[i];
+    $$(".caso", cajaCasos).forEach(function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+    var h = '<div class="respuesta"><p class="frase cliente">' + esc(k.c) + '</p><div class="grid g2">';
+    h += '<div class="plantilla publico"><div class="cab"><span>1 · Respuesta pública</span><button class="copiar" type="button">Copiar</button></div><p class="texto">' + esc(k.pub) + "</p></div>";
+    if (k.pri) h += '<div class="plantilla"><div class="cab"><span>2 · Mensaje privado</span><button class="copiar" type="button">Copiar</button></div><p class="texto">' + esc(k.pri) + "</p></div>";
+    h += "</div>";
+    if (k.nota) h += '<div class="error-comun" style="margin-top:10px"><b>Ojo</b>' + esc(k.nota) + "</div>";
+    resp.innerHTML = h + "</div>"; marcar(resp);
+  }
+  verCaso(0);
+
+  /* ---------- Reglas del equipo ---------- */
+  [["Llegada a las 8:30 a. m.", "Listos para trabajar, no apenas llegando. La llegada tarde tiene la consecuencia que el lavadero dejó por escrito: [consecuencia por llegar tarde]. Las cámaras y el registro de llegada son la prueba."],
+   ["Misma calidad con propina o sin propina", "La moto del que nunca deja propina sale igual que la del que siempre deja. La lista es la misma para las dos."],
+   ["La moto que sale mal se vuelve a lavar", "Y la lava el mismo lavador, sin mala cara. Faltarle el respeto a quien revisa ya es un tema de permanencia en el equipo."],
+   ["Quien revisa tiene la última palabra", "Nadie se salta al encargado para llamar al dueño. Si el dueño recibe la llamada, devuelve la decisión."],
+   ["Sin inspección con foto no se lava", "Ni por afán ni porque el cliente sea conocido."],
+   ["Discos y mordazas secos y sin producto", "Siempre."],
+   ["El día de descanso se respeta", "Un lavador cansado lava peor."],
+   ["Fines de semana sin almuerzo largo", "De jueves a domingo es cuando más motos entran. Almuerzo por turnos y ninguna moto a medio lavar."],
+   ["El trapo de abajo no sube nunca", "Cada uno de los 8 trapos tiene una sola función. El trapo de la cadena no se bota: se lava y se guarda solo para la cadena. Si se cruzan, la moto sale rayada a la semana."],
+   ["Lo que no está escrito, no existe", "Inspección, lista y reclamo: todo queda en el sistema con la placa."]
+  ].forEach(function (r, i) {
+    var d = document.createElement("div"); d.className = "card buscable" + (i === 0 || i === 2 ? " oro" : "");
+    d.innerHTML = '<span class="etq">Regla ' + (i + 1) + "</span><h3>" + esc(r[0]) + "</h3><p>" + esc(r[1]) + "</p>";
+    $("#reglas-lista").appendChild(d);
+  });
+
+  /* ---------- Rúbrica ---------- */
+  var RUB = [
+    ["Recepción y venta (quien recibe)", [
+      ["Saluda primero", "Suelta lo que hace, mira a los ojos y dice «Bienvenido a [nombre del lavadero]» antes de que el cliente hable. Trato de usted.", true],
+      ["Recibe el casco", "Le recibe el casco y lo guarda en el lugar fijo."],
+      ["Hace las 3 preguntas", "¿Ya había venido? ¿Tiene reserva? ¿Tiene membresía? Una por una, sin interrogar.", true],
+      ["Valor antes del precio", "Dice qué incluye antes del precio. Empieza por la básica y sube un escalón a la vez.", true],
+      ["Silencio después del precio", "Dice el precio y se calla hasta que el cliente decide.", true],
+      ["Presenta al lavador por su nombre", "«La persona que le va a lavar su moto es…» Pregunta qué tener en cuenta y lo anota de verdad."],
+      ["Toma los datos", "Solo si es primera vez: nombre y celular, y confirma la placa que ya anotó. Al frecuente no se los vuelve a pedir."],
+      ["Ofrece algo de tomar", "«Tome asiento, por favor… ¿Le provoca algo de tomar?»"]]],
+    ["Inspección y calidad (quien recibe y lavador)", [
+      ["Inspección con foto", "Los 8 puntos antes de mojar la moto, fotos con la placa visible, se lo muestra al cliente y lo anota.", true],
+      ["Lista de calidad", "El lavador la revisa en el puesto y otra persona antes de llamar al cliente. Con una casilla que falle, se vuelve a lavar.", true]]],
+    ["Entrega y cierre (quien recibe)", [
+      ["Recorrido de entrega", "Muestra lo que se hizo parte por parte, pasa la mano al kit delante del cliente y recuerda lo anotado."],
+      ["Cobro", "Dice el valor exacto según el registro, cobra y registra en el mismo movimiento. No negocia."],
+      ["Pide la reseña", "Con el QR, mientras el cliente ve la moto limpia. Devuelve el casco y se despide."],
+      ["Ofrece la membresía solo si califica", "En la entrega, después de cobrar: pregunta cada cuánto lava y la ofrece solo si lava dos veces al mes o más. Una sola vez."],
+      ["No discute un reclamo", "Escucha completo, revisa con el cliente y ofrece corregir si es falla del lavado. Si no lo es, lo dice con calma y sin culpar."]]]
+  ];
+  var LAV = ["4 de 5 motos o más pasan la lista de calidad a la primera", "Lavada base entre 45 y 60 minutos", "Discos y mordazas sin producto: 5 de 5, sin excepción"];
+  var CLAVE_RUB = "monaco-atencion-rubrica-v1";
+  function rubVacia() { return { nombre: "", rol: "recepcion", fecha: "", s: { 1: {}, 2: {} }, lav: {}, act: 1 }; }
+  var rub = leer(CLAVE_RUB, null) || rubVacia();
+  if (!rub || typeof rub !== "object" || !rub.s || !rub.s[1] || !rub.s[2] || !rub.lav) rub = rubVacia();
+  if (rub.act !== 1 && rub.act !== 2) rub.act = 1;
+  var cajaR = $("#rub-items"), k = 0, ESTRELLAS = [];
+  RUB.forEach(function (g) {
+    var d = document.createElement("div"); d.className = "rub-grupo";
+    var h = "<h5>" + esc(g[0]) + "</h5>";
+    g[1].forEach(function (it) { k++; if (it[2]) ESTRELLAS.push(k);
+      h += '<div class="rub-item" data-k="' + k + '"><div><b>' + k + (it[2] ? ' <span class="estrella">★</span>' : "") + " · " + esc(it[0]) + "</b><small>" + esc(it[1]) + '</small></div><div class="sino" role="group" aria-label="Resultado"><button type="button" class="s" aria-pressed="false">Sí</button><button type="button" class="n" aria-pressed="false">No</button></div></div>'; });
+    d.innerHTML = h; cajaR.appendChild(d);
+  });
+  var TOT = k, MINIMO = TOT - 2;
+  var cajaLav = $("#rub-lav");
+  LAV.forEach(function (t, i) {
+    var d = document.createElement("div"); d.className = "rub-item"; d.dataset.l = i;
+    d.innerHTML = "<div><b>" + esc(t) + '</b></div><div class="sino" role="group"><button type="button" class="s" aria-pressed="false">Sí</button><button type="button" class="n" aria-pressed="false">No</button></div>';
+    cajaLav.appendChild(d);
+  });
+  marcar(cajaR);
+  function evalSim(s) {
+    var r = rub.s[s] || {}, si = 0, faltan = 0, malas = 0, marcados = 0;
+    for (var i = 1; i <= TOT; i++) { if (r[i]) marcados++; if (r[i] === "si") si++; }
+    ESTRELLAS.forEach(function (e) { if (r[e] === "no") malas++; else if (r[e] !== "si") faltan++; });
+    var ok = marcados === TOT && malas === 0 && si >= MINIMO;
+    return { si: si, marcados: marcados, malas: malas, faltan: faltan, ok: ok, completo: marcados === TOT };
+  }
+  function pintarRub() {
+    $("#rub-nombre").value = rub.nombre; $("#rub-rol").value = rub.rol; $("#rub-fecha").value = rub.fecha;
+    $$("#rub-tabs button").forEach(function (b) { b.setAttribute("aria-selected", +b.dataset.s === rub.act ? "true" : "false"); });
+    var r = rub.s[rub.act];
+    $$(".rub-item[data-k]", cajaR).forEach(function (d) {
+      var v = r[d.dataset.k]; d.className = "rub-item" + (v ? " " + v : "");
+      d.querySelector(".s").setAttribute("aria-pressed", v === "si" ? "true" : "false");
+      d.querySelector(".n").setAttribute("aria-pressed", v === "no" ? "true" : "false");
+    });
+    var esLav = rub.rol === "lavador";
+    $("#lavador-extra").hidden = !esLav;
+    $$(".rub-grupo", cajaR).forEach(function (g, i) { g.hidden = esLav && i !== 1; });
+    $("#rub-tabs").hidden = esLav; $("#marcador").hidden = esLav;
+    if (esLav && rub.act !== 1) { rub.act = 1; return pintarRub(); }
+    $$(".rub-item", cajaLav).forEach(function (d) {
+      var v = rub.lav[d.dataset.l]; d.className = "rub-item" + (v ? " " + v : "");
+      d.querySelector(".s").setAttribute("aria-pressed", v === "si" ? "true" : "false");
+      d.querySelector(".n").setAttribute("aria-pressed", v === "no" ? "true" : "false");
+    });
+    var e1 = evalSim(1), e2 = evalSim(2);
+    [[1, e1], [2, e2]].forEach(function (p) {
+      var e = p[1];
+      $("#pt-" + p[0]).textContent = e.si + " / " + TOT;
+      $("#st-" + p[0]).textContent = !e.marcados ? "Sin empezar" : e.malas ? "★ con No: no aprueba" : (e.faltan ? "★ pendientes" : (e.completo ? (e.ok ? "Aprobado ✓" : "Menos de " + MINIMO) : "★ en Sí"));
+    });
+    var v = $("#veredicto"), quien = rub.nombre ? rub.nombre : "Esta persona";
+    var lavOk = rub.rol !== "lavador" || LAV.every(function (t, i) { return rub.lav[i] === "si"; });
+    var lavNo = rub.rol === "lavador" && LAV.some(function (t, i) { return rub.lav[i] === "no"; });
+    var reforzar = [];
+    [1, 2].forEach(function (s) { var r2 = rub.s[s]; $$(".rub-item[data-k]", cajaR).forEach(function (d) { if (r2[d.dataset.k] === "no") { var t = d.querySelector("b").textContent.replace(/^\d+\s*★?\s*·\s*/, ""); if (reforzar.indexOf(t) < 0) reforzar.push(t); } }); });
+    if (esLav) {
+      var r1 = rub.s[1], c9 = r1[9] === "si" && r1[10] === "si", n9 = r1[9] === "no" || r1[10] === "no";
+      if (c9 && lavOk) { v.className = "veredicto aprobado"; v.innerHTML = "Aprobado: " + esc(quien) + " ya puede lavar sin ayuda.<small>Inspección y lista de calidad en Sí, y las 3 condiciones de las 5 motos.</small>"; }
+      else if (n9 || lavNo) { v.className = "veredicto repasar"; v.innerHTML = "Repasar: " + esc(quien) + " repite la medición de 5 motos." + (reforzar.length ? "<small>Qué reforzar: " + esc(reforzar.join(" · ")) + ".</small>" : ""); }
+      else { v.className = "veredicto"; v.innerHTML = "El lavador se aprueba con los puntos 9 y 10, más las 3 condiciones medidas en 5 motos seguidas."; }
+      guardar(CLAVE_RUB, rub); return;
+    }
+    if (!e1.marcados && !e2.marcados) { v.className = "veredicto"; v.innerHTML = "Marque Sí o No en cada punto."; }
+    else if (e1.ok && e2.ok && lavOk) { v.className = "veredicto aprobado"; v.innerHTML = "Aprobado: " + esc(quien) + " ya puede atender sin ayuda.<small>Pasó dos simulacros seguidos con todos los ★ en Sí.</small>"; }
+    else if ((e1.completo && !e1.ok) || (e2.completo && !e2.ok) || e1.malas || e2.malas || lavNo) {
+      v.className = "veredicto repasar"; v.innerHTML = "Repasar: " + esc(quien) + " repite el simulacro." + (reforzar.length ? "<small>Qué reforzar: " + esc(reforzar.join(" · ")) + ".</small>" : "");
+    }
+    else { v.className = "veredicto"; v.innerHTML = (e1.ok ? "Simulacro 1 aprobado. Falta el simulacro 2, con otro tipo de cliente." : "Siga marcando: faltan " + (TOT - evalSim(rub.act).marcados) + " puntos en este simulacro.") + (rub.rol === "lavador" && !lavOk ? "<small>Al lavador también le faltan las 3 condiciones de las 5 motos.</small>" : ""); }
+    guardar(CLAVE_RUB, rub);
+  }
+  cajaR.addEventListener("click", function (e) {
+    var b = e.target.closest(".sino button"); if (!b) return;
+    var d = b.closest(".rub-item"), val = b.classList.contains("s") ? "si" : "no", r = rub.s[rub.act];
+    if (r[d.dataset.k] === val) delete r[d.dataset.k]; else r[d.dataset.k] = val;
+    pintarRub();
+  });
+  cajaLav.addEventListener("click", function (e) {
+    var b = e.target.closest(".sino button"); if (!b) return;
+    var d = b.closest(".rub-item"), val = b.classList.contains("s") ? "si" : "no";
+    if (rub.lav[d.dataset.l] === val) delete rub.lav[d.dataset.l]; else rub.lav[d.dataset.l] = val;
+    pintarRub();
+  });
+  $$("#rub-tabs button").forEach(function (b) { b.addEventListener("click", function () { rub.act = +b.dataset.s; pintarRub(); }); });
+  $("#rub-nombre").addEventListener("input", function (e) { rub.nombre = e.target.value; pintarRub(); });
+  $("#rub-fecha").addEventListener("input", function (e) { rub.fecha = e.target.value; guardar(CLAVE_RUB, rub); });
+  $("#rub-rol").addEventListener("change", function (e) { rub.rol = e.target.value; pintarRub(); });
+  $("#nueva-rub").addEventListener("click", function () { rub = rubVacia(); pintarRub(); });
+  $("#imprimir-rub").addEventListener("click", function () { imprimir("imp-rub"); });
+  pintarRub();
+
+  /* ---------- Video del lavado: carga diferida ---------- */
+  var VIDEO = "https://www.youtube-nocookie.com/embed/hZlQgd1CsCQ";
+  var CAP = [[0, "Tapa del piñón y raspado de grasa"], [45, "Prelavado con agua a presión"], [96, "Desengrase del kit de arrastre"],
+    [204, "Enjuague del kit de arrastre"], [247, "Zona del piñón y tapa del piñón"], [303, "Motor con champú"],
+    [354, "Tapas, guardabarros y placa"], [413, "Rueda trasera, mordaza y basculante"], [508, "Rueda delantera, disco y mordaza"],
+    [619, "Radiador, exhosto, parte alta y mandos"], [733, "Champucera y espuma pH neutro"], [853, "Enjuague final"],
+    [924, "Secado y resultados"], [1057, "Tapa del piñón y lubricación de la cadena"]];
+  var cajaV = $("#video-lavado"), cajaCap = $("#capitulos");
+  function mmss(t) { return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + (t % 60)).slice(-2); }
+  CAP.forEach(function (c) {
+    var li = document.createElement("li");
+    li.innerHTML = '<button type="button" data-seg="' + c[0] + '" aria-pressed="false"><b>' + mmss(c[0]) + "</b>" + esc(c[1]) + "</button>";
+    cajaCap.appendChild(li);
+  });
+  function ponerVideo(seg, llevar) {
+    var f = document.createElement("iframe");
+    f.src = VIDEO + "?start=" + seg + "&autoplay=1&rel=0&playsinline=1";
+    f.title = "Cómo lavar una moto correctamente";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    f.setAttribute("allowfullscreen", ""); f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    cajaV.innerHTML = ""; cajaV.appendChild(f);
+    var act = 0; CAP.forEach(function (c, i) { if (c[0] <= seg) act = i; });
+    $$("button", cajaCap).forEach(function (b, i) { b.setAttribute("aria-pressed", i === act ? "true" : "false"); });
+    if (llevar) { var r = cajaV.getBoundingClientRect(); if (r.top < 100 || r.bottom > innerHeight) cajaV.scrollIntoView({ behavior: "smooth", block: "start" }); }
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".video-portada, #capitulos button, .salto"); if (!b) return;
+    ponerVideo(+b.dataset.seg || 0, !b.classList.contains("video-portada"));
+  });
+  addEventListener("beforeprint", function () { $$("details.paso-l").forEach(function (d) { d.open = true; }); });
+
+  /* ---------- Buscador ---------- */
+  var INDICE = [];
+  function agregar(t, sub, accion, extra) { INDICE.push({ t: t, s: sub, n: norm(t + " " + sub + " " + (extra || "")), a: accion }); }
+  $$(".sec").forEach(function (s) {
+    var h2 = s.querySelector("h2"), kick = s.querySelector(".kick");
+    var sec = kick ? kick.textContent : "";
+    if (h2) agregar(h2.textContent, sec, function () { irA(s); });
+    $$("h3.buscable, .principio, .p8, li.buscable, .card.buscable, details.buscable, .caso, .frase", s).forEach(function (el) {
+      if (el.closest("#ficha, #pantalla, #respuesta-caso")) return;
+      var tEl = el.matches("h3") ? el : el.querySelector("h3, b");
+      var titulo = el.dataset.t || (tEl ? tEl.textContent : el.textContent);
+      var cuerpo = el.matches("h3") ? (el.parentNode.textContent || "") : el.textContent;
+      if (el.classList.contains("frase")) titulo = "«" + el.textContent.replace(/^Lo que dice/, "").slice(0, 80) + "…»";
+      agregar(titulo.trim(), sec, function () {
+        var panel = el.closest(".panel"); if (panel && panel.hidden) { var seg = panel.parentNode.querySelector(".seg"); if (seg) abrirTab(seg, panel.id); }
+        if (el.classList.contains("caso")) el.click();
+        var det = el.closest("details"); if (det && !det.open) det.open = true;
+        var oculta = el.closest(".respuesta[hidden]"); if (oculta) { var bt = document.querySelector('[data-r="' + oculta.id + '"]'); if (bt) bt.click(); }
+        irA(el);
+      }, cuerpo);
+    });
+  });
+  [["Reclamo en el local", "r-local", "queja bravo molesto mostrador"], ["Reclamo por WhatsApp", "r-wa", "queja chat mensaje"], ["Comentario negativo en público", "r-publico", "comentario resena mala google instagram tiktok redes estrellas critica"]].forEach(function (r) {
+    agregar(r[0], "Reclamos", function () { abrirTab($("#tabs-reclamo"), r[1]); irA($("#tabs-reclamo")); }, r[2]);
+  });
+  agregar("Imprimir la lista de calidad", "Control de calidad", function () { irA($("#hoja-lista")); }, "imprimir hoja checklist");
+  agregar("Ponerle los datos de mi lavadero", "Inicio", function () { $("#datos").open = true; irA($("#datos")); }, "nombre precios marcadores personalizar");
+  Object.keys(N).forEach(function (id) {
+    var n = N[id];
+    var extra = (n.dice || []).map(function (d) { return typeof d === "string" ? d : d.et + " " + d.d; }).join(" ") + " " + (n.hace || []).join(" ") + " " + (n.err || "");
+    agregar(n.t, "Practicar en la recepción", function () { pila = []; ir(id, false); irA(pant); }, extra);
+  });
+  REC.forEach(function (r, i) { agregar("Paso " + (i + 1) + " · " + r.t, "Recorrido de la moto", function () { verPaso(i); irA($("#ficha")); }, r.dice.join(" ") + r.hace.join(" ")); });
+  var inp = $("#buscar"), res = $("#resultados");
+  function buscar() {
+    var q = norm(inp.value.trim()).replace(/[¿?¡!«»".,:;]/g, " ");
+    res.innerHTML = ""; if (q.trim().length < 2) return;
+    var VACIAS = ["esta", "para", "que", "como", "una", "los", "las", "del", "con", "por"];
+    var pal = q.split(/\s+/).filter(function (w) { return (w.length >= 3 || /^\d/.test(w)) && VACIAS.indexOf(w) < 0; });
+    if (!pal.length) pal = [q.trim()];
+    var minimo = Math.ceil(pal.length / 2);
+    var hits = INDICE.map(function (it) {
+      var p = 0, m = 0, tt = norm(it.t);
+      pal.forEach(function (w) { if (tt.indexOf(w) >= 0) { p += 3; m++; } else if (it.n.indexOf(w) >= 0) { p += 1; m++; } });
+      return { it: it, p: m >= minimo ? p : 0 };
+    }).filter(function (h) { return h.p > 0; }).sort(function (a, b) { return b.p - a.p; });
+    var vistos = {}, n = 0;
+    hits.forEach(function (h) {
+      if (n >= 8 || vistos[h.it.t]) return; vistos[h.it.t] = 1; n++;
+      var li = document.createElement("li"), b = document.createElement("button"); b.type = "button";
+      b.innerHTML = "<b>" + esc(h.it.t) + "</b><small>" + esc(h.it.s) + "</small>";
+      b.addEventListener("click", function () { res.innerHTML = ""; h.it.a(); });
+      li.appendChild(b); res.appendChild(li);
+    });
+    if (!n) res.innerHTML = '<li class="vacio">No encontramos eso. Pruebe con otra palabra: casco, caro, reseña, lista, reclamo.</li>';
+  }
+  inp.addEventListener("input", buscar);
+  inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { var b = res.querySelector("button"); if (b) b.click(); } if (e.key === "Escape") { inp.value = ""; res.innerHTML = ""; } });
+  $("#abrir-buscar").addEventListener("click", function () { scrollTo({ top: 0, behavior: "smooth" }); setTimeout(function () { inp.focus(); }, 350); });
+  document.addEventListener("keydown", function (e) { if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.nodeName)) { e.preventDefault(); $("#abrir-buscar").click(); } });
+
+  /* Marcadores en toda la página (al final, después de pintar todo) */
+  marcar($("main"));
+  avance();
+})();
+</script>
+</body>
+</html>
