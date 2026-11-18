@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo lavar una moto · Mónaco</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="El video del lavado, los 10 pasos y la lista de calidad que el lavador revisa antes de entregar la moto.">
+<link rel="stylesheet" href="../assets/mapa.css">
+<script src="../assets/ruta.js" defer></script>
+<style>
+  /* Estilo Mónaco tipo Apple: blanco, Helvetica Neue, #f5f5f7 y dorado de marca */
+  :root {
+    --t:#1d1d1f; --t2:#424245; --g:#6e6e73; --s:#f5f5f7; --l:#e5e5ea;
+    --a:#c0a44d; --a-osc:#8a6d1f; --a-suave:#f8f3e4; --a-linea:#eadfbf;
+    --r:#b3261e; --r-suave:#fbeceb; --v:#1d7a46; --v-suave:#eaf5ee;
+    --f:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color-scheme: light;
+  }
+  html, body { background:#fff; color:var(--t); font-family:var(--f) }
+  body { margin:0; font-size:18px; line-height:1.4; letter-spacing:-0.01em; overflow-x:hidden }
+  * { box-sizing:border-box }
+  .rm-barra { display:none !important }
+  a { color:var(--a-osc) }
+  p { margin:0 0 10px }
+  button { font:inherit; color:inherit }
+
+  /* Barra superior */
+  .barra-top { position:sticky; top:0; z-index:20; display:flex; align-items:center; height:50px;
+    padding:0 max(16px, env(safe-area-inset-left,0px)); background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(12px); -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--l) }
+  .barra-top a { color:var(--t); text-decoration:none; font-weight:700; font-size:17px; min-height:44px; display:flex; align-items:center }
+
+  .hoja { max-width:640px; margin:0 auto; padding:16px max(16px, env(safe-area-inset-left,0px)) 40px }
+
+  /* Selector de persona */
+  .quien { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:0 0 22px }
+  .quien a { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:72px;
+    padding:8px 4px; border-radius:18px; background:var(--s); color:var(--t); text-decoration:none;
+    font-weight:700; font-size:17px; text-align:center; line-height:1.15 }
+  .quien a .ic { font-size:26px; line-height:1 }
+  .quien a[aria-current="page"] { background:var(--a); color:#fff; box-shadow:0 4px 14px rgba(192,164,77,.35) }
+
+  h1 { font-size:clamp(32px, 8vw, 44px); line-height:1.05; font-weight:800; letter-spacing:-0.025em; margin:0 0 8px; text-wrap:balance }
+  h2 { font-size:clamp(26px, 6vw, 34px); line-height:1.1; font-weight:800; letter-spacing:-0.02em; margin:0 0 8px; padding:0; border:0; text-wrap:balance }
+  .lead { font-size:19px; color:var(--t2); margin:0 0 16px }
+  .sec { margin:34px 0 0 }
+
+  /* Video con carga diferida */
+  .video { position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#2a2418; margin:0 0 12px; scroll-margin-top:60px }
+  .video iframe { position:absolute; inset:0; width:100%; height:100%; border:0 }
+  .portada { all:unset; box-sizing:border-box; position:absolute; inset:0; cursor:pointer; display:block;
+    background:linear-gradient(135deg, #2a2418, #5a4714) center/cover }
+  .portada img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.85 }
+  .portada .play { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:76px; height:76px; border-radius:50%;
+    background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.3) }
+  .portada .play svg { width:30px; height:30px; fill:var(--a-osc); margin-left:5px }
+  .portada .rotulo { position:absolute; left:0; right:0; bottom:0; padding:28px 16px 12px; color:#fff; font-weight:800; font-size:18px;
+    background:linear-gradient(transparent, rgba(0,0,0,.7)) }
+  .portada:focus-visible { outline:3px solid var(--a); outline-offset:-3px }
+
+  .volver { display:block; width:100%; min-height:52px; margin:0; border:0; border-radius:16px; background:var(--a); color:#fff;
+    font-weight:700; font-size:18px; cursor:pointer }
+  .volver[hidden] { display:none }
+  .pasos li { scroll-margin-top:60px }
+
+  /* Pasos */
+  .pasos { list-style:none; margin:0; padding:0; display:grid; gap:10px; counter-reset:p }
+  .pasos li { counter-increment:p; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start;
+    background:var(--s); border-radius:20px; padding:14px 14px 12px }
+  .pasos .em { grid-row:span 2; width:56px; height:56px; border-radius:16px; background:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:32px; line-height:1; position:relative }
+  .pasos .em::after { content:counter(p); position:absolute; top:-6px; left:-6px; min-width:26px; height:26px; border-radius:13px;
+    background:var(--a); color:#fff; font-size:15px; font-weight:800; display:flex; align-items:center; justify-content:center; padding:0 6px }
+  .pasos p { margin:0; font-size:19px; font-weight:600; line-height:1.3 }
+  .pasos p small { display:block; font-size:17px; font-weight:400; color:var(--t2); margin-top:3px }
+  .pasos .seco { display:block; width:max-content; margin:0 0 4px; padding:2px 10px; border-radius:980px; background:var(--r-suave);
+    color:var(--r); font-size:17px; font-weight:800; text-transform:uppercase }
+  .pasos .ojo { display:block; margin-top:6px; color:var(--r); font-weight:800 }
+  .dist-t { grid-column:1 / -1; font-size:19px; font-weight:800; margin:8px 0 0 !important }
+  .ver { justify-self:start; border:0; background:#fff; color:var(--a-osc); font-weight:700; font-size:17px;
+    min-height:44px; padding:6px 14px; border-radius:980px; cursor:pointer; margin-top:4px }
+  .ver:hover, .ver:focus-visible { background:var(--a-suave) }
+
+  /* Distancias del agua */
+  .dist { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; margin:6px 0 0; grid-column:1 / -1 }
+  .dist div { background:#fff; border-radius:14px; padding:8px 4px; text-align:center; font-size:17px; font-weight:600; line-height:1.2 }
+  .dist div span { display:block; font-size:24px }
+  .dist div small { display:block; font-size:15px; font-weight:400; color:var(--t2) }
+  .mas-c li small { font-size:14px; color:var(--g) }
+
+  /* Plegables (máximo 3 en la página) */
+  details.mas { margin:12px 0 0; background:var(--s); border-radius:18px }
+  details.mas > summary { list-style:none; cursor:pointer; min-height:52px; display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; font-weight:700; font-size:18px }
+  details.mas > summary::-webkit-details-marker { display:none }
+  details.mas > summary::after { content:"Ver más"; font-size:16px; color:var(--a-osc); font-weight:700; flex:none; margin-left:10px }
+  details.mas[open] > summary::after { content:"Cerrar" }
+  .mas-c { padding:0 16px 14px }
+  .mas-c ul { margin:0; padding:0; list-style:none; display:grid; gap:6px }
+  .mas-c li { background:#fff; border-radius:12px; padding:8px 12px; font-size:17px }
+
+  /* Lista de calidad */
+  .cuenta { display:flex; align-items:center; gap:10px; margin:0 0 10px; font-weight:700; font-size:18px }
+  .cuenta .barra { flex:1; height:10px; background:var(--l); border-radius:5px; overflow:hidden }
+  .cuenta .barra span { display:block; height:100%; width:0; background:var(--v); transition:width .25s }
+  .items { list-style:none; margin:0; padding:0; display:grid; gap:8px }
+  .items label { display:flex; align-items:center; gap:12px; min-height:60px; padding:10px 14px; background:var(--s); border-radius:16px; cursor:pointer; font-size:18px; line-height:1.25 }
+  .items input { appearance:none; -webkit-appearance:none; flex:none; width:32px; height:32px; border-radius:10px; border:2px solid #c7c7cc; background:#fff; margin:0; display:grid; place-content:center; cursor:pointer }
+  .items input::before { content:"✓"; font-size:22px; font-weight:800; color:#fff; transform:scale(0); transition:transform .12s }
+  .items input:checked { background:var(--v); border-color:var(--v) }
+  .items input:checked::before { transform:scale(1) }
+  .items input:focus-visible { outline:3px solid var(--a); outline-offset:2px }
+  .items li.ok label { background:var(--v-suave) }
+  .items li.ok .tx { text-decoration:line-through; text-decoration-thickness:2px; color:var(--g) }
+  .items li.oblig label { box-shadow:inset 0 0 0 2px var(--r-suave) }
+  .items .tx b { color:var(--r) }
+  .resultado { margin:12px 0 0; padding:14px 16px; border-radius:16px; background:var(--s); font-weight:700; font-size:18px }
+  .resultado.pasa { background:var(--v-suave); color:var(--v) }
+  .otra { margin:10px 0 0; width:100%; min-height:52px; border:2px solid var(--l); background:#fff; border-radius:16px; font-weight:700; font-size:18px; cursor:pointer }
+
+  /* Cierre que pinta ruta.js */
+  #ruta-cierre { margin:34px 0 0 }
+  .cierre { display:grid; gap:10px }
+  .cierre .boton { border-radius:16px; min-height:56px; font-size:18px; flex-direction:column; gap:2px }
+  .cierre .boton-hice { background:#fff; color:var(--v); border:2px solid var(--v) }
+  .cierre .boton-hice[aria-pressed="true"] { background:var(--v); color:#fff }
+  .cierre .boton-siguiente { background:var(--t); border-color:var(--t); color:#fff }
+  .cierre .hice-nota { margin:0; font-size:17px; color:var(--g) }
+
+  @media print { .barra-top, .quien, .video, .volver, .ver, .otra, #ruta-cierre { display:none !important } }
+</style>
+</head>
+<body data-tarea="lavado">
+
+<nav class="barra-top" aria-label="Volver"><a href="../">← Mapa</a></nav>
+
+<main class="hoja">
+
+  <nav class="quien" aria-label="¿Qué hace usted?">
+    <a href="../atencion-al-cliente/"><span class="ic" aria-hidden="true">🙋</span>Atiendo</a>
+    <a href="../lavado/" aria-current="page"><span class="ic" aria-hidden="true">🧽</span>Lavo</a>
+    <a href="../encargado/"><span class="ic" aria-hidden="true">📋</span>Soy encargado</a>
+  </nav>
+
+  <h1>Cómo lavar una moto</h1>
+  <p class="lead">Siga los pasos en orden. Al final revise la lista.</p>
+
+  <div class="video" id="video">
+    <button class="portada" type="button" data-seg="0" aria-label="Ver el video del lavado">
+      <img src="https://i.ytimg.com/vi/hZlQgd1CsCQ/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
+      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span>
+      <span class="rotulo">Video completo · o toque ▶ en cada paso</span>
+    </button>
+  </div>
+  <button class="volver" type="button" id="volver" hidden>↓ Volver al paso</button>
+
+  <section class="sec" id="pasos">
+    <h2>Los 10 pasos</h2>
+    <ol class="pasos">
+      <li><span class="em" aria-hidden="true">🧊</span>
+        <p><span class="seco">🚫💧 Sin agua todavía</span>Moto fría y en el caballete. Tape con bolsa tablero, cables y filtro de aire (bajo el asiento o junto al motor).<small>Motor caliente: espere 15 minutos.</small></p></li>
+      <li><span class="em" aria-hidden="true">🪛</span>
+        <p><span class="seco">🚫💧 Sin agua todavía</span>Quite la tapa del piñón (la tapita junto a la cadena) y raspe la grasa con el destornillador de pala.</p>
+        <button class="ver" type="button" data-seg="0">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">💦</span>
+        <p>Ahora sí, agua: quite el barro de lado y sin acercarse.</p>
+        <button class="ver" type="button" data-seg="45">▶ ver en el video</button>
+        <p class="dist-t">Qué tan lejos la pistola:</p>
+        <div class="dist">
+          <div><span aria-hidden="true">⛓️</span>Cadena y rines<small>una cuarta · 25 cm</small></div>
+          <div><span aria-hidden="true">🏍️</span>Motor<small>un brazo · 50 cm</small></div>
+          <div><span aria-hidden="true">🎛️</span>Manubrio<small>un paso largo · 90 cm</small></div>
+        </div></li>
+      <li><span class="em" aria-hidden="true">⛓️</span>
+        <p>Cadena: desengrasante con brocha. Abrácela con su trapo, gire la rueda y enjuague.<strong class="ojo">Ese trapo es SOLO para la cadena. Déjelo aparte para la próxima moto.</strong></p>
+        <button class="ver" type="button" data-seg="96">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">⚙️</span>
+        <p>Lave con brocha esa tapita y el hueco donde va.</p>
+        <button class="ver" type="button" data-seg="247">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">🧽</span>
+        <p>Motor, tapas y placa: champú y trapo. Nunca desengrasante en tanque ni tapas.</p>
+        <button class="ver" type="button" data-seg="303">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">🛞</span>
+        <p>Ruedas: rin (aunque sea pintado) con desengrasante, llanta con cepillo, freno con trapo.</p>
+        <button class="ver" type="button" data-seg="413">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">🖐️</span>
+        <p>Radiador (rejilla del frente), mofle (tubo de escape) y manubrio: solo trapo y brocha. Enjuague.</p>
+        <button class="ver" type="button" data-seg="619">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">🫧</span>
+        <p>Espuma en toda la moto. Trapo y enjuague de arriba hacia abajo.<small>Tarro de espuma: 1,5 litros, 1 de champú por 9 de agua.</small></p>
+        <button class="ver" type="button" data-seg="733">▶ ver en el video</button></li>
+      <li><span class="em" aria-hidden="true">💨</span>
+        <p>Sople, seque, ponga la tapa y, de último, aceite a la cadena.</p>
+        <button class="ver" type="button" data-seg="924">▶ ver en el video</button></li>
+    </ol>
+
+    <details class="mas">
+      <summary>🧰 Lo que tiene a la mano</summary>
+      <div class="mas-c"><ul>
+        <li>🪛 Destornillador de pala y la llave de la tapa</li>
+        <li>🏍️ Caballete</li>
+        <li>💦 Hidrolavadora <small>(1.500–1.800 PSI)</small></li>
+        <li>🖌️ Brochas y 🪥 cepillo grueso, solo para llantas</li>
+        <li>🧴 Desengrasante, champú y champú suave para la espuma</li>
+        <li>🫧 Tarro de espuma lleno</li>
+        <li>🧻 Trapos: uno para la cadena, uno para el champú y los de secar</li>
+        <li>🛍️ Bolsas para tapar</li>
+        <li>💨 Sopladora</li>
+        <li>🛢️ Aceite de cadena</li>
+        <li>🧤 Guantes largos y botas</li>
+      </ul></div>
+    </details>
+
+    <details class="mas">
+      <summary>📖 Palabras del lavadero</summary>
+      <div class="mas-c"><ul>
+        <li>🏍️ <b>Caballete:</b> el soporte que levanta la rueda de atrás.</li>
+        <li>⚙️ <b>Piñón:</b> la rueda chica con dientes, junto al motor.</li>
+        <li>🌬️ <b>Radiador:</b> la rejilla del frente que enfría el motor.</li>
+        <li>🔥 <b>Mofle:</b> el tubo de escape.</li>
+      </ul></div>
+    </details>
+  </section>
+
+  <section class="sec" id="calidad">
+    <h2>Antes de entregar</h2>
+    <p class="lead">Si una falla, se vuelve a lavar esa parte.</p>
+    <div class="cuenta"><span id="cuenta">0 de 10</span><span class="barra"><span id="barra"></span></span></div>
+    <ul class="items" id="items">
+      <li><label><input type="checkbox" data-i="rines"><span class="tx">🛞 Rines limpios por dentro y fuera</span></label></li>
+      <li><label><input type="checkbox" data-i="llantas"><span class="tx">✋ Llantas sin nada encima</span></label></li>
+      <li><label><input type="checkbox" data-i="motor"><span class="tx">🏍️ Motor limpio, también por debajo</span></label></li>
+      <li><label><input type="checkbox" data-i="cadena"><span class="tx">⛓️ Cadena limpia y con aceite</span></label></li>
+      <li><label><input type="checkbox" data-i="rincones"><span class="tx">👆 Mofle, pata y placa por detrás</span></label></li>
+      <li><label><input type="checkbox" data-i="pintura"><span class="tx">✨ Pintura sin jabón ni gotas</span></label></li>
+      <li><label><input type="checkbox" data-i="manubrio"><span class="tx">🪞 Manubrio y espejos secos; sin bolsas</span></label></li>
+      <li><label><input type="checkbox" data-i="tapa"><span class="tx">🪛 Tapa puesta, sin tornillos sobrando</span></label></li>
+      <li><label><input type="checkbox" data-i="pedido"><span class="tx">📝 Hecho lo que pidió el cliente</span></label></li>
+      <li class="oblig"><label><input type="checkbox" data-i="frenos"><span class="tx"><b>Obligatorio:</b> 🛑 frenos secos, sin producto</span></label></li>
+    </ul>
+    <p class="resultado" id="resultado" aria-live="polite">Toque cada punto al revisarlo.</p>
+    <button class="otra" type="button" id="otra">🔄 Otra moto</button>
+  </section>
+
+  <div id="ruta-cierre"></div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var VIDEO = "https://www.youtube-nocookie.com/embed/hZlQgd1CsCQ";
+  var caja = document.getElementById("video");
+
+  function ponerVideo(seg, llevar) {
+    var f = document.createElement("iframe");
+    f.src = VIDEO + "?start=" + seg + "&autoplay=1&rel=0&playsinline=1";
+    f.title = "Cómo lavar una moto correctamente";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    f.setAttribute("allowfullscreen", "");
+    f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    caja.innerHTML = "";
+    caja.appendChild(f);
+    if (llevar) {
+      var r = caja.getBoundingClientRect();
+      if (r.top < 50 || r.bottom > window.innerHeight) caja.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+  /* Botón para volver al paso donde iba */
+  var volver = document.getElementById("volver");
+  var pasoLi = null;
+  var lis = Array.prototype.slice.call(document.querySelectorAll(".pasos > li"));
+  volver.addEventListener("click", function () {
+    if (pasoLi) pasoLi.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-seg]") : null;
+    if (!b) return;
+    var li = b.closest(".pasos > li");
+    if (li) {
+      pasoLi = li;
+      volver.textContent = "↓ Volver al paso " + (lis.indexOf(li) + 1);
+      volver.hidden = false;
+    }
+    ponerVideo(parseInt(b.getAttribute("data-seg"), 10) || 0, !b.classList.contains("portada"));
+  });
+
+  /* ruta.js pinta el cierre tuteando; aquí se pasa a usted */
+  var USTED = {
+    "✔ Ya lo hiciste": "✔ Ya lo hizo",
+    "Toca otra vez si te equivocaste.": "Toque otra vez si se equivocó.",
+    "Márcalo cuando ya lo tengas en la mano.": "Márquelo cuando ya lo sepa hacer."
+  };
+  var cierre = document.getElementById("ruta-cierre");
+  function aUsted() {
+    Array.prototype.forEach.call(cierre.querySelectorAll("button, p, span, small"), function (n) {
+      var t = n.textContent.trim();
+      if (USTED.hasOwnProperty(t)) n.textContent = USTED[t];
+    });
+  }
+  if (window.MutationObserver) new MutationObserver(aUsted).observe(cierre, { childList: true, subtree: true, characterData: true });
+
+  /* Lista de calidad: se guarda en este celular y se borra sola a las 4 horas */
+  var CLAVE = "monaco-lavado-calidad-v3";
+  var VENCE = 4 * 60 * 60 * 1000;
+  function leer() {
+    try {
+      var v = JSON.parse(localStorage.getItem(CLAVE) || "{}");
+      if (!v || typeof v !== "object" || !v.t || Date.now() - v.t > VENCE) return {};
+      return v.m && typeof v.m === "object" ? v.m : {};
+    } catch (e) { return {}; }
+  }
+  function guardar(v) { try { localStorage.setItem(CLAVE, JSON.stringify({ t: Date.now(), m: v })); } catch (e) {} }
+
+  var cajas = Array.prototype.slice.call(document.querySelectorAll("#items input"));
+  var total = cajas.length;
+  var res = document.getElementById("resultado");
+
+  function pintar(cambio) {
+    var est = {}, n = 0, obligFalta = false;
+    cajas.forEach(function (c) {
+      var li = c.closest("li");
+      li.classList.toggle("ok", c.checked);
+      if (c.checked) { est[c.getAttribute("data-i")] = 1; n++; }
+      else if (li.classList.contains("oblig")) obligFalta = true;
+    });
+    document.getElementById("cuenta").textContent = n + " de " + total;
+    document.getElementById("barra").style.width = (n / total * 100) + "%";
+    res.classList.toggle("pasa", n === total);
+    res.textContent = n === 0 ? "Toque cada punto al revisarlo."
+      : n === total ? "✅ Lista. Grabe 10 segundos de la moto y avísele al encargado."
+      : obligFalta ? "Faltan " + (total - n) + ". Sin el de los frenos, la moto no sale."
+      : "Faltan " + (total - n) + ".";
+    if (cambio) guardar(est);
+  }
+
+  var guardado = leer();
+  cajas.forEach(function (c) {
+    c.checked = !!guardado[c.getAttribute("data-i")];
+    c.addEventListener("change", pintar);
+  });
+  document.getElementById("otra").addEventListener("click", function () {
+    cajas.forEach(function (c) { c.checked = false; });
+    pintar(true);
+    document.getElementById("calidad").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  pintar();
+})();
+</script>
+</body>
+</html>

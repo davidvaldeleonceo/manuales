@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para el encargado · Mónaco</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Para el encargado del lavadero: revisar al equipo, atender reclamos y poner los precios.">
+<link rel="stylesheet" href="../assets/mapa.css">
+<script src="../assets/ruta.js" defer></script>
+<style>
+  /* Estilo Mónaco tipo Apple: blanco, Helvetica Neue, #f5f5f7 y dorado de marca */
+  :root {
+    --t:#1d1d1f; --t2:#424245; --g:#6e6e73; --s:#f5f5f7; --l:#e5e5ea;
+    --a:#c0a44d; --a-osc:#8a6d1f; --a-suave:#f8f3e4; --a-linea:#eadfbf;
+    --r:#b3261e; --r-suave:#fbeceb; --v:#1d7a46; --v-suave:#eaf5ee;
+    --f:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color-scheme: light;
+  }
+  html, body { background:#fff; color:var(--t); font-family:var(--f) }
+  body { margin:0; font-size:18px; line-height:1.45; letter-spacing:-0.01em; overflow-x:hidden }
+  .rm-barra { display:none !important }
+  * { box-sizing:border-box }
+  a { color:var(--a-osc) }
+  p { margin:0 0 12px }
+  h1, h2 { letter-spacing:-0.02em; line-height:1.1 }
+
+  /* Barra superior */
+  .e-top { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:12px; height:52px;
+    padding:0 16px; background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(12px); -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--l); font-size:17px }
+  .e-top a { color:var(--t); text-decoration:none; font-weight:600; white-space:nowrap }
+  .e-top span { flex:1; min-width:0; text-align:center; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .e-top i { width:64px }
+
+  main { max-width:720px; margin:0 auto; padding:0 16px }
+
+  /* Selector de 3 personas */
+  .quien { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin:16px 0 8px }
+  .quien a { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:64px;
+    padding:10px 6px; border-radius:18px; background:var(--s); color:var(--t); text-decoration:none;
+    font-weight:700; font-size:17px; text-align:center; line-height:1.15 }
+  .quien a b { font-size:22px; line-height:1 }
+  .quien a[aria-current="page"] { background:var(--a-suave); box-shadow:inset 0 0 0 2px var(--a); color:var(--a-osc) }
+
+  .e-hero { padding:4px 0 8px }
+  .solo-lector { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
+  .saltos { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 0 }
+  .saltos a { display:inline-flex; align-items:center; min-height:48px; padding:0 16px; border-radius:980px; background:var(--s);
+    color:var(--t); text-decoration:none; font-weight:600; font-size:17px }
+
+  /* Bloques */
+  .bloque { padding:28px 0; border-bottom:1px solid var(--l); scroll-margin-top:60px }
+  .bloque:last-of-type { border-bottom:0 }
+  .num { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%;
+    background:var(--a); color:#fff; font-weight:800; font-size:20px; margin:0 0 10px }
+  .bloque h2 { font-size:clamp(26px, 6.5vw, 34px); margin:0 0 8px }
+  .lead { color:var(--t2); font-size:18px }
+
+  /* Botones */
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:980px;
+    border:0; background:var(--t); color:#fff; font:inherit; font-size:17px; font-weight:700; cursor:pointer; text-decoration:none }
+  .btn.gris { background:var(--s); color:var(--t) }
+  .acciones { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 0 }
+
+  /* 1 · Revisar al equipo */
+  .campo { display:block; font-weight:700; font-size:17px; margin:0 0 12px }
+  .campo input { display:block; width:100%; margin-top:6px; font:inherit; font-size:18px; padding:12px 14px; border-radius:14px;
+    border:1px solid var(--l); background:#fff; color:var(--t) }
+  .campo input:focus { outline:2px solid var(--a); border-color:transparent }
+  .rub { list-style:none; margin:0; padding:0; display:grid; gap:8px }
+  .rub label { display:grid; grid-template-columns:30px minmax(0,1fr); gap:12px; align-items:center; min-height:60px;
+    padding:12px 14px; border-radius:16px; background:var(--s); cursor:pointer; font-size:18px; font-weight:600; line-height:1.3 }
+  .rub input { width:28px; height:28px; margin:0; accent-color:var(--v); cursor:pointer }
+  .rub label:has(input:checked) { background:var(--v-suave) }
+  .rub label:has(input:checked) .txt { text-decoration:line-through; text-decoration-color:rgba(29,122,70,.45) }
+  .rub .est { color:var(--a-osc); font-weight:800 }
+  .rub small { display:block; color:var(--g); font-size:17px; font-weight:400 }
+  .marcador { margin:14px 0 0; border-radius:18px; padding:14px 18px;
+    font-size:19px; font-weight:800; background:var(--s); color:var(--t2) }
+  .marcador.aprobado { background:var(--v-suave); color:var(--v) }
+  .marcador.repasar { background:var(--r-suave); color:var(--r) }
+
+  /* 2 · Reclamos */
+  .tabs { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:4px; background:var(--s); border-radius:16px; padding:4px; margin:6px 0 16px }
+  .tabs button { font:inherit; font-size:17px; font-weight:700; border:0; background:transparent; color:var(--t2);
+    min-height:52px; padding:6px 4px; border-radius:12px; cursor:pointer; line-height:1.15 }
+  .tabs button[aria-selected="true"] { background:#fff; color:var(--t); box-shadow:0 1px 3px rgba(0,0,0,.12) }
+  .panel[hidden] { display:none }
+  .frase { border-radius:18px; background:var(--a-suave); border:1px solid var(--a-linea); padding:14px 16px; margin:0 0 12px }
+  .frase .cab { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:0 0 4px;
+    font-size:17px; font-weight:700; color:var(--a-osc) }
+  .frase p { margin:0; font-size:19px; font-weight:600; line-height:1.35 }
+  .copiar { font:inherit; font-size:17px; font-weight:700; border:0; background:#fff; color:var(--a-osc); border-radius:980px;
+    min-height:44px; padding:0 14px; cursor:pointer; flex:none }
+  .pasos { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:8px }
+  .pasos li { display:grid; grid-template-columns:34px minmax(0,1fr); gap:10px; align-items:start; padding:12px 14px;
+    border-radius:16px; background:var(--s); font-size:18px }
+  .pasos li > span { font-size:24px; line-height:1.1 }
+  .nunca { border-radius:16px; padding:12px 16px; background:var(--r-suave); color:var(--r); font-weight:700; margin:0 0 12px }
+
+  details.mas { border-radius:16px; background:#fff; border:1px solid var(--l); margin:6px 0 0 }
+  details.mas > summary { cursor:pointer; list-style:none; min-height:52px; padding:14px 16px; font-weight:700; color:var(--a-osc);
+    display:flex; justify-content:space-between; align-items:center; gap:12px }
+  details.mas > summary::-webkit-details-marker { display:none }
+  details.mas > summary::after { content:"+"; font-size:24px; line-height:1 }
+  details.mas[open] > summary::after { content:"−" }
+  .mas-c { padding:0 16px 16px }
+  .mas-c ul { margin:0 0 12px; padding-left:22px }
+  .mas-c li { margin:0 0 6px }
+
+  /* 3 · Precios */
+  .escalera { display:grid; gap:10px; margin:6px 0 0 }
+  .peldano { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,150px); gap:12px; align-items:center;
+    padding:14px 16px; border-radius:18px; background:var(--s) }
+  .peldano:nth-child(2) { margin-left:12px } .peldano:nth-child(3) { margin-left:24px }
+  .peldano b { display:block; font-size:19px }
+  .peldano small { display:block; color:var(--g); font-size:17px }
+  .plata { display:flex; align-items:center; gap:6px; background:#fff; border:1px solid var(--l); border-radius:14px; padding:0 12px; min-width:0 }
+  .plata:focus-within { outline:2px solid var(--a); border-color:transparent }
+  .plata span { font-weight:800; color:var(--g) }
+  .plata input { width:100%; min-width:0; border:0; background:transparent; font:inherit; font-size:20px; font-weight:800;
+    padding:12px 0; color:var(--t) }
+  .plata input:focus { outline:none }
+  .plata input::placeholder { color:#b0b0b5; font-weight:700 }
+  .aviso { border-radius:16px; padding:12px 16px; font-weight:700; margin:12px 0 0; background:var(--s); color:var(--t2) }
+  .aviso.ok { background:var(--v-suave); color:var(--v) }
+  .aviso.mal { background:var(--r-suave); color:var(--r) }
+
+  .pie { max-width:720px; margin:0 auto; padding:24px 16px 48px; color:var(--g); font-size:17px }
+  .destello { animation:destello 1.6s ease }
+  @keyframes destello { 0%,40% { box-shadow:0 0 0 4px var(--a) } 100% { box-shadow:0 0 0 0 transparent } }
+  @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important } }
+  @media (max-width:380px) { .quien a { font-size:17px; min-height:60px } .peldano { grid-template-columns:1fr } .peldano:nth-child(n) { margin-left:0 } }
+
+  @media print {
+    .e-top, .quien, .saltos, .tabs, .acciones, .copiar, #precios, #ruta-siguiente { display:none !important }
+    .panel[hidden] { display:block !important }
+  }
+</style>
+</head>
+<body data-tarea="encargado">
+
+<header class="e-top">
+  <a href="../">← Mapa</a>
+  <span>Para el encargado</span>
+  <i aria-hidden="true"></i>
+</header>
+
+<main>
+  <nav class="quien" aria-label="¿Quién es usted?">
+    <a href="../atencion-al-cliente/"><b aria-hidden="true">🙋</b>Atiendo</a>
+    <a href="../lavado/"><b aria-hidden="true">🧽</b>Lavo</a>
+    <a href="../encargado/" aria-current="page"><b aria-hidden="true">🧑‍💼</b>Soy encargado</a>
+  </nav>
+
+  <div class="e-hero">
+    <h1 class="solo-lector">Para el encargado</h1>
+    <div class="saltos">
+      <a href="#equipo">Equipo</a><a href="#reclamos">Quejas y reseñas</a><a href="#precios">Precios</a>
+    </div>
+  </div>
+
+  <!-- 1 · Revisar al equipo -->
+  <section class="bloque" id="equipo">
+    <span class="num" aria-hidden="true">1</span>
+    <h2>Revisar a quien atiende</h2>
+    <p class="lead">Un compañero hace de cliente. Marque lo que hizo bien. ¿Un lavado? <a href="../lavado/#calidad">Lista de calidad</a>.</p>
+    <label class="campo">¿A quién revisa?<input type="text" id="rub-nombre" autocomplete="off" placeholder="Nombre"></label>
+    <ul class="rub" id="rub">
+      <li><label><input type="checkbox" data-k="1" data-est="1"><span class="txt"><span class="est">★</span> Saluda primero, de usted</span></label></li>
+      <li><label><input type="checkbox" data-k="2"><span class="txt">Recibe el casco</span></label></li>
+      <li><label><input type="checkbox" data-k="3"><span class="txt">Hace las 3 preguntas<small>¿Ya vino? ¿Reserva? ¿Membresía?</small></span></label></li>
+      <li><label><input type="checkbox" data-k="4" data-est="1"><span class="txt"><span class="est">★</span> Ofrece primero la básica</span></label></li>
+      <li><label><input type="checkbox" data-k="5" data-est="1"><span class="txt"><span class="est">★</span> Calla después del precio</span></label></li>
+      <li><label><input type="checkbox" data-k="6"><span class="txt">Presenta al lavador</span></label></li>
+      <li><label><input type="checkbox" data-k="7" data-est="1"><span class="txt"><span class="est">★</span> Revisa la moto con fotos</span></label></li>
+      <li><label><input type="checkbox" data-k="8" data-est="1"><span class="txt"><span class="est">★</span> Pasa la lista de calidad</span></label></li>
+      <li><label><input type="checkbox" data-k="9"><span class="txt">Muestra, cobra y anota</span></label></li>
+      <li><label><input type="checkbox" data-k="10"><span class="txt">Responde un reclamo sin discutir</span></label></li>
+    </ul>
+    <div class="marcador" id="marcador" aria-live="polite">0 de 10</div>
+    <div class="acciones"><button class="btn gris" type="button" id="rub-nueva">Revisar a otra persona</button></div>
+  </section>
+
+  <!-- 2 · Reclamos -->
+  <section class="bloque" id="reclamos">
+    <span class="num" aria-hidden="true">2</span>
+    <h2>Quejas y reseñas</h2>
+    <p class="lead">No se discute. Si el lavado quedó mal, se vuelve a lavar gratis.</p>
+    <div class="tabs" role="tablist" id="tabs">
+      <button type="button" role="tab" aria-selected="true" data-panel="r-local">🏠 En el local</button>
+      <button type="button" role="tab" aria-selected="false" data-panel="r-wa">💬 WhatsApp</button>
+      <button type="button" role="tab" aria-selected="false" data-panel="r-redes">📱 Instagram / Facebook</button>
+    </div>
+
+    <div class="panel" id="r-local">
+      <div class="frase"><div class="cab"><span>Diga primero</span></div><p>Gracias por decirme. Muéstreme, por favor, qué no le gustó.</p></div>
+      <ul class="pasos">
+        <li><span aria-hidden="true">👂</span><div>Escuche todo. No interrumpa.</div></li>
+        <li><span aria-hidden="true">🏍️</span><div>Vayan juntos a la moto. Que el cliente le señale.</div></li>
+        <li><span aria-hidden="true">🧽</span><div>Si quedó mal: «Le pido disculpas. Se la volvemos a lavar ya, sin costo.»</div></li>
+        <li><span aria-hidden="true">📷</span><div>Si es un daño: «Revisemos juntos la foto de cuando la recibimos.»</div></li>
+      </ul>
+      <p class="nunca">💵 Plata, descuentos o daños: solo el encargado o el dueño.</p>
+      <details class="mas"><summary>Ver más</summary><div class="mas-c">
+        <ul>
+          <li>Se corrige adentro, nunca delante del cliente con un trapo.</li>
+          <li>Anote el reclamo: placa, qué pasó y qué se hizo.</li>
+          <li>Nunca diga «eso ya venía así». Muestre la foto.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <div class="panel" id="r-wa" hidden>
+      <div class="frase"><div class="cab"><span>Conteste primero</span><button class="copiar" type="button">Copiar</button></div><p>Gracias por decirnos y disculpe. ¿Nos manda una foto, por favor?</p></div>
+      <ul class="pasos">
+        <li><span aria-hidden="true">⏱️</span><div>Conteste en menos de una hora. Sin audios.</div></li>
+      </ul>
+      <div class="frase"><div class="cab"><span>Si es del lavado</span><button class="copiar" type="button">Copiar</button></div><p>Tiene razón. Tráigala cuando pueda y se la lavamos gratis. ¿Qué día le sirve?</p></div>
+      <div class="frase"><div class="cab"><span>Si es un daño</span><button class="copiar" type="button">Copiar</button></div><p>Gracias por la foto. La comparamos con las de recepción y le respondo hoy.</p></div>
+      <div class="frase"><div class="cab"><span>Cuando ya se arregló</span><button class="copiar" type="button">Copiar</button></div><p>Gracias por dejarnos corregirlo. Aquí estamos para servirle.</p></div>
+    </div>
+
+    <div class="panel" id="r-redes" hidden>
+      <ul class="pasos">
+        <li><span aria-hidden="true">🧑‍💼</span><div>Responde usted o quien maneja las redes. El lavador no.</div></li>
+        <li><span aria-hidden="true">🚫</span><div>Nunca borre el comentario. Nunca pelee en público.</div></li>
+        <li><span aria-hidden="true">💬</span><div>Luego escríbale por mensaje con las frases de WhatsApp.</div></li>
+      </ul>
+        <div class="frase"><div class="cab"><span>Lavado mal hecho</span><button class="copiar" type="button">Copiar</button></div><p>Tiene razón y le pedimos disculpas. Lo corregimos gratis. Le escribimos por mensaje.</p></div>
+        <div class="frase"><div class="cab"><span>Mala atención</span><button class="copiar" type="button">Copiar</button></div><p>Lamentamos cómo se sintió. Así no queremos atender. Le escribimos por mensaje.</p></div>
+        <div class="frase"><div class="cab"><span>Demora</span><button class="copiar" type="button">Copiar</button></div><p>Tiene razón, debimos decirle la hora real. Disculpe. Le escribimos por mensaje.</p></div>
+        <div class="frase"><div class="cab"><span>Precio</span><button class="copiar" type="button">Copiar</button></div><p>Gracias por comentar. Limpiamos toda la parte de abajo. Le contamos por mensaje.</p></div>
+        <div class="frase"><div class="cab"><span>Daño en la moto</span><button class="copiar" type="button">Copiar</button></div><p>Lamentamos la situación. Lo revisamos con usted y las fotos. Le escribimos ya.</p></div>
+        <div class="frase"><div class="cab"><span>Ya se resolvió</span><button class="copiar" type="button">Copiar</button></div><p>Gracias por darnos la oportunidad de corregirlo. Lo esperamos pronto. 🏍️</p></div>
+    </div>
+  </section>
+
+  <!-- 3 · Precios -->
+  <section class="bloque" id="precios">
+    <span class="num" aria-hidden="true">3</span>
+    <h2>Poner los precios</h2>
+    <p class="nunca">Ponga los precios en el celular que usa quien atiende.</p>
+    <div class="escalera">
+      <div class="peldano"><div><b>Básica</b><small>Primero</small></div>
+        <label class="plata"><span>$</span><input type="text" inputmode="numeric" autocomplete="off" placeholder="___" data-clave="monaco-precio-basica-v3" aria-label="Precio de la básica"></label></div>
+      <div class="peldano"><div><b>Brillo o cadena como nueva</b><small>Si quiere más</small></div>
+        <label class="plata"><span>$</span><input type="text" inputmode="numeric" autocomplete="off" placeholder="___" data-clave="monaco-precio-intermedia-v3" aria-label="Precio de brillo o cadena"></label></div>
+      <div class="peldano"><div><b>Full</b><small>La más completa</small></div>
+        <label class="plata"><span>$</span><input type="text" inputmode="numeric" autocomplete="off" placeholder="___" data-clave="monaco-precio-full-v3" aria-label="Precio de la full"></label></div>
+    </div>
+    <div class="aviso" id="aviso-precios" aria-live="polite">Faltan precios.</div>
+    <div class="acciones">
+      <a class="btn" href="../atencion-al-cliente/#escalera">Ver cómo quedan →</a>
+      <button class="btn gris" type="button" id="borrar-precios">Borrar precios</button>
+    </div>
+  </section>
+
+  <div id="ruta-siguiente" style="margin:8px 0 24px"></div>
+</main>
+
+<footer class="pie"><p>Mónaco · Moto Detailing · Para el encargado · noviembre de 2026</p></footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function leerTxt(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function guardarTxt(k, v) { try { if (v === null || v === "") localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+
+  /* ---------- 1 · Revisar al equipo ---------- */
+  /* No se guarda: cada vez que se abre la página empieza en blanco (y se borra lo que guardaba la versión vieja). */
+  guardarTxt("monaco-encargado-rubrica-v3", null);
+  function rubVacia() { return { nombre: "", r: {} }; }
+  var rub = rubVacia();
+  var cajas = $$("#rub input[type=checkbox]");
+  var total = cajas.length;
+  function pintarRub() {
+    var si = 0, faltan = [];
+    cajas.forEach(function (c) {
+      c.checked = !!rub.r[c.dataset.k];
+      if (c.checked) si++; else if (c.dataset.est) faltan.push(c.closest("label").querySelector(".txt").textContent.replace("★", "").trim());
+    });
+    var faltaEst = faltan.length > 0;
+    $("#rub-nombre").value = rub.nombre || "";
+    var m = $("#marcador"), quien = rub.nombre ? rub.nombre : "Esta persona";
+    if (si >= 9 && !faltaEst) { m.className = "marcador aprobado"; m.textContent = "✔ " + si + " de " + total + ". " + quien + " ya puede atender solo."; }
+    else if (si === 0) { m.className = "marcador"; m.textContent = "0 de " + total; }
+    else if (si >= 9) { m.className = "marcador repasar"; m.textContent = si + " de " + total + " · Todavía no pasa. Falta ★ " + faltan.join(" · ") + "."; }
+    else { m.className = "marcador"; m.textContent = si + " de " + total + " · Todavía no pasa. Necesita 9 y todas las ★."; }
+  }
+  cajas.forEach(function (c) {
+    c.addEventListener("change", function () { if (c.checked) rub.r[c.dataset.k] = 1; else delete rub.r[c.dataset.k]; pintarRub(); });
+  });
+  $("#rub-nombre").addEventListener("input", function (e) { rub.nombre = e.target.value; pintarRub(); });
+  $("#rub-nueva").addEventListener("click", function () {
+    var hay = rub.nombre || Object.keys(rub.r).length;
+    if (hay && !confirm("¿Borrar esta revisión y empezar con otra persona?")) return;
+    rub = rubVacia(); pintarRub(); $("#rub-nombre").focus(); });
+  pintarRub();
+
+  /* ---------- 2 · Pestañas de reclamos ---------- */
+  var tabs = $("#tabs");
+  var botones = $$("button", tabs);
+  function abrirTab(id) {
+    botones.forEach(function (o) { var on = o.dataset.panel === id; o.setAttribute("aria-selected", on ? "true" : "false"); o.tabIndex = on ? 0 : -1; document.getElementById(o.dataset.panel).hidden = !on; });
+  }
+  botones.forEach(function (b, i) {
+    b.setAttribute("aria-controls", b.dataset.panel);
+    document.getElementById(b.dataset.panel).setAttribute("role", "tabpanel");
+    b.addEventListener("click", function () { abrirTab(b.dataset.panel); });
+    b.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!d) return;
+      e.preventDefault(); var o = botones[(i + d + botones.length) % botones.length]; o.focus(); o.click();
+    });
+  });
+  abrirTab("r-local");
+
+  /* Copiar frases */
+  function copiar(texto, boton) {
+    var listo = function () { var t = boton.textContent; boton.textContent = "Copiado ✔"; setTimeout(function () { boton.textContent = t; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(listo, function () { respaldo(); });
+    } else respaldo();
+    function respaldo() {
+      var a = document.createElement("textarea"); a.value = texto; a.setAttribute("readonly", ""); a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      try { document.execCommand("copy"); listo(); } catch (e) {}
+      document.body.removeChild(a);
+    }
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".copiar"); if (!b) return;
+    var p = b.closest(".frase").querySelector("p"); if (p) copiar(p.textContent.trim(), b);
+  });
+
+  /* ---------- 3 · Precios ----------
+     Las mismas claves que lee la página Atiendo. Se guarda el número con puntos de mil, sin «$» (ej.: "25.000"). */
+  var campos = $$("#precios input[data-clave]");
+  function soloNumero(v) { return String(v || "").replace(/^"|"$/g, "").replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 9); }
+  function conPuntos(d) { return d ? d.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ""; }
+  function valor(c) { var d = soloNumero(c.value); return d ? parseInt(d, 10) : 0; }
+  function revisar() {
+    var v = campos.map(valor), aviso = $("#aviso-precios");
+    if (!v[0] && !v[1] && !v[2]) { aviso.className = "aviso"; aviso.textContent = "Faltan precios. En Atiendo se ven como «$ ___»."; return; }
+    if ((v[0] && v[1] && v[1] <= v[0]) || (v[1] && v[2] && v[2] <= v[1]) || (v[0] && v[2] && v[2] <= v[0])) {
+      aviso.className = "aviso mal"; aviso.textContent = "Ojo: cada lavada debe costar más que la anterior. Básica, luego brillo o cadena, luego full."; return;
+    }
+    var faltan = v.filter(function (x) { return !x; }).length;
+    if (faltan) { aviso.className = "aviso"; aviso.textContent = "Guardado ✔ Faltan " + faltan + (faltan === 1 ? " precio." : " precios."); return; }
+    aviso.className = "aviso ok"; aviso.textContent = "Guardado ✔";
+  }
+  function cargar() {
+    campos.forEach(function (c) { if (document.activeElement !== c) c.value = conPuntos(soloNumero(leerTxt(c.dataset.clave))); });
+    revisar();
+  }
+  campos.forEach(function (c) {
+    c.addEventListener("input", function () {
+      var d = soloNumero(c.value);
+      c.value = conPuntos(d);
+      guardarTxt(c.dataset.clave, conPuntos(d));
+      revisar();
+    });
+  });
+  $("#borrar-precios").addEventListener("click", function () {
+    if (!confirm("¿Borrar los tres precios de este celular?")) return;
+    campos.forEach(function (c) { c.value = ""; guardarTxt(c.dataset.clave, ""); });
+    revisar();
+  });
+  addEventListener("storage", function (e) {
+    if (!e.key || /^monaco-precio-/.test(e.key)) cargar();
+  });
+  cargar();
+
+  /* Al saltar a una sección, un destello suave */
+  $$(".saltos a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var s = document.querySelector(a.getAttribute("href")); if (!s) return;
+      s.classList.remove("destello"); void s.offsetWidth; s.classList.add("destello");
+    });
+  });
+})();
+</script>
+</body>
+</html>
