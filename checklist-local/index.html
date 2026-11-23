@@ -119,6 +119,7 @@
 
   .cl-acciones { display:grid; gap:10px; margin:24px 0 0 }
   .cl-acciones .wa { background:var(--wa); border-color:var(--wa) }
+  .cl-formato { margin:-4px 0 0; text-align:center }
   .cl-confirma { border:2px solid var(--alerta); border-radius:var(--radio); padding:14px; text-align:center }
   .cl-confirma p { font-weight:800; margin:0 0 10px }
   .cl-confirma div { display:grid; grid-template-columns:1fr 1fr; gap:8px }
@@ -261,6 +262,7 @@
   <div class="cl-acciones">
     <button type="button" class="boton wa" id="cl-enviar">Enviar resumen a mi asesor</button>
     <button type="button" class="boton claro" id="cl-copiar">Copiar resumen</button>
+    <p class="meta cl-formato">Se envía en formato .md, listo para pegarlo en Claude.</p>
     <button type="button" class="boton claro" id="cl-reset">Revisar otro local</button>
     <div class="cl-confirma" id="cl-confirma" hidden>
       <p>¿Borrar todo y empezar con otro local?</p>

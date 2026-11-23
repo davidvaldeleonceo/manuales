@@ -417,54 +417,250 @@
     $("cl-fotos-cuenta").textContent = nf + " de " + FOTOS.length + " listas";
   }
 
-  /* ---------- Resumen para el asesor ---------- */
-  function resumen() {
+  /* ---------- Resumen para el asesor (Markdown completo, listo para Claude) ---------- */
+  var URL_MANUAL = "https://monaco-principal.github.io/manuales/checklist-local/";
+  var ESTADO_MD = { ok: "✅ Cumple", inv: "⚠️ Toca invertir", no: "❌ No cumple" };
+  var SIN_REVISAR = "Sin revisar";
+
+  /* Fecha y hora de Colombia (America/Bogota), sin depender de la zona del celular */
+  function ahoraBogota() {
+    var p = {};
+    try {
+      new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date())
+        .forEach(function (x) { p[x.type] = x.value; });
+    } catch (e) {}
+    if (!p.year) {
+      var d = new Date(Date.now() - 5 * 3600 * 1000);
+      function dos(n) { return (n < 10 ? "0" : "") + n; }
+      p = { year: d.getUTCFullYear(), month: dos(d.getUTCMonth() + 1), day: dos(d.getUTCDate()), hour: dos(d.getUTCHours()), minute: dos(d.getUTCMinutes()) };
+    }
+    return { fecha: p.year + "-" + p.month + "-" + p.day, hora: p.hour + ":" + p.minute };
+  }
+
+  /* Texto de una celda de tabla Markdown: una sola línea y sin "|" que rompa la tabla */
+  function celda(s) { return String(s == null ? "" : s).replace(/\s+/g, " ").replace(/\|/g, "\\|").trim(); }
+  function fila(cols) { return "| " + cols.map(celda).join(" | ") + " |"; }
+
+  /* Las pruebas y opciones (vienen en HTML) pasadas a texto de una línea */
+  function textoPlano(html) {
+    var d = document.createElement("div");
+    d.innerHTML = html;
+    return Array.prototype.map.call(d.querySelectorAll("b, p, li"), function (n) {
+      return n.textContent.trim() + (n.tagName === "B" ? ":" : "");
+    }).join(" · ").replace(/: ·/g, ":");
+  }
+
+  /* La pregunta tal como se ve en la página (Sí / No); si no está, la del listado */
+  function preguntaAlerta(a) {
+    var li = document.querySelector('.cl-alerta[data-id="' + a.id + '"] .cl-alerta-t');
+    return li ? li.textContent.trim() : a.t;
+  }
+
+  function resumenMd() {
     var v = veredicto();
+    var t = ahoraBogota();
+    var nombre = E.nombre.trim();
     var L = [];
-    L.push("*Checklist del local · Mónaco*");
-    if (E.nombre.trim()) L.push("Local: " + E.nombre.trim());
-    L.push("Resultado: " + v.titulo);
     var total = ALERTAS.length + todosItems.length;
     var hechos = Object.keys(E.alertas).length + todosItems.filter(function (it) { return E.items[it.id]; }).length;
-    L.push("Revisé " + hechos + " de " + total + " puntos.");
+    var cuenta = { ok: 0, inv: 0, no: 0 };
+    todosItems.forEach(function (it) { if (E.items[it.id]) cuenta[E.items[it.id]]++; });
+    var sinRevisar = todosItems.filter(function (it) { return !E.items[it.id]; });
+    var alertasFaltan = ALERTAS.filter(function (a) { return !E.alertas[a.id]; });
+    var minNo = v.filas.filter(function (f) { return f.est === "no"; });
+    var minInv = v.filas.filter(function (f) { return f.est === "inv"; });
+    var minFalta = v.filas.filter(function (f) { return f.est === "falta"; });
+    var minOk = v.filas.filter(function (f) { return f.est === "ok"; });
+
+    L.push("# Checklist del local · MONACO");
     L.push("");
-    if (v.alertasSi.length) {
-      L.push("*Señales de alerta:*");
-      v.alertasSi.forEach(function (a) { L.push("- " + a.t); });
+    L.push("- **Local:** " + (nombre || "Sin nombre (no lo escribió)"));
+    L.push("- **Generado:** " + t.fecha + " " + t.hora + " (hora de Colombia, UTC−5)");
+    L.push("- **Manual:** " + URL_MANUAL);
+    L.push("");
+
+    // Veredicto
+    L.push("## Veredicto");
+    L.push("");
+    var decision = v.tipo === "no" ? "NO se arrienda" : v.tipo === "ok" ? "SÍ se puede arrendar" :
+      v.tipo === "inv" ? "Se puede arrendar SOLO si se arregla lo pendiente" : "Todavía no se sabe: faltan puntos por revisar";
+    L.push("**" + v.titulo + "** · " + decision + ".");
+    L.push("");
+    L.push(v.texto);
+    L.push("");
+    L.push("Por qué:");
+    L.push("");
+    var porque = [];
+    v.alertasSi.forEach(function (a) { porque.push("Señal de alerta en ROJO: " + preguntaAlerta(a) + " → Sí."); });
+    minNo.forEach(function (f) { porque.push("Requisito mínimo que NO se cumple: " + f.t + "."); });
+    minInv.forEach(function (f) { porque.push("Requisito mínimo que se cumple solo invirtiendo: " + f.t + "."); });
+    if (alertasFaltan.length) porque.push("Señales de alerta sin responder: " + alertasFaltan.length + " de " + ALERTAS.length + ".");
+    if (minFalta.length) porque.push("Requisitos mínimos sin revisar: " + minFalta.map(function (f) { return f.t; }).join(", ") + ".");
+    if (!porque.length) porque.push("Ninguna señal de alerta en rojo y los " + MINIMOS.length + " requisitos mínimos en ✅.");
+    porque.forEach(function (x) { L.push("- " + x); });
+    L.push("");
+
+    // Señales de alerta
+    L.push("## Señales de alerta (Sí = ROJO, no se arrienda · No = VERDE, sigue)");
+    L.push("");
+    L.push(fila(["#", "Pregunta", "Respuesta", "Resultado"]));
+    L.push("|---|---|---|---|");
+    ALERTAS.forEach(function (a, i) {
+      var r = E.alertas[a.id];
+      L.push(fila([i + 1, preguntaAlerta(a), r === "si" ? "Sí" : r === "no" ? "No" : "Sin responder",
+        r === "si" ? "🔴 ROJO · no se arrienda" : r === "no" ? "🟢 VERDE · sigue" : "—"]));
+    });
+    L.push("");
+
+    // Avance
+    L.push("## Avance");
+    L.push("");
+    L.push(fila(["Qué", "Cuántos"]));
+    L.push("|---|---|");
+    L.push(fila(["Puntos revisados (señales + checklist)", hechos + " de " + total]));
+    L.push(fila(["Señales de alerta respondidas", (ALERTAS.length - alertasFaltan.length) + " de " + ALERTAS.length + " (" + v.alertasSi.length + " en rojo)"]));
+    L.push(fila(["Puntos del checklist revisados", (todosItems.length - sinRevisar.length) + " de " + todosItems.length]));
+    L.push(fila(["✅ Cumple", cuenta.ok]));
+    L.push(fila(["⚠️ Toca invertir", cuenta.inv]));
+    L.push(fila(["❌ No cumple", cuenta.no]));
+    L.push(fila(["Sin revisar", sinRevisar.length]));
+    L.push(fila(["Fotos y videos tomados", Object.keys(E.fotos).length + " de " + FOTOS.length]));
+    L.push("");
+    var cumpleMin = minOk.length === MINIMOS.length ? "Sí, se cumplen los " + MINIMOS.length :
+      minNo.length ? "No: " + minNo.length + " no se cumple" + (minNo.length === 1 ? "" : "n") :
+      minFalta.length ? "Todavía no se sabe: faltan " + minFalta.length + " por revisar" :
+      "Solo si se invierte en " + minInv.length;
+    L.push("### Requisitos mínimos para arrendar: " + cumpleMin + " (" + minOk.length + " de " + MINIMOS.length + " en ✅)");
+    L.push("");
+    L.push(fila(["Requisito", "Estado", "Puntos del checklist que lo definen"]));
+    L.push("|---|---|---|");
+    var EST_MIN = { ok: "✅ Cumple", inv: "⚠️ Toca invertir", no: "❌ No cumple", falta: SIN_REVISAR };
+    MINIMOS.forEach(function (m, i) {
+      L.push(fila([m.t, EST_MIN[v.filas[i].est], m.ids.map(function (id) {
+        var it = item(id); return it.t + " (" + (ESTADO_MD[E.items[id]] || SIN_REVISAR) + ")";
+      }).join("; ")]));
+    });
+    L.push("");
+
+    // Cada sección
+    L.push("## Checklist por secciones");
+    L.push("");
+    L.push("Tipo de punto: 🔴 Obligatorio · 🟡 Se arregla con plata · 🟢 Mejora el negocio.");
+    L.push("");
+    var TIPO = { r: "🔴 Obligatorio", a: "🟡 Se arregla con plata", v: "🟢 Mejora el negocio" };
+    SECCIONES.forEach(function (s) {
+      var its = s.items.filter(function (it) { return it.id; });
+      var rev = its.filter(function (it) { return E.items[it.id]; }).length;
+      L.push("### " + s.n + ". " + s.t + " (" + rev + " de " + its.length + " revisados)");
       L.push("");
-    }
-    var nos = todosItems.filter(function (it) { return E.items[it.id] === "no"; });
-    var invs = todosItems.filter(function (it) { return E.items[it.id] === "inv"; });
-    L.push("*❌ No cumple (" + nos.length + "):*");
-    if (!nos.length) L.push("- Ninguno");
-    nos.forEach(function (it) { L.push("- " + it.t + " (" + it.sec.t + ")"); });
+      L.push(fila(["Punto", "Tipo", "Estado", "Qué se revisa"]));
+      L.push("|---|---|---|---|");
+      var grupo = "";
+      s.items.forEach(function (it) {
+        if (it.grupo) { grupo = it.grupo; return; }
+        var que = it.d + (it.extra ? " " + textoPlano(it.extra) : "") + (it.nota ? " " + it.nota : "");
+        L.push(fila([(grupo ? grupo + ": " : "") + it.t, TIPO[it.c], ESTADO_MD[E.items[it.id]] || SIN_REVISAR, que]));
+      });
+      L.push("");
+    });
+
+    // Fotos
+    L.push("## Fotos y videos de la visita");
     L.push("");
-    L.push("*⚠️ Toca invertir (" + invs.length + "):*");
-    if (!invs.length) L.push("- Ninguno");
-    invs.forEach(function (it) { L.push("- " + it.t + " (" + it.sec.t + ")"); });
+    FOTOS.forEach(function (f) { L.push("- [" + (E.fotos[f.id] ? "x" : " ") + "] " + f.t + (E.fotos[f.id] ? " (tomado)" : " (falta)")); });
     L.push("");
-    L.push("*📸 Fotos y videos (" + Object.keys(E.fotos).length + " de " + FOTOS.length + "):*");
-    FOTOS.forEach(function (f) { L.push((E.fotos[f.id] ? "✔ " : "✘ ") + f.t); });
+    L.push("Las fotos y los videos no van dentro de este archivo: el asesorado los envía aparte.");
+    L.push("");
+
+    // Pendientes
+    L.push("## Pendientes (sin revisar)");
+    L.push("");
+    if (!alertasFaltan.length && !sinRevisar.length) L.push("- Ninguno: se revisó todo.");
+    alertasFaltan.forEach(function (a) { L.push("- Señal de alerta: " + preguntaAlerta(a)); });
+    sinRevisar.forEach(function (it) { L.push("- " + it.sec.n + ". " + it.sec.t + " → " + it.t + " (" + TIPO[it.c] + ")"); });
+    L.push("");
+
+    L.push("---");
+    L.push("");
+    L.push("> Nota para la IA: Este resumen lo generó el Checklist del local de MONACO. Úsalo para evaluar si el local sirve para un lavadero de motos.");
+    L.push("");
     return L.join("\n");
   }
 
+  function nombreArchivo() {
+    var slug = E.nombre.trim().toLowerCase();
+    try { slug = slug.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+    slug = slug.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "sin-nombre";
+    return "checklist-local-" + slug + "-" + ahoraBogota().fecha + ".md";
+  }
+
+  var TEXTO_WA = "Te envío el resumen del checklist del local (archivo .md adjunto)";
+
+  function descargarMd(md, archivo) {
+    var url = URL.createObjectURL(new Blob([md], { type: "text/markdown;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = url; a.download = archivo; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); document.body.removeChild(a); }, 1000);
+  }
+
+  function enviar() {
+    var md = resumenMd();
+    var archivo = nombreArchivo();
+    var plan = function () {
+      descargarMd(md, archivo);
+      window.open("https://wa.me/?text=" + encodeURIComponent(TEXTO_WA), "_blank", "noopener");
+    };
+    var archivos = null;
+    if (navigator.canShare && navigator.share && typeof File === "function") {
+      // Primero como Markdown; algunos celulares solo aceptan texto plano (el archivo sigue siendo .md)
+      ["text/markdown", "text/plain"].some(function (tipo) {
+        try {
+          var f = [new File([md], archivo, { type: tipo })];
+          if (navigator.canShare({ files: f })) { archivos = f; return true; }
+        } catch (e) {}
+        return false;
+      });
+    }
+    if (!archivos) { plan(); return; }
+    navigator.share({ files: archivos, title: "Checklist del local", text: TEXTO_WA }).catch(function (err) {
+      if (!err || err.name !== "AbortError") descargarMd(md, archivo);
+    });
+  }
+
   function copiar(texto, boton) {
+    if (!boton.getAttribute("data-texto")) boton.setAttribute("data-texto", boton.textContent);
+    var antes = boton.getAttribute("data-texto");
+    boton.textContent = antes;
     function listo() {
-      var antes = boton.textContent;
       boton.textContent = "✔ Copiado";
       setTimeout(function () { boton.textContent = antes; }, 2000);
     }
+    function aMano() {
+      var t = $("cl-copia-manual");
+      if (!t) {
+        t = document.createElement("textarea");
+        t.id = "cl-copia-manual";
+        t.setAttribute("readonly", "");
+        t.setAttribute("aria-label", "Resumen en Markdown: selecciónalo y cópialo");
+        t.rows = 10;
+        t.style.cssText = "width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;padding:10px;border:1.5px solid var(--tinta);border-radius:var(--radio)";
+        boton.parentNode.insertBefore(t, boton.nextSibling);
+      }
+      t.value = texto;
+      t.focus(); t.select();
+      try { t.setSelectionRange(0, texto.length); } catch (e) {}
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      if (ok) listo(); else boton.textContent = "Selecciona el texto y cópialo";
+    }
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(texto).then(listo, function () { copiarViejo(texto); listo(); });
-    } else { copiarViejo(texto); listo(); }
+      navigator.clipboard.writeText(texto).then(listo, aMano);
+    } else aMano();
   }
-  function copiarViejo(texto) {
-    var t = document.createElement("textarea");
-    t.value = texto; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
-    document.body.appendChild(t); t.select();
-    try { document.execCommand("copy"); } catch (e) {}
-    document.body.removeChild(t);
-  }
+
+  window.MonacoChecklist = { resumenMd: resumenMd, nombreArchivo: nombreArchivo };
 
   /* ---------- Barra de progreso fija debajo de "← Mapa" ---------- */
   function ajustarFija() {
@@ -483,10 +679,8 @@
     nombre.value = E.nombre;
     nombre.addEventListener("input", function () { E.nombre = nombre.value; guardar(); });
 
-    $("cl-enviar").addEventListener("click", function () {
-      window.open("https://wa.me/?text=" + encodeURIComponent(resumen()), "_blank", "noopener");
-    });
-    $("cl-copiar").addEventListener("click", function (e) { copiar(resumen(), e.currentTarget); });
+    $("cl-enviar").addEventListener("click", enviar);
+    $("cl-copiar").addEventListener("click", function (e) { copiar(resumenMd(), e.currentTarget); });
 
     var confirma = $("cl-confirma");
     $("cl-reset").addEventListener("click", function () { confirma.hidden = false; $("cl-reset-si").focus(); });
