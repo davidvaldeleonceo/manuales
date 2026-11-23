@@ -210,16 +210,23 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   /* ---------- Pintar ---------- */
+  /* Las preguntas ya vienen escritas en el HTML (para que se lean impresas o sin JavaScript).
+     Aquí solo se les agregan los botones Sí / No y la línea del resultado. */
   function pintarAlertas() {
     var ul = $("cl-alertas");
     ALERTAS.forEach(function (a) {
-      var li = h("li", "cl-alerta");
-      li.setAttribute("data-id", a.id);
-      li.appendChild(h("p", "cl-alerta-t", esc(a.t)));
+      var li = ul.querySelector('[data-id="' + a.id + '"]');
+      if (!li) {
+        li = h("li", "cl-alerta");
+        li.setAttribute("data-id", a.id);
+        li.appendChild(h("p", "cl-alerta-t", esc(a.t)));
+        ul.appendChild(li);
+      }
+      var pregunta = li.querySelector(".cl-alerta-t").textContent;
       var g = h("div", "cl-sino");
       g.setAttribute("role", "group");
-      g.setAttribute("aria-label", a.t);
-      [["si", "Sí, pasa"], ["no", "No"]].forEach(function (op) {
+      g.setAttribute("aria-label", pregunta);
+      [["si", "Sí"], ["no", "No"]].forEach(function (op) {
         var b = h("button", "cl-btn cl-" + op[0], op[1]);
         b.type = "button";
         b.setAttribute("data-v", op[0]);
@@ -231,8 +238,27 @@
         g.appendChild(b);
       });
       li.appendChild(g);
-      ul.appendChild(li);
+      li.appendChild(h("p", "cl-alerta-res"));
     });
+  }
+
+  function pintarResumenAlertas() {
+    var caja = $("cl-al-resumen");
+    var rojas = ALERTAS.filter(function (a) { return E.alertas[a.id] === "si"; }).length;
+    var verdes = ALERTAS.filter(function (a) { return E.alertas[a.id] === "no"; }).length;
+    var total = ALERTAS.length;
+    if (rojas) {
+      caja.className = "cl-al-resumen cl-res-rojo";
+      caja.innerHTML = rojas + " en rojo: este local no se arrienda<small>Descarta este local y busca otro. No vale la pena invertir.</small>";
+    } else if (verdes === total) {
+      caja.className = "cl-al-resumen cl-res-verde";
+      caja.innerHTML = 'Todo en verde: sigue con el uso de suelo<small><a href="../uso-de-suelo/">Cómo revisar el uso del suelo →</a></small>';
+    } else {
+      caja.className = "cl-al-resumen";
+      caja.innerHTML = "Van " + verdes + " de " + total + " en verde" +
+        "<small>Te " + (total - verdes === 1 ? "falta 1 pregunta" : "faltan " + (total - verdes) + " preguntas") +
+        '. Un solo "Sí" en rojo y el local no se arrienda.</small>';
+    }
   }
 
   function pintarSecciones() {
@@ -340,7 +366,10 @@
       Array.prototype.forEach.call(li.querySelectorAll("button"), function (b) {
         b.setAttribute("aria-pressed", b.getAttribute("data-v") === v ? "true" : "false");
       });
+      var res = li.querySelector(".cl-alerta-res");
+      if (res) res.textContent = v === "si" ? "ROJO · No se arrienda" : v === "no" ? "VERDE · Sigue" : "";
     });
+    pintarResumenAlertas();
     Array.prototype.forEach.call(document.querySelectorAll(".cl-item"), function (li) {
       var v = E.items[li.getAttribute("data-id")];
       li.className = "cl-item" + (v ? " cl-hay-" + v : "");
@@ -352,10 +381,6 @@
       c.checked = !!E.fotos[c.getAttribute("data-foto")];
     });
 
-    // Banner rojo
-    var hayAlerta = ALERTAS.some(function (a) { return E.alertas[a.id] === "si"; });
-    $("cl-descarta").hidden = !hayAlerta;
-
     // Progreso total
     var total = ALERTAS.length + todosItems.length;
     var hechos = Object.keys(E.alertas).length + todosItems.filter(function (it) { return E.items[it.id]; }).length;
@@ -365,7 +390,6 @@
     $("cl-prog-barra").parentNode.setAttribute("aria-valuemax", total);
     var invs = todosItems.filter(function (it) { return E.items[it.id] === "inv"; }).length;
     $("cl-prog-inv").textContent = invs ? "⚠️ " + invs : "";
-    $("cl-alertas-cuenta").textContent = Object.keys(E.alertas).length + " de " + ALERTAS.length + " revisadas";
 
     // Mini progreso por sección
     SECCIONES.forEach(function (s) {

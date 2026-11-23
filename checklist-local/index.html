@@ -31,21 +31,37 @@
   .cl-tres .cl-ok[aria-pressed="true"] { background:var(--ok); border-color:var(--ok) }
   .cl-tres .cl-inv[aria-pressed="true"] { background:#b7791f; border-color:#b7791f }
   .cl-tres .cl-no[aria-pressed="true"] { background:var(--alerta); border-color:var(--alerta) }
-  .cl-sino .cl-si[aria-pressed="true"] { background:var(--alerta); border-color:var(--alerta) }
-  .cl-sino .cl-no[aria-pressed="true"] { background:var(--ok); border-color:var(--ok) }
+  .cl-sino .cl-si[aria-pressed="true"] { background:var(--cl-rojo); border-color:var(--cl-rojo) }
+  .cl-sino .cl-no[aria-pressed="true"] { background:var(--cl-verde); border-color:var(--cl-verde) }
   .cl-tres { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; margin:10px 0 0 }
   .cl-sino { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0 0 }
 
-  /* Señales de alerta */
-  .cl-bloque-alerta { border:2px solid var(--alerta); border-radius:var(--radio); padding:14px; margin:24px 0 0 }
-  .cl-bloque-alerta h2 { border:0; padding:0; margin:0 0 4px; color:var(--alerta) }
-  .cl-bloque-alerta .meta { margin:0 0 6px }
+  /* Señales de alerta: preguntas de Sí / No. Sí = rojo (no se arrienda) · No = verde (sigue).
+     Contraste calculado: #C4271F sobre blanco 5,74:1 y sobre #FBEFED 5,11:1;
+     #137A33 sobre blanco 5,44:1 y sobre #EAF5EE 4,87:1; blanco sobre #C4271F 5,74:1 y sobre #137A33 5,44:1. */
+  .cl-bloque-alerta { --cl-rojo:#C4271F; --cl-rojo-suave:#FBEFED; --cl-verde:#137A33; --cl-verde-suave:#EAF5EE;
+    border:2px solid var(--alerta); border-radius:var(--radio); padding:14px; margin:24px 0 0 }
+  .cl-bloque-alerta h2 { border:0; padding:0; margin:0 0 6px; color:var(--alerta) }
+  .cl-regla-general { margin:0 0 12px; font-size:16px }
+  .cl-txt-rojo { color:var(--cl-rojo); font-weight:800 }
+  .cl-txt-verde { color:var(--cl-verde); font-weight:800 }
+  .cl-al-resumen { margin:0 0 12px; padding:12px 14px; border:2px solid var(--linea); border-radius:var(--radio); font-weight:800; font-size:18px; line-height:1.25 }
+  .cl-al-resumen small { display:block; font-weight:400; font-size:15px; margin-top:4px; color:var(--tinta-2) }
+  .cl-al-resumen.cl-res-rojo { background:var(--cl-rojo); border-color:var(--cl-rojo); color:#fff }
+  .cl-al-resumen.cl-res-rojo small { color:#fff }
+  .cl-al-resumen.cl-res-verde { background:var(--cl-verde-suave); border-color:var(--cl-verde); color:var(--cl-verde) }
+  .cl-al-resumen.cl-res-verde a { font-weight:700 }
   .cl-alertas { list-style:none; margin:0; padding:0 }
-  .cl-alerta { padding:12px 0; border-top:1px solid var(--linea) }
-  .cl-alerta-t { margin:0; font-weight:700 }
-  .cl-alerta.cl-hay-si .cl-alerta-t { color:var(--alerta) }
-  .cl-descarta { margin:12px 0 0; padding:14px; background:var(--alerta); color:#fff; border-radius:var(--radio); font-weight:800; font-size:19px; text-align:center }
-  .cl-descarta small { display:block; font-weight:400; font-size:15px; margin-top:4px }
+  .cl-alerta { padding:12px 10px; border-top:1px solid var(--linea); border-left:4px solid transparent }
+  .cl-alerta-t { margin:0; font-weight:800; font-size:17px }
+  .cl-alerta-regla { margin:4px 0 0; font-size:14px; line-height:1.35 }
+  .cl-alerta-regla span { white-space:nowrap }
+  .cl-alerta-res { margin:8px 0 0; font-weight:800; font-size:16px }
+  .cl-alerta-res:empty { display:none }
+  .cl-alerta.cl-hay-si { background:var(--cl-rojo-suave); border-left-color:var(--cl-rojo) }
+  .cl-alerta.cl-hay-si .cl-alerta-t, .cl-alerta.cl-hay-si .cl-alerta-res { color:var(--cl-rojo) }
+  .cl-alerta.cl-hay-no { background:var(--cl-verde-suave); border-left-color:var(--cl-verde) }
+  .cl-alerta.cl-hay-no .cl-alerta-res { color:var(--cl-verde) }
 
   /* Secciones */
   .cl-secciones { display:grid; gap:12px; margin:0 }
@@ -118,7 +134,7 @@
     .cl-item, .cl-alerta { break-inside:avoid; padding:6px 0 }
     .cl-btn { min-height:0; padding:3px 6px; font-size:11px; border:1px solid #999 }
     .cl-btn[aria-pressed="true"] { background:#000 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact }
-    .cl-punto, .cl-descarta { -webkit-print-color-adjust:exact; print-color-adjust:exact }
+    .cl-punto, .cl-al-resumen, .cl-alerta { -webkit-print-color-adjust:exact; print-color-adjust:exact }
     .cl-tres, .cl-sino { max-width:420px }
     .cl-fotos label { min-height:0 }
   }
@@ -201,10 +217,35 @@
   </div>
 
   <section class="cl-bloque-alerta" aria-labelledby="cl-alertas-titulo">
-    <h2 id="cl-alertas-titulo">Señales de alerta — no arriendes si…</h2>
-    <p class="meta" id="cl-alertas-cuenta"></p>
-    <ul class="cl-alertas" id="cl-alertas"></ul>
-    <div class="cl-descarta" id="cl-descarta" role="alert" hidden>Descarta este local y busca otro<small>No vale la pena invertir.</small></div>
+    <h2 id="cl-alertas-titulo">Señales de alerta: ¿se arrienda o no?</h2>
+    <p class="cl-regla-general">Responde las 6 preguntas. <span class="cl-txt-rojo">Sí = ROJO: no se arrienda.</span> <span class="cl-txt-verde">No = VERDE: sigue.</span> Con un solo rojo, descarta el local.</p>
+    <div class="cl-al-resumen" id="cl-al-resumen" role="status" aria-live="polite">Responde las 6 preguntas<small>Un solo "Sí" en rojo y el local no se arrienda.</small></div>
+    <ul class="cl-alertas" id="cl-alertas">
+      <li class="cl-alerta" data-id="al-alcantarillado">
+        <p class="cl-alerta-t">¿Le falta la conexión al alcantarillado público?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+      <li class="cl-alerta" data-id="al-piso">
+        <p class="cl-alerta-t">¿El piso es de tierra o madera?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+      <li class="cl-alerta" data-id="al-escalones">
+        <p class="cl-alerta-t">¿La entrada tiene escalones altos donde no se puede poner rampa?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+      <li class="cl-alerta" data-id="al-residencial">
+        <p class="cl-alerta-t">¿Es zona residencial exclusiva, donde NO permiten negocios?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+      <li class="cl-alerta" data-id="al-agua">
+        <p class="cl-alerta-t">¿Le falta agua potable con contador propio (independiente)?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+      <li class="cl-alerta" data-id="al-dueno">
+        <p class="cl-alerta-t">¿El dueño se niega a que hagas adecuaciones (romper el piso, instalar la trampa de grasas)?</p>
+        <p class="cl-alerta-regla"><span class="cl-txt-rojo">Sí = ROJO: no se arrienda</span> · <span class="cl-txt-verde">No = VERDE: sigue</span></p>
+      </li>
+    </ul>
   </section>
 
   <h2>Revisa el local</h2>
