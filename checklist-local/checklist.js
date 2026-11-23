@@ -418,7 +418,7 @@
   }
 
   /* ---------- Resumen para el asesor (Markdown completo, listo para Claude) ---------- */
-  var URL_MANUAL = "https://monaco-principal.github.io/manuales/checklist-local/";
+  var URL_MANUAL = "https://davidvaldeleonceo.github.io/manuales/checklist-local/";
   var ESTADO_MD = { ok: "✅ Cumple", inv: "⚠️ Toca invertir", no: "❌ No cumple" };
   var SIN_REVISAR = "Sin revisar";
 

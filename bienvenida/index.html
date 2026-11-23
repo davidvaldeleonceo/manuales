@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bienvenida MONACO</title>
+<style>
+:root{
+  color-scheme: light;
+  --fondo:#FFFFFF; --fondo-2:#F5F5F7; --sup-2:#FAFAFA;
+  --tinta:#1D1D1F; --tinta-2:#494950; --tinta-3:#6E6E73;
+  --linea:#E5E5EA; --borde:#D2D2D7;
+  --azul:#007AFF; --azul-texto:#0066D6; --azul-fondo:#EAF2FE; --azul-linea:#C2DBF8;
+  --bien:#137A33; --bien-fondo:#E9F6EC;
+  --alerta:#9A6700; --alerta-fondo:#FFF6E5;
+  --critico:#C4271F; --critico-fondo:#FDECEA;
+  --font:'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#FFFFFF;overflow:hidden}
+body{font-family:var(--font);color:var(--tinta);-webkit-font-smoothing:antialiased}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#FFFFFF}
+#stage{width:1600px;height:900px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;padding:96px 120px 110px;display:none;flex-direction:column;background:#FFFFFF}
+.slide.activa{display:flex}
+.sello{position:absolute;top:44px;left:120px;font-weight:700;font-size:20px;letter-spacing:.08em;color:var(--azul-texto)}
+.seccion{position:absolute;top:44px;right:120px;font-size:20px;color:var(--tinta-3);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.pie{position:absolute;bottom:40px;left:120px;right:120px;display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--tinta-3);border-top:1px solid var(--linea);padding-top:18px}
+h1{font-size:112px;font-weight:700;letter-spacing:-.035em;line-height:1.02}
+h2{font-size:64px;font-weight:700;letter-spacing:-.035em;line-height:1.08;margin-top:24px;margin-bottom:40px}
+h3{font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1.2;margin-bottom:12px}
+p,li{font-size:32px;line-height:1.4;color:var(--tinta-2)}
+.lead{font-size:38px;line-height:1.4;color:var(--tinta-2);max-width:1250px}
+.azul{color:var(--azul-texto)}
+b,strong{color:var(--tinta);font-weight:700}
+a{color:var(--azul-texto);text-decoration:underline;text-underline-offset:4px;font-weight:700}
+a:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+ul.lista{list-style:none;display:flex;flex-direction:column;gap:16px}
+ul.lista li{padding-left:44px;position:relative}
+ul.lista li::before{content:"";position:absolute;left:0;top:16px;width:18px;height:18px;border-radius:50%;background:var(--azul)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:36px 56px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.tarjeta{border:1px solid var(--borde);border-radius:18px;padding:32px 34px;background:#FFFFFF}
+.tarjeta p,.tarjeta li{font-size:27px}
+.tarjeta.azulf{background:var(--azul-fondo);border-color:var(--azul-linea)}
+.etiqueta{display:inline-block;font-size:19px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--azul-texto);margin-bottom:12px}
+.barra{border-left:6px solid var(--azul);padding-left:28px}
+.pc{color:var(--alerta);font-weight:700}
+.chip{display:inline-block;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:999px}
+.chip.no{background:var(--critico-fondo);color:var(--critico)}
+.chip.si{background:var(--bien-fondo);color:var(--bien)}
+.chip.pcf{background:var(--alerta-fondo);color:var(--alerta)}
+/* portada */
+.portada{justify-content:center}
+.portada .linea-azul{width:120px;height:8px;background:var(--azul);border-radius:4px;margin-bottom:48px}
+.portada .nombres{font-size:52px;font-weight:700;letter-spacing:-.035em;margin-top:40px;color:var(--tinta)}
+.portada .fecha{font-size:32px;color:var(--tinta-3);margin-top:18px}
+/* línea de tiempo */
+.tl{position:relative;margin-top:30px;height:470px}
+.tl .eje{position:absolute;left:0;right:0;top:250px;height:12px;background:var(--linea);border-radius:6px}
+.tl .tramo{position:absolute;top:250px;height:12px;border-radius:6px;background:var(--azul)}
+.tl .antes{position:absolute;left:0;top:250px;height:12px;width:15%;border-radius:6px;background:repeating-linear-gradient(90deg,var(--azul) 0 14px,transparent 14px 24px)}
+.hito{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:150px;text-align:center}
+.hito .dia{font-size:30px;font-weight:700;letter-spacing:-.035em;color:var(--azul-texto)}
+.hito .que{font-size:23px;line-height:1.3;color:var(--tinta-2);margin-top:6px;min-height:92px}
+.hito .punto{width:34px;height:34px;border-radius:50%;background:#FFFFFF;border:7px solid var(--azul);margin-top:auto}
+.hito.abajo{top:240px}
+.hito.abajo .punto{order:-1;margin-top:-1px;margin-bottom:14px}
+.hito.abajo .que{min-height:0}
+.hito.arriba{height:273px}
+/* etapas */
+.etapa{border:1px solid var(--borde);border-radius:18px;padding:26px 26px 24px;display:flex;flex-direction:column;gap:8px;border-top:8px solid var(--azul)}
+.etapa .num{font-size:22px;font-weight:700;letter-spacing:.08em;color:var(--azul-texto)}
+.etapa .nom{font-size:30px;font-weight:700;letter-spacing:-.035em;color:var(--tinta);line-height:1.15}
+.etapa .lim{font-size:24px;color:var(--tinta-2);line-height:1.3;margin-top:auto}
+.etapa .lim b{color:var(--tinta)}
+/* tabla */
+.tabla-wrap{overflow-x:auto;border:1px solid var(--borde);border-radius:18px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:18px 26px;font-size:25px;line-height:1.3;border-bottom:1px solid var(--linea);vertical-align:top;color:var(--tinta-2)}
+th{background:var(--sup-2);color:var(--tinta-3);font-size:19px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+tr:last-child td{border-bottom:0}
+td.quien{font-weight:700;color:var(--tinta);white-space:nowrap}
+.alerta-item{display:flex;gap:22px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--linea)}
+.alerta-item:last-child{border-bottom:0}
+.alerta-item .x{flex:none;width:44px;height:44px;border-radius:50%;background:var(--critico-fondo);color:var(--critico);font-weight:700;font-size:28px;display:flex;align-items:center;justify-content:center}
+.alerta-item p{font-size:29px}
+.paso{display:flex;gap:26px;align-items:flex-start}
+.paso .n{flex:none;width:58px;height:58px;border-radius:50%;background:var(--azul-texto);color:#FFFFFF;font-weight:700;font-size:30px;display:flex;align-items:center;justify-content:center}
+.paso p{font-size:28px}
+.ayuda{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--tinta-3);background:#FFFFFF;padding:4px 10px;border-radius:8px;opacity:0;transition:opacity .4s;pointer-events:none}
+.ayuda.ver{opacity:1}
+.semana td,.semana th{padding-top:12px!important;padding-bottom:12px!important;white-space:nowrap}
+.semana td{font-size:23px}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1 · Portada -->
+<section class="slide portada" data-titulo="Portada">
+  <div class="sello">MONACO</div>
+  <div class="linea-azul"></div>
+  <h1>Bienvenidos<br>a MONACO</h1>
+  <div class="nombres">Nuevo asesorado</div>
+  <div class="fecha">2026-11-23 · Reunión de bienvenida</div>
+</section>
+
+<!-- 2 · Quiénes somos -->
+<section class="slide" data-titulo="Quiénes somos">
+  <div class="sello">MONACO</div><div class="seccion">Quiénes somos</div>
+  <h2>Montamos lavaderos de motos<br>porque tenemos uno.</h2>
+  <div class="grid2">
+    <div class="tarjeta azulf">
+      <span class="etiqueta">Lo que hacemos</span>
+      <h3>Operamos nuestro propio lavadero</h3>
+      <p>MONACO Moto Detailing, en León XIII, Soacha. Es la prueba de que el método funciona.</p>
+    </div>
+    <div class="tarjeta azulf">
+      <span class="etiqueta">Lo que les ofrecemos</span>
+      <h3>Los acompañamos a montar el suyo</h3>
+      <p>No vendemos horas ni franquicias: les entregamos un sistema ya probado, etapa por etapa.</p>
+    </div>
+  </div>
+  <p class="lead barra" style="margin-top:48px">Ustedes deciden, firman y radican. Nosotros explicamos, acompañamos y verificamos.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 3 · Qué vamos a lograr -->
+<section class="slide" data-titulo="Qué vamos a lograr">
+  <div class="sello">MONACO</div><div class="seccion">Qué vamos a lograr</div>
+  <h2 style="font-size:56px;margin-bottom:32px">La meta: su lavadero abierto y caminando solo.</h2>
+  <div class="grid3">
+    <div class="tarjeta"><span class="etiqueta">El local</span><p>Guía de búsqueda, checklist del local y presupuesto personalizado.</p></div>
+    <div class="tarjeta"><span class="etiqueta">El montaje</span><p>Esquemas de referencia, guía de instalación y proveedores de maquinaria e insumos.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Los papeles</span><p>Guía de documentación y verificación. Ustedes radican y firman.</p></div>
+    <div class="tarjeta"><span class="etiqueta">El equipo</span><p>Capacitación presencial de 3 días en su local, justo antes de abrir.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Los clientes</span><p>Landing, reservas, Google Maps y 8 videos editados para sus redes.</p></div>
+    <div class="tarjeta"><span class="etiqueta">La operación</span><p>MONACO PRO por 12 meses y guías de personal, precios y membresías.</p></div>
+  </div>
+  <p class="lead" style="margin-top:26px;font-size:30px">Acompañamiento de <b>60 días desde que tengan el local</b>.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 4 · Cómo trabajamos: canales -->
+<section class="slide" data-titulo="Canales">
+  <div class="sello">MONACO</div><div class="seccion">Cómo vamos a trabajar</div>
+  <h2>Por dónde hablamos</h2>
+  <div class="grid3">
+    <div class="tarjeta azulf">
+      <span class="etiqueta">Todos los días</span>
+      <h3>Grupo de WhatsApp</h3>
+      <p>Todo se coordina ahí: dudas, avances, fotos y reuniones. Un solo canal para que todos estemos alineados.</p>
+    </div>
+    <div class="tarjeta azulf">
+      <span class="etiqueta">Cada semana</span>
+      <h3>Reunión semanal</h3>
+      <p>Grabada en Fathom para que nada se pierda. Desde la entrega de llaves es una 1 a 1 de 60 minutos, misma hora y mismo enlace.</p>
+    </div>
+    <div class="tarjeta azulf">
+      <span class="etiqueta">Miércoles · 8:00 p. m.</span>
+      <h3>Clase grupal</h3>
+      <p>Virtual, una hora, con todos los asesorados. Un tema por clase y espacio para preguntas.</p>
+    </div>
+  </div>
+  <p class="lead" style="margin-top:40px;font-size:30px">Y una <b>biblioteca de guías</b>: cada semana les mandamos solo la que toca.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 5 · Quién responde qué -->
+<section class="slide" data-titulo="Quién responde qué">
+  <div class="sello">MONACO</div><div class="seccion">Cómo vamos a trabajar</div>
+  <h2>Quién responde qué</h2>
+  <div class="grid2">
+    <div class="tarjeta"><span class="etiqueta">David</span><h3>Obra y compras</h3><p>Local, adecuaciones, maquinaria, compras y precios.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Juan Pablo</span><h3>Marketing</h3><p>Contenido, redes, videos, WhatsApp Business y Google Maps.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Nicolle</span><h3>Logística</h3><p>Coordina en el grupo las reuniones, fechas y ajustes.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Juan Pablo</span><h3>Documentación</h3><p>Trámites y papeles: cómo sacar cada documento y verificación.</p></div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 6 · Qué esperamos de ustedes -->
+<section class="slide" data-titulo="Qué esperamos">
+  <div class="sello">MONACO</div><div class="seccion">Cómo vamos a trabajar</div>
+  <h2>Lo que esperamos de ustedes</h2>
+  <div class="grid3">
+    <div class="tarjeta">
+      <span class="etiqueta">1 · Responder</span>
+      <h3>Estar en el grupo</h3>
+      <p>Contestar y avisar a tiempo. Si algo se traba, lo decimos de una.</p>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">2 · Subir evidencias</span>
+      <h3>Fotos, videos, pantallazos</h3>
+      <p>Cuando terminen una tarea escriben <b>«LISTO»</b> con la prueba. Respondemos en 24 h hábiles: <b>«APROBADA»</b> o <b>«FALTA: …»</b>.</p>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">3 · Avanzar juntos</span>
+      <h3>Una misión a la vez</h3>
+      <p>Siempre van a saber cuál es el siguiente paso. Lo revisamos juntos en la reunión semanal.</p>
+    </div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 7 · El reloj -->
+<section class="slide" data-titulo="El reloj">
+  <div class="sello">MONACO</div><div class="seccion">La metodología</div>
+  <h2 style="margin-bottom:10px">El reloj arranca el día 0:<br><span class="azul">la entrega de llaves.</span></h2>
+  <div class="tl">
+    <div class="eje"></div>
+    <div class="antes"></div>
+    <div class="tramo" style="left:15%;right:0"></div>
+    <!-- Escala: 0–15 % = antes de llaves; 15–100 % = días 0 a 60 -->
+    <div class="hito arriba" style="left:7%;width:240px"><div class="dia">Antes</div><div class="que">Arriendo y presupuesto<br>(tope 4 meses)</div><div class="punto"></div></div>
+    <div class="hito abajo" style="left:15%"><div class="punto"></div><div class="dia">Día 0</div><div class="que">Llaves: arranca la obra</div></div>
+    <div class="hito arriba" style="left:53.25%"><div class="dia">Día 27</div><div class="que">Adecuaciones listas</div><div class="punto"></div></div>
+    <div class="hito abajo" style="left:57.5%"><div class="punto"></div><div class="dia">Día 30</div><div class="que">Personal: capacitación</div></div>
+    <div class="hito arriba" style="left:64.59%"><div class="dia">Día 35</div><div class="que">Apertura</div><div class="punto"></div></div>
+    <div class="hito abajo" style="left:71.66%"><div class="punto"></div><div class="dia">Día 40</div><div class="que">Apertura, máximo</div></div>
+    <div class="hito arriba" style="left:100%;width:170px"><div class="dia">Día 60</div><div class="que">Marketing, documentos y consolidación</div><div class="punto"></div></div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 8 · Las 8 etapas -->
+<section class="slide" data-titulo="Las 8 etapas">
+  <div class="sello">MONACO</div><div class="seccion">La metodología</div>
+  <h2>Las 8 etapas del método</h2>
+  <div class="grid4">
+    <div class="etapa"><div class="num">01</div><div class="nom">Arriendo</div><div class="lim">Antes de llaves · <b>tope 4 meses</b></div></div>
+    <div class="etapa"><div class="num">02</div><div class="nom">Presupuesto</div><div class="lim">Antes de llaves · <b>tope 4 meses</b></div></div>
+    <div class="etapa"><div class="num">03</div><div class="nom">Adecuaciones</div><div class="lim">Obra lista el <b>día 27</b></div></div>
+    <div class="etapa"><div class="num">04</div><div class="nom">Marketing</div><div class="lim">Desde el local · hasta el <b>día 60</b></div></div>
+    <div class="etapa"><div class="num">05</div><div class="nom">Documentación</div><div class="lim">Hasta el <b>día 60</b></div></div>
+    <div class="etapa"><div class="num">06</div><div class="nom">Personal e insumos</div><div class="lim">Capacitación a más tardar el <b>día 30</b></div></div>
+    <div class="etapa"><div class="num">07</div><div class="nom">Apertura</div><div class="lim"><b>Día 35</b> · máximo día 40</div></div>
+    <div class="etapa"><div class="num">08</div><div class="nom">Consolidación</div><div class="lim">El negocio camina solo · <b>día 60</b></div></div>
+  </div>
+  <p class="lead" style="margin-top:34px;font-size:28px">Los documentos arrancan desde ya. El marketing arranca apenas tengan el local.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 8b · El marketing -->
+<section class="slide" data-titulo="El marketing">
+  <div class="sello">MONACO</div><div class="seccion">La metodología</div>
+  <h2>El marketing arranca con el local</h2>
+  <div class="grid4">
+    <div class="etapa"><div class="num">2 videos</div><div class="nom">Tienen el local</div><div class="lim">Apenas tengan las llaves</div></div>
+    <div class="etapa"><div class="num">2 videos</div><div class="nom">En construcción</div><div class="lim">Mientras se adecúa el local</div></div>
+    <div class="etapa"><div class="num">2 videos</div><div class="nom">Antes de abrir</div><div class="lim">Para llegar con gente a la apertura</div></div>
+    <div class="etapa"><div class="num">2 videos</div><div class="nom">Después de abrir</div><div class="lim">Para que vuelvan y recomienden</div></div>
+  </div>
+  <p class="lead" style="margin-top:34px;font-size:28px">Y durante todo ese tiempo, un trabajo de marketing para que todo el mundo sepa que el lavadero viene.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 9 · Esta semana -->
+<section class="slide" data-titulo="Esta semana">
+  <div class="sello">MONACO</div><div class="seccion">Lo que sigue</div>
+  <span class="etiqueta" style="margin-top:30px;font-size:24px">Esta semana · Etapa 01</span>
+  <h2 style="margin-top:6px">Buscar el local</h2>
+  <p class="lead">Es la decisión más importante del proyecto. Puede tomar una semana o varios meses; tienen <b>máximo 4 meses desde la firma</b>.</p>
+  <div class="grid3" style="margin-top:44px">
+    <div class="tarjeta azulf"><h3>Buscar todos los días</h3><p>Manden cada opción al grupo: foto, área, canon y si el dueño permite lavar motos.</p></div>
+    <div class="tarjeta azulf"><h3>Revisar con el checklist</h3><p>Cada local se visita con la lista y se graba. La decisión final es de ustedes; nosotros opinamos.</p></div>
+    <div class="tarjeta azulf"><h3>Uso de suelo primero</h3><p>Antes de enamorarse de un local, se consulta si ahí se puede lavar.</p></div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 10 · Qué buscar: el local por dentro -->
+<section class="slide" data-titulo="El local por dentro">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 1</div>
+  <h2>Qué mirar dentro del local</h2>
+  <div class="grid2">
+    <div class="tarjeta"><span class="etiqueta">Medidas</span>
+      <p>Más de <b>70 m²</b> (ideal 80 a 100), <b>3 m</b> de altura, piso de concreto y entrada a nivel de <b>mínimo 3 m</b> de ancho.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Agua</span>
+      <p>Contador <b>propio</b>. Buena presión: un balde de 10 litros en menos de 30 segundos.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Desagüe</span>
+      <p>Conectado al <b>alcantarillado</b>, con rejillas y espacio para la trampa de grasas (mínimo 60 × 60 × 60 cm).</p></div>
+    <div class="tarjeta"><span class="etiqueta">Luz</span>
+      <p>Ideal <b>110 V y 220 V</b>, breaker de mínimo 40 A y polo a tierra. Revisen la carga en el recibo.</p></div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 11 · Qué buscar: afuera -->
+<section class="slide" data-titulo="El local por fuera">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 2</div>
+  <h2>Qué mirar afuera</h2>
+  <div class="grid2">
+    <div class="tarjeta"><span class="etiqueta">Ubicación</span>
+      <p>Vía principal o zona de talleres. Buenos vecinos: taller de motos, montallantas, repuestos.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Tráfico de motos</span>
+      <p>Cuenten motos <b>3 veces, 10 minutos cada vez</b>, a horas distintas. La guía pide unas <b>30 por conteo</b>.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Parqueo</span>
+      <p>¿Dónde esperan las motos su turno? Lo ideal es que quepan <b>adentro</b>.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Visibilidad</span>
+      <p>Que se vea desde la calle y que el dueño deje poner <b>aviso en la fachada</b>.</p></div>
+  </div>
+  <p class="lead" style="margin-top:30px;font-size:27px">Ojo con vivienda, colegio u hospital al lado: el ruido de la hidrolavadora trae quejas.</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 12 · Alertas -->
+<section class="slide" data-titulo="Alertas">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 3</div>
+  <h2 style="margin-bottom:20px">Si pasa una de estas, <span style="color:var(--critico)">no firmen</span></h2>
+  <div class="grid2" style="gap:0 64px">
+    <div>
+      <div class="alerta-item"><div class="x">✕</div><p>No tiene conexión al <b>alcantarillado</b>.</p></div>
+      <div class="alerta-item"><div class="x">✕</div><p>Piso de <b>tierra o madera</b>.</p></div>
+      <div class="alerta-item"><div class="x">✕</div><p>Escalones altos en la entrada, <b>sin rampa posible</b>.</p></div>
+      <div class="alerta-item"><div class="x">✕</div><p>Zona <b>residencial exclusiva</b>.</p></div>
+    </div>
+    <div>
+      <div class="alerta-item"><div class="x">✕</div><p>Sin <b>contador de agua propio</b>.</p></div>
+      <div class="alerta-item"><div class="x">✕</div><p>El dueño <b>no deja hacer adecuaciones</b> (romper piso, trampa de grasas).</p></div>
+      <div class="alerta-item"><div class="x">✕</div><p>El uso de suelo <b>no permite lavado de vehículos</b>.</p></div>
+      <div class="alerta-item"><div class="x" style="background:var(--alerta-fondo);color:var(--alerta)">!</div><p>Casa o mezanine: <b>puede pedir licencia</b> y retrasar la obra.</p></div>
+    </div>
+  </div>
+  <div class="pie"><span><span class="chip no">No firmar</span></span><span class="pagnum"></span></div>
+</section>
+
+<!-- 13 · Uso de suelo -->
+<section class="slide" data-titulo="Uso de suelo">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 4</div>
+  <h2 style="margin-bottom:30px">Primero el uso de suelo.<br><span class="azul">Antes de firmar, siempre.</span></h2>
+  <div style="display:flex;flex-direction:column;gap:30px">
+    <div class="paso"><div class="n">1</div><div><h3>Busquen la dirección exacta en el mapa (gratis)</h3>
+      <p><a href="https://sinu.sdp.gov.co/" target="_blank" rel="noopener">SINUPOT · sinu.sdp.gov.co</a> &nbsp;o&nbsp; <a href="https://mapas.bogota.gov.co/" target="_blank" rel="noopener">Mapas Bogotá · mapas.bogota.gov.co</a>. Dirección exacta o CHIP, no el barrio. Guarden el pantallazo.</p></div></div>
+    <div class="paso"><div class="n">2</div><div><h3>Pregunten de palabra en una curaduría (gratis)</h3>
+      <p>«¿Ese predio permite lavado de vehículos según el POT?» Anoten la respuesta, la fecha y quién los atendió.</p></div></div>
+    <div class="paso"><div class="n">3</div><div><h3>Si no permite lavado de vehículos: <span style="color:var(--critico)">no firmen</span></h3>
+      <p>Busquen otro local. El concepto oficial se pide después en la curaduría.</p></div></div>
+  </div>
+  <div class="pie"><span>Guía completa: <a href="https://davidvaldeleonceo.github.io/manuales/uso-de-suelo/" target="_blank" rel="noopener">manual de uso de suelo</a></span><span class="pagnum"></span></div>
+</section>
+
+<!-- 14 · Qué negociar -->
+<section class="slide" data-titulo="Qué negociar">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 5</div>
+  <h2>Qué negociar en el contrato</h2>
+  <div class="grid2" style="gap:28px 56px">
+    <ul class="lista">
+      <li><b>Permiso de obra por escrito</b>: romper piso, trampa, electricidad.</li>
+      <li><b>Días de gracia</b>: mínimo 15 días sin pagar mientras adecuan.</li>
+      <li><b>Mínimo 1 año</b>, con renovación automática.</li>
+      <li><b>Cuánto sube</b> el arriendo (IPC).</li>
+    </ul>
+    <ul class="lista">
+      <li><b>Qué incluye el canon</b>: administración, vigilancia, aseo.</li>
+      <li><b>Aviso en la fachada</b> permitido.</li>
+      <li><b>Las mejoras</b>: quién se queda con ellas al final, y compensación si piden el local antes.</li>
+      <li><b>Pidan</b>: predial, nomenclatura, área, año de construcción y que no haya deudas de servicios.</li>
+    </ul>
+  </div>
+  <p class="lead barra" style="margin-top:26px;font-size:28px">Si les gusta, no muestren afán: «Está interesante, tenemos que revisar los costos de adecuación».</p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 15 · Antes de firmar -->
+<section class="slide" data-titulo="Antes de firmar">
+  <div class="sello">MONACO</div><div class="seccion">Cómo buscar un arriendo bien · 6</div>
+  <h2>Antes de firmar el arriendo</h2>
+  <div class="grid2">
+    <div class="tarjeta azulf"><span class="etiqueta">Al grupo</span>
+      <p>El <b>borrador del contrato</b> de arriendo, para revisarlo juntos.</p></div>
+    <div class="tarjeta azulf"><span class="etiqueta">Fotos y videos</span>
+      <p>Video panorámico desde la entrada, tablero eléctrico, pisos y desagües, llaves de agua abiertas.</p></div>
+    <div class="tarjeta azulf"><span class="etiqueta">Plano a mano</span>
+      <p>Con medidas del local, para cotizar la obra.</p></div>
+    <div class="tarjeta azulf"><span class="etiqueta">Maestros</span>
+      <p><b>Dos cotizaciones</b> y un maestro de reemplazo, listos antes de las llaves.</p></div>
+  </div>
+  <p class="lead" style="margin-top:36px;font-size:28px">Checklist para la visita: <a href="https://davidvaldeleonceo.github.io/manuales/checklist-local/" target="_blank" rel="noopener">davidvaldeleonceo.github.io/manuales/checklist-local</a></p>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 16 · Tareas de la semana -->
+<section class="slide" data-titulo="Tareas de la semana">
+  <div class="sello">MONACO</div><div class="seccion">Cierre</div>
+  <h2 style="margin-bottom:28px">Tareas de esta semana · meta: 10 locales</h2>
+  <div class="tabla-wrap">
+    <table class="semana">
+      <thead><tr><th>Día</th><th>Quién</th><th>Qué</th></tr></thead>
+      <tbody>
+        <tr><td class="quien" style="white-space:nowrap">Lunes 23</td><td class="quien">Asesorado</td><td><b>Firma de contrato</b></td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Martes 24</td><td class="quien">Asesorado</td><td><b>Logo y nombre temporal</b> · Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Miércoles 25</td><td class="quien">Asesorado</td><td>Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Jueves 26</td><td class="quien">Asesorado</td><td>Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Viernes 27</td><td class="quien">Asesorado</td><td>Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Sábado 28</td><td class="quien">Asesorado</td><td>Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+        <tr><td class="quien" style="white-space:nowrap">Domingo 29</td><td class="quien">Asesorado</td><td>Buscar locales · fotos a <b>Fotos de locales</b> · llamar: canon y m²</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+<!-- 17 · Próxima reunión -->
+<section class="slide portada" data-titulo="Próxima reunión">
+  <div class="sello">MONACO</div>
+  <div class="linea-azul"></div>
+  <h1 style="font-size:96px">Gracias.<br>Arrancamos.</h1>
+  <div class="grid2" style="margin-top:56px;max-width:1300px">
+    <div class="tarjeta"><span class="etiqueta">Próxima reunión</span><h3>Fecha y hora <span class="pc">por confirmar</span></h3><p>Nicolle la coordina en el grupo.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Clase grupal</span><h3>Miércoles 2026-11-25 · 8:00 p. m.</h3><p>Virtual. Enlace <span class="pc">por confirmar</span>.</p></div>
+  </div>
+  <div class="pie"><span>MONACO · Bienvenida</span><span class="pagnum"></span></div>
+</section>
+
+</div></div>
+<div class="ayuda" id="ayuda">← → para pasar · clic para avanzar · F pantalla completa</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, i = 0;
+  var stage = document.getElementById('stage');
+  function escalar(){
+    var s = Math.min(window.innerWidth/1600, window.innerHeight/900);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  function ir(n){
+    i = Math.max(0, Math.min(total-1, n));
+    slides.forEach(function(el, k){ el.classList.toggle('activa', k === i); });
+    var num = slides[i].querySelector('.pagnum');
+    if (num) num.textContent = (i+1) + ' / ' + total;
+    if (history.replaceState) history.replaceState(null, '', '#' + (i+1));
+  }
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter') { e.preventDefault(); ir(i+1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); ir(i-1); }
+    else if (k === 'Home') { ir(0); }
+    else if (k === 'End') { ir(total-1); }
+    else if (k === 'f' || k === 'F') {
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen && document.exitFullscreen(); }
+    }
+  });
+  document.addEventListener('click', function(e){
+    if (e.target.closest('a')) return; // los enlaces abren, no pasan diapositiva
+    if (e.clientX < window.innerWidth * 0.25) ir(i-1); else ir(i+1);
+  });
+  window.addEventListener('resize', escalar);
+  var inicio = parseInt((location.hash || '').replace('#',''), 10);
+  escalar(); ir(isNaN(inicio) ? 0 : inicio-1);
+  var ay = document.getElementById('ayuda');
+  ay.classList.add('ver'); setTimeout(function(){ ay.classList.remove('ver'); }, 3500);
+})();
+</script>
+</body>
+</html>
