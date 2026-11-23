@@ -40,6 +40,12 @@
     { id: "uso-de-suelo", paso: 1, url: "uso-de-suelo/",
       title: "Uso del suelo", verb: "Mira si se puede tener un lavadero ahí",
       keywords: ["suelo", "arriendo", "local", "pot", "ciiu", "alcaldía", "planeación", "permitido"] },
+    { id: "zonas-bogota", paso: 1, url: "zonas-bogota/",
+      title: "Dónde buscar local en Bogotá", verb: "Mira en el mapa en qué zonas se permite el lavadero",
+      keywords: ["mapa", "zonas", "bogotá", "bogota", "pot", "arriendo", "local", "buscar", "sinupot"] },
+    { id: "documento-predio", paso: 1, url: "documento-predio/",
+      title: "Documento del predio", verb: "Descarga el reporte del predio y verifica el uso del suelo",
+      keywords: ["predio", "sinupot", "chip", "reporte", "certificado", "tradición", "tradicion", "catastro", "uso", "suelo", "curaduría"] },
 
     { id: "rut-y-camara", paso: 2, url: "rut-y-camara/",
       title: "RUT y Cámara de Comercio", verb: "Registra tu negocio en línea",

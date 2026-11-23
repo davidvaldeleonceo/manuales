@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Documento del predio · Mapa MONACO</title>
+<link rel="stylesheet" href="../assets/mapa.css">
+<script src="../assets/ruta.js" defer></script>
+<style>
+  /* Solo de esta página: capturas, tabla y versión impresa */
+  .captura { margin:12px 0 6px }
+  .captura img { display:block; width:100%; height:auto; border:1px solid var(--linea); border-radius:var(--radio) }
+  .captura figcaption { font-size:14px; color:var(--gris); margin-top:6px }
+  .tabla { overflow-x:auto; border:1px solid var(--linea); border-radius:var(--radio); margin:12px 0 }
+  .tabla table { border-collapse:collapse; width:100%; min-width:560px; font-size:15px }
+  .tabla th, .tabla td { text-align:left; padding:10px 12px; border-top:1px solid var(--linea); vertical-align:top }
+  .tabla th { background:var(--papel-suave); border-top:0; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--gris) }
+  .si { color:var(--ok); font-weight:800 }
+  .ojo { color:#8a5a00; font-weight:800 }
+  .ok-caja { border-left-color:var(--ok) }
+  .fuentes { font-size:13px; color:var(--gris) }
+  .fuentes li { margin:4px 0; word-break:break-word }
+  .solo-impreso { display:none }
+  code { font-family:inherit; font-weight:800; background:var(--papel-suave); padding:0 4px; border-radius:3px }
+  @media print {
+    .vid iframe, .vid figcaption { display:none }
+    .solo-impreso { display:block }
+    .captura, .caja, .tabla tr { break-inside:avoid }
+    h3 { break-after:avoid }
+    .captura img { max-height:320px; width:auto; max-width:100% }
+    .tabla { overflow:visible }
+    a { color:var(--azul) }
+  }
+</style>
+</head>
+<body>
+<main class="hoja">
+  <a class="migas" href="../">← Mapa</a>
+  <p class="ubicacion">Paso 1 · Escoger el local · Bogotá</p>
+  <h1>Documento del predio y uso del suelo</h1>
+  <p class="bajada">Antes de firmar el arriendo, saca los datos exactos del local, descarga su <strong>reporte de uso del suelo</strong> en el mapa oficial de Bogotá (SINUPOT) y confírmalo con el <strong>concepto de la curaduría</strong>. Así sabes si ahí se pueden lavar motos.</p>
+  <p class="meta">Revisado contra fuentes oficiales el 23 de noviembre de 2026. Solo Bogotá. Todos los montos en pesos colombianos (COP).</p>
+
+  <div class="resumen" aria-label="Resumen">
+    <div class="ancho">
+      <h3>Qué vas a necesitar</h3>
+      <ul>
+        <li><strong>Dirección exacta</strong> del local (como sale en el recibo del predial, no la del aviso).</li>
+        <li><strong>CHIP</strong>: el código del predio en Bogotá. Empieza por <code>AAA</code>.</li>
+        <li><strong>Matrícula inmobiliaria</strong>: el número del predio en la oficina de registro (por ejemplo, 50C-1234567).</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cuánto cuesta</h3>
+      <b>$127.083 COP</b>
+      <p>$23.000 COP del certificado de tradición + $104.083 COP del concepto. El mapa y los datos de Catastro son gratis.</p>
+    </div>
+    <div>
+      <h3>Cuánto tarda</h3>
+      <b>1 hora + hasta 15 días hábiles</b>
+      <p>Una hora en internet. La curaduría tiene hasta 15 días hábiles.</p>
+    </div>
+  </div>
+
+  <h2>Paso a paso</h2>
+  <ol class="steps">
+    <li>
+      <h3>Consigue los 3 datos del local (gratis)</h3>
+      <p>Pídele al dueño una foto del <strong>recibo del impuesto predial</strong> del local. Ahí salen el CHIP, la dirección y, por lo general, la matrícula. Es gratis: él ya lo tiene.</p>
+      <p>Si solo tienes la dirección, saca el CHIP tú mismo, sin registrarte: entra a <a href="https://catastroenlinea.catastrobogota.gov.co/cel/">Catastro en Línea ↗</a> y escoge <strong>«Obtén el CHIP de un predio»</strong>. Escribe la dirección y te sale el CHIP.</p>
+      <p>Otra opción es el <strong>certificado catastral</strong>, también gratis. Se descarga en Catastro en Línea con usuario registrado, o en la página de Catastro con <strong>«Pregúntale a Catia»</strong>, escribiendo: «requiero descargar el certificado catastral». Lo saca el propietario, así que pídeselo al dueño.</p>
+      <p class="done">✔ Listo cuando: tienes anotados dirección, CHIP y matrícula.</p>
+    </li>
+
+    <li>
+      <h3>Saca el certificado de tradición y libertad ($23.000 COP)</h3>
+      <p>Entra a <a href="https://certificados.supernotariado.gov.co/certificado">certificados.supernotariado.gov.co ↗</a>, escribe la <strong>matrícula inmobiliaria</strong>, paga <strong>$23.000 COP</strong> y descarga el PDF.</p>
+      <p>Te sirve dos veces: la curaduría lo pide (con menos de 30 días) y te muestra <strong>quién es el dueño de verdad</strong> y si el local tiene <strong>embargos</strong>. Sácalo solo en esa página oficial: no se lo compres a páginas particulares.</p>
+      <p class="done">✔ Listo cuando: tienes el PDF guardado y el dueño que aparece es quien te va a arrendar.</p>
+    </li>
+
+    <li>
+      <h3>Busca el predio en SINUPOT (gratis)</h3>
+      <p>SINUPOT es el mapa oficial de la Secretaría Distrital de Planeación. Míralo primero en este video (2:18):</p>
+      <figure class="vid">
+        <iframe src="https://www.youtube-nocookie.com/embed/YTk-pPtVYfQ" title="Cómo consultar un predio en Sinupot — Secretaría Distrital de Planeación" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe>
+        <figcaption>▶ Video oficial de la Secretaría Distrital de Planeación: <strong>cómo buscar un predio en SINUPOT</strong> · 2:18.</figcaption>
+        <p class="solo-impreso">▶ Video oficial de la Secretaría Distrital de Planeación (2:18): <a href="https://youtu.be/YTk-pPtVYfQ">https://youtu.be/YTk-pPtVYfQ</a></p>
+      </figure>
+      <p>Ahora hazlo tú, mejor en computador:</p>
+      <ul>
+        <li>Abre <a href="https://sinu.sdp.gov.co/visor/">sinu.sdp.gov.co/visor ↗</a>. Si entras por <a href="https://sinu.sdp.gov.co/">sinu.sdp.gov.co ↗</a>, toca el cuadro <strong>«Sistema de Información de Norma Urbana y POT»</strong>.</li>
+        <li>Arriba a la izquierda está el buscador: <strong>«Buscar por dirección, lugar o chip»</strong>. Toca la <strong>flechita ▾</strong> que tiene a la izquierda y escoge <strong>«Dirección»</strong>, o <strong>«Predios»</strong> si vas a buscar por CHIP.</li>
+        <li>Escribe la dirección <strong>como sale en el recibo</strong>, con abreviaturas: <code>KR</code> carrera, <code>CL</code> calle, <code>AK</code> avenida carrera, <code>AC</code> avenida calle. Por ejemplo: <code>AK 30 25 90</code>. Toca la sugerencia que aparece debajo.</li>
+      </ul>
+      <figure class="captura">
+        <img src="img/1-buscar-direccion.jpg" width="560" height="500" alt="Buscador de SINUPOT con el menú abierto: Todos, Dirección, Predios, Predio Rural">
+        <figcaption>La flechita del buscador abre el menú: <strong>Dirección</strong> o <strong>Predios</strong> (CHIP).</figcaption>
+      </figure>
+      <p>El mapa se va hasta el lote y abre una ventanita con el <strong>CHIP</strong>, la dirección y el código de lote. Revisa que el CHIP sea el mismo del recibo. Toma <strong>pantallazo</strong> con la dirección y el CHIP visibles.</p>
+      <figure class="captura">
+        <img src="img/2-chip-del-predio.jpg" width="800" height="715" alt="SINUPOT con un lote seleccionado y la ventanita con CHIP, dirección y código de lote">
+        <figcaption>Ejemplo con un edificio público (el CAD, AK 30 25 90). Este es el pantallazo que le mandas a MONACO.</figcaption>
+      </figure>
+      <p class="done">✔ Listo cuando: tienes el pantallazo del predio con la dirección y el CHIP.</p>
+    </li>
+
+    <li>
+      <h3>Descarga el reporte de uso del suelo en PDF (gratis)</h3>
+      <p>Con el predio ya seleccionado:</p>
+      <ul>
+        <li>En la barra azul de la izquierda toca el <strong>tercer ícono</strong> (una hojita): se abre el panel <strong>«Reportes SINU»</strong>. Arriba dice el CHIP que escogiste.</li>
+        <li>Debajo de <strong>«Reportes POT Dec. 555 (Vigente)»</strong> toca <strong>«Uso del suelo (POT Dec. 555 de 2021 Vigente)»</strong>.</li>
+      </ul>
+      <figure class="captura">
+        <img src="img/3-reportes-sinu.jpg" width="800" height="715" alt="Panel Reportes SINU con el enlace Uso del suelo (POT Dec. 555 de 2021 Vigente)">
+        <figcaption>Usa siempre el del <strong>Decreto 555 (vigente)</strong>. Los del POT 190 son de la norma derogada.</figcaption>
+      </figure>
+      <ul>
+        <li>Se abre <strong>«Seleccionar usos»</strong>. Deja marcado <strong>«Uso (Código CIIU)»</strong>, escribe <code>4520</code> y escoge <strong>«Mantenimiento y reparación de vehículos automotores - 4520»</strong>. Es el código del DANE que nombra el lavado.</li>
+        <li>En <strong>«Área construida destinada al uso»</strong> escoge <strong>«1 - Menor a 500 m2»</strong> (si el local es más grande, escoge el que corresponda).</li>
+        <li>Toca <strong>«Generar»</strong>. Espera: el reporte sale en PDF. <strong>Descárgalo</strong> y guárdalo con la dirección en el nombre.</li>
+      </ul>
+      <figure class="captura">
+        <img src="img/4-ciiu-y-area.jpg" width="800" height="715" alt="Ventana Seleccionar usos con CIIU 4520 y área menor a 500 m2, botones Generar y Cancelar">
+        <figcaption>Así debe quedar antes de tocar <strong>Generar</strong>.</figcaption>
+      </figure>
+      <div class="caja">
+        <h3>¿Te sale «Existen problemas de conexión»?</h3>
+        <p>Es una falla del servidor de Planeación, no tuya. Nos pasó al revisar este manual. Intenta otra vez más tarde o al día siguiente, en horario de oficina. Mientras tanto, guarda el pantallazo del paso 3 y sigue con el paso 6: el concepto de la curaduría es lo que vale.</p>
+      </div>
+      <figure class="captura">
+        <img src="img/5-aviso-conexion.jpg" width="480" height="429" alt="Aviso de SINUPOT: Existen problemas de conexión, por favor intente más tarde">
+        <figcaption>El aviso que sale cuando el servidor de reportes está caído.</figcaption>
+      </figure>
+      <p class="done">✔ Listo cuando: tienes el PDF del reporte guardado (o el pantallazo del aviso, si no salió).</p>
+    </li>
+
+    <li>
+      <h3>Lee el reporte: busca estas palabras</h3>
+      <p>No tienes que entenderlo todo. Busca estas cinco cosas y anótalas:</p>
+      <ul>
+        <li><strong>Área de actividad:</strong> la más importante. Compárala con la tabla de abajo.</li>
+        <li><strong>Frente a malla vial arterial:</strong> si el local da a una avenida principal. Pesa mucho en Proximidad.</li>
+        <li><strong>Sector de uso residencial neto:</strong> si aparece, ahí no se puede.</li>
+        <li><strong>Tratamiento urbanístico</strong> (consolidación, renovación, desarrollo, conservación…): dice qué se puede construir. Para arrendar, fíjate sobre todo si dice <strong>conservación</strong>.</li>
+        <li><strong>Plan parcial</strong>, <strong>Bien de Interés Cultural (BIC)</strong> o <strong>PEMP</strong>: norma especial. No firmes sin el concepto.</li>
+      </ul>
+      <p>El reporte de SINUPOT <strong>informa, no da permiso</strong>. La propia Planeación dice que el concepto formal se pide en una curaduría.</p>
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr><th>Si el área de actividad es…</th><th>Local de menos de 500 m²</th><th>Condiciones</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Grandes Servicios Metropolitanos</strong> (AAGSM)</td><td><span class="si">Permitido</span></td><td>Uso complementario.</td></tr>
+            <tr><td><strong>Estructurante</strong>, receptora de actividades económicas (AAERAE) o de vivienda social (AAERVIS)</td><td><span class="si">Permitido</span></td><td>Uso complementario. No dentro de Sectores de Interés Urbanístico.</td></tr>
+            <tr><td><strong>Proximidad</strong>, generadora (AAPGSU) o receptora (AAPRSU) de soportes urbanos</td><td><span class="ojo">Restringido</span></td><td>Solo con frente a <strong>malla vial arterial construida</strong> (avenida principal) o en <strong>manzana comercial</strong> aprobada. Nunca en sector de uso residencial neto. 500 m² o más: <span class="no">no permitido</span>.</td></tr>
+            <tr><td><strong>Sector de uso residencial neto</strong></td><td><span class="no">No permitido</span></td><td>Ahí solo vivienda y dotacional.</td></tr>
+            <tr><td>Plan parcial, BIC, PEMP o norma anterior</td><td><span class="ojo">Por confirmar</span></td><td>Se rige por su propia norma. Solo lo resuelve el concepto.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Para el POT, el lavadero es «Comercio y servicios · Servicios al automóvil». Tabla resumida del cuadro de usos del artículo 243 del Decreto 555 de 2021 (reglamentado por el Decreto 122 de 2023).</p>
+      <p class="done">✔ Listo cuando: sabes en qué área de actividad está el local y si da a avenida principal.</p>
+    </li>
+
+    <li>
+      <h3>Pide el concepto de uso en la curaduría ($104.083 COP)</h3>
+      <p>Este es el <strong>papel oficial</strong>. En Bogotá solo lo dan las curadurías, no Planeación. La más sencilla es la <strong>Curaduría 1</strong>, todo en línea: <a href="https://curaduria1.com.co/cu1-online/solicitud-de-conceptos/conceptos-de-uso/">formulario de conceptos de uso ↗</a>.</p>
+      <ul>
+        <li>Escribe la dirección <strong>tal como sale en el certificado de tradición</strong> (tienen que coincidir) y el CHIP.</li>
+        <li>Sube el <strong>certificado de tradición</strong> de menos de 30 días y tu <strong>cédula</strong> en PDF. Si lo pides a nombre de una S.A.S., la <strong>Cámara de Comercio</strong> de menos de 30 días.</li>
+        <li>En usos específicos (máximo tres) escribe:</li>
+      </ul>
+      <p class="say">"Lavado y detailing de motocicletas."</p>
+      <ul>
+        <li>Paga <strong>$104.083 COP, IVA incluido</strong>, por PSE y sube el comprobante en PDF.</li>
+      </ul>
+      <p>La ley les da <strong>hasta 15 días hábiles</strong>. Llama cada 3 días hábiles al (601) 580 4455, ext. 100, 102 o 144. Cuando salga, revisa nombre, dirección, actividad y el resultado: <span class="si">permitido</span>, <span class="ojo">condicionado</span> o <span class="no">prohibido</span>.</p>
+      <p class="done">✔ Listo cuando: tienes el concepto en PDF y dice permitido.</p>
+    </li>
+  </ol>
+
+  <div class="caja ok-caja">
+    <h3>Lo que debes enviarle a MONACO</h3>
+    <p>Por el grupo de tu asesoría, <strong>antes de firmar</strong>:</p>
+    <ul class="check">
+      <li><label><input type="checkbox"> <span><strong>El PDF del predio:</strong> el reporte de uso del suelo de SINUPOT (paso 4). Si no salió, el pantallazo del aviso.</span></label></li>
+      <li><label><input type="checkbox"> <span><strong>El pantallazo</strong> del predio en SINUPOT, con dirección y CHIP visibles (paso 3).</span></label></li>
+      <li><label><input type="checkbox"> <span><strong>El concepto</strong> de uso del suelo de la curaduría en PDF (paso 6).</span></label></li>
+      <li><label><input type="checkbox"> <span>Si ya lo tienes, el <strong>certificado de tradición y libertad</strong> (paso 2).</span></label></li>
+    </ul>
+  </div>
+
+  <div class="caja alerta-caja">
+    <h3>Señales de NO firmar</h3>
+    <ul>
+      <li>El predio está en un <span class="no">sector de uso residencial neto</span>.</li>
+      <li>Es <strong>Proximidad</strong> y el local no da a avenida principal ni está en manzana comercial.</li>
+      <li>El local mide <strong>500 m² o más</strong> y está en Proximidad.</li>
+      <li>Sale <strong>plan parcial, BIC, PEMP o conservación</strong> y todavía no tienes el concepto.</li>
+      <li>El concepto dice <span class="no">prohibido</span>, o <strong>condicionado</strong> y nadie te ha explicado la condición.</li>
+      <li>La dirección o el CHIP del contrato no coinciden con el recibo, el certificado de tradición o SINUPOT.</li>
+      <li>Quien te arrienda <strong>no aparece como dueño</strong> en el certificado de tradición y no tiene poder por escrito.</li>
+      <li>El certificado de tradición muestra <strong>embargo</strong> u otra medida sobre el local.</li>
+      <li>Te presionan para firmar <strong>antes</strong> de tener el concepto, o alguien te cobra por «sacarte el papel». <span class="no">Nunca</span> pagues eso.</li>
+    </ul>
+  </div>
+
+  <h2>Fuentes</h2>
+  <ul class="fuentes">
+    <li>SINUPOT, Secretaría Distrital de Planeación: <a href="https://sinu.sdp.gov.co/visor/">sinu.sdp.gov.co/visor</a>. Pasos y capturas tomados en el visor el 23-nov-2026.</li>
+    <li>Video oficial de la SDP: <a href="https://youtu.be/YTk-pPtVYfQ">youtu.be/YTk-pPtVYfQ</a>.</li>
+    <li>Catastro Bogotá, preguntas frecuentes de Catastro en Línea (trámites gratuitos; CHIP sin registro): <a href="https://www.catastrobogota.gov.co/sites/default/files/archivos/faq/1.%20GENERALIDADES%20DE%20CATASTRO%20EN%20L%C3%8DNEA.pdf">catastrobogota.gov.co</a>.</li>
+    <li>Certificado catastral gratis con «Pregúntale a Catia» (Alcaldía de Bogotá, 20-abr-2026): <a href="https://bogota.gov.co/mi-ciudad/hacienda/descargar-certificado-catastral-es-gratis-bogota-rapido-y-digital">bogota.gov.co</a>.</li>
+    <li>Certificado de tradición y libertad: <a href="https://certificados.supernotariado.gov.co/certificado">certificados.supernotariado.gov.co</a>. Tarifa electrónica de $23.000 COP vigente desde el 2-feb-2026, según <a href="https://radionacional.co/actualidad/economia/gobierno-confirma-alza-del-51-en-las-tarifas-registrales-y-descarta-incrementos">Radio Nacional</a>.</li>
+    <li>Concepto de uso, Curaduría Urbana 1 de Bogotá ($104.083 COP IVA incluido; requisitos): <a href="https://curaduria1.com.co/cu1-online/solicitud-de-conceptos/conceptos-de-uso/">curaduria1.com.co</a>, consultada el 23-nov-2026.</li>
+    <li>Decreto Distrital 555 de 2021, artículo 243 (cuadro de usos), en el Régimen Legal de Bogotá: <a href="https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=119582">alcaldiabogota.gov.co</a>.</li>
+  </ul>
+
+  <a class="enlace-completo" href="https://monaco-principal.github.io/manuales/uso-de-suelo/">Ver el manual de uso del suelo (curadurías, CIIU y multas) →</a>
+
+  <footer class="pie">
+    <a class="boton" href="#whatsapp" data-whatsapp>¿Te trabaste? Escríbenos por WhatsApp</a>
+    <p>MONACO · Moto Detailing · Este instructivo te explica el trámite; lo que vale es el concepto de la curaduría. ¿Dudas? Tu asesor MONACO.</p>
+  </footer>
+</main>
+</body>
+</html>
