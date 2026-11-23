@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contratar lavadores · Mónaco</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Cómo contratar lavadores: dónde buscar, la entrevista de 30 minutos, la prueba práctica, la hoja de puntaje y el ingreso.">
+<link rel="stylesheet" href="../assets/mapa.css">
+<script src="../assets/ruta.js" defer></script>
+<style>
+  /* Estilo Mónaco tipo Apple: blanco, Helvetica Neue, #f5f5f7 y dorado de marca */
+  :root {
+    --t:#1d1d1f; --t2:#424245; --g:#6e6e73; --s:#f5f5f7; --l:#e5e5ea;
+    --a:#c0a44d; --a-osc:#8a6d1f; --a-suave:#f8f3e4; --a-linea:#eadfbf;
+    --r:#b3261e; --r-suave:#fbeceb; --v:#1d7a46; --v-suave:#eaf5ee;
+    --am:#7a5a00; --am-suave:#fdf4d8;
+    --f:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color-scheme: light;
+  }
+  html, body { background:#fff; color:var(--t); font-family:var(--f) }
+  body { margin:0; font-size:18px; line-height:1.45; letter-spacing:-0.01em; overflow-x:hidden }
+  .rm-barra { display:none !important }
+  * { box-sizing:border-box }
+  a { color:var(--a-osc) }
+  p { margin:0 0 12px }
+  h1, h2, h3 { letter-spacing:-0.02em; line-height:1.15 }
+  h2 { border-top:0; padding-top:0 }
+  :focus-visible { outline:3px solid var(--a-osc); outline-offset:2px }
+
+  /* Barra superior */
+  .e-top { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:12px; height:52px;
+    padding:0 16px; background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(12px); -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--l); font-size:17px }
+  .e-top a { color:var(--t); text-decoration:none; font-weight:600; white-space:nowrap; min-height:48px; display:inline-flex; align-items:center }
+  .e-top span { flex:1; min-width:0; text-align:center; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .e-top i { width:64px }
+
+  main { max-width:720px; margin:0 auto; padding:0 16px }
+
+  .e-hero { padding:24px 0 8px }
+  .e-hero h1 { font-size:clamp(32px, 8vw, 44px); margin:0 0 10px }
+  .corto { border-radius:18px; background:var(--a-suave); border:1px solid var(--a-linea); padding:14px 16px; margin:0 0 14px; font-size:18px }
+  .corto b { color:var(--a-osc) }
+  .saltos { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 0 }
+  .saltos a { display:inline-flex; align-items:center; min-height:48px; padding:0 16px; border-radius:980px; background:var(--s);
+    color:var(--t); text-decoration:none; font-weight:600; font-size:17px }
+
+  /* Bloques */
+  .bloque { padding:28px 0; border-bottom:1px solid var(--l); scroll-margin-top:60px }
+  .num { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%;
+    background:var(--a); color:var(--t); font-weight:800; font-size:20px; margin:0 0 10px }
+  .bloque h2 { font-size:clamp(26px, 6.5vw, 34px); margin:0 0 8px }
+  .bloque h3 { font-size:21px; margin:24px 0 8px }
+  .lead { color:var(--t2); font-size:18px }
+
+  .lista { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:8px }
+  .lista li { display:grid; grid-template-columns:34px minmax(0,1fr); gap:10px; align-items:start; padding:12px 14px;
+    border-radius:16px; background:var(--s); font-size:18px }
+  .lista li > span { font-size:22px; line-height:1.2; font-weight:800; color:var(--a-osc) }
+  .lista li small { display:block; color:var(--g); font-size:17px }
+
+  .nota { border-radius:16px; padding:12px 16px; background:var(--s); color:var(--t2); margin:12px 0 }
+  .ojo { border-radius:16px; padding:12px 16px; background:var(--am-suave); color:var(--am); font-weight:600; margin:12px 0 }
+  .ojo b, .nota b { font-weight:800 }
+
+  /* Bloques para copiar */
+  .copia { border-radius:18px; background:var(--a-suave); border:1px solid var(--a-linea); padding:14px 16px; margin:0 0 12px }
+  .copia .cab { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:0 0 8px;
+    font-size:17px; font-weight:700; color:var(--a-osc) }
+  .copia pre, .copia .txt { margin:0; font-family:var(--f); font-size:16px; line-height:1.45; white-space:pre-wrap; overflow-wrap:anywhere; color:var(--t) }
+  .copia pre { max-height:340px; overflow-y:auto; background:#fff; border-radius:12px; padding:12px }
+  .copia .txt { font-size:18px }
+  .copiar { font:inherit; font-size:17px; font-weight:700; border:0; background:#fff; color:var(--a-osc); border-radius:980px;
+    min-height:48px; padding:0 18px; cursor:pointer; flex:none; box-shadow:inset 0 0 0 1px var(--a-linea) }
+
+  /* Entrevista */
+  .tramo { display:inline-block; font-size:15px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--g); margin:22px 0 8px }
+  .preg { list-style:none; margin:0; padding:0; display:grid; gap:12px; counter-reset:p }
+  .preg > li { border-radius:18px; background:var(--s); padding:14px 16px }
+  .preg .q { font-weight:800; font-size:19px; line-height:1.3; margin:0 0 10px }
+  .preg .q::before { counter-increment:p; content:counter(p) ". "; color:var(--a-osc) }
+  .senal { display:grid; grid-template-columns:auto minmax(0,1fr); gap:8px; align-items:start; border-radius:12px; padding:8px 12px; margin:6px 0 0; font-size:17px; line-height:1.35 }
+  .senal b { font-weight:800; white-space:nowrap }
+  .senal.si { background:var(--v-suave); color:var(--v) }
+  .senal.no { background:var(--r-suave); color:var(--r); font-weight:400 }
+
+  /* Prueba práctica */
+  .prueba { list-style:none; margin:0; padding:0; display:grid; gap:10px }
+  .prueba li { border-radius:18px; background:var(--s); padding:14px 16px }
+  .prueba .paso-n { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%;
+    background:var(--t); color:#fff; font-weight:800; font-size:17px; margin:0 8px 0 0 }
+  .prueba h3 { display:flex; align-items:center; margin:0 0 6px; font-size:19px }
+  .prueba ul { margin:6px 0 0; padding-left:22px }
+  .prueba li li { background:none; padding:0; margin:0 0 4px; border-radius:0 }
+
+  /* Hoja de puntaje */
+  .campo { display:block; font-weight:700; font-size:17px; margin:0 0 14px }
+  .campo input { display:block; width:100%; margin-top:6px; font:inherit; font-size:18px; padding:12px 14px; min-height:52px; border-radius:14px;
+    border:1px solid #c7c7cc; background:#fff; color:var(--t) }
+  .campo input:focus { outline:2px solid var(--a-osc); border-color:transparent }
+  .crit { border:0; margin:0 0 12px; padding:14px 16px; border-radius:18px; background:var(--s); min-width:0 }
+  .crit legend { float:left; width:100%; padding:0; font-weight:800; font-size:19px; margin:0 0 2px }
+  .crit legend + * { clear:both }
+  .crit .ayuda { display:block; color:var(--g); font-size:16px; margin:0 0 10px; clear:both }
+  .opc { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px }
+  .opc label { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:64px;
+    padding:6px 4px; border-radius:14px; background:#fff; border:2px solid var(--l); cursor:pointer; text-align:center; line-height:1.1 }
+  .opc label > span { display:flex; flex-direction:column; align-items:center; gap:2px }
+  .opc label b { font-size:24px; font-weight:800 }
+  .opc label small { font-size:15px; color:var(--t2); font-weight:600 }
+  .opc input { position:absolute; opacity:0; width:1px; height:1px; margin:0 }
+  .opc input:focus-visible + span { outline:3px solid var(--a-osc); outline-offset:6px; border-radius:6px }
+  .opc label:has(input:checked) { border-color:var(--t); background:var(--t); color:#fff }
+  .opc label:has(input:checked) small { color:#fff }
+  .opc label.v1:has(input:checked) { background:var(--r); border-color:var(--r) }
+  .opc label.v3:has(input:checked) { background:var(--v); border-color:var(--v) }
+  .veredicto { margin:14px 0 0; border-radius:18px; padding:16px 18px; background:var(--s); color:var(--t2) }
+  .veredicto .tot { display:block; font-size:16px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; margin:0 0 4px }
+  .veredicto .dec { display:block; font-size:22px; font-weight:800; line-height:1.2 }
+  .veredicto .por { display:block; font-size:17px; margin:6px 0 0 }
+  .veredicto.ok { background:var(--v-suave); color:var(--v) }
+  .veredicto.medio { background:var(--am-suave); color:var(--am) }
+  .veredicto.mal { background:var(--r-suave); color:var(--r) }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:980px;
+    border:0; background:var(--s); color:var(--t); font:inherit; font-size:17px; font-weight:700; cursor:pointer; text-decoration:none }
+  .acciones { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 0 }
+  .guardado { font-size:15px; color:var(--g); margin:8px 0 0 }
+
+  /* Banco completo */
+  details.banco { border-radius:16px; background:#fff; border:1px solid var(--l); margin:0 0 10px }
+  details.banco > summary { cursor:pointer; list-style:none; min-height:56px; padding:14px 16px; font-weight:800; font-size:18px;
+    display:flex; justify-content:space-between; align-items:center; gap:12px }
+  details.banco > summary::-webkit-details-marker { display:none }
+  details.banco > summary small { display:block; font-weight:600; font-size:15px; color:var(--g) }
+  details.banco > summary::after { content:"+"; font-size:26px; line-height:1; color:var(--a-osc); flex:none }
+  details.banco[open] > summary::after { content:"−" }
+  .banco-c { padding:0 16px 16px }
+  .banco-c ol { margin:0 0 8px; padding-left:28px }
+  .banco-c ol li { margin:0 0 8px }
+  .aviso-p { display:block; margin:4px 0 0; padding:6px 10px; border-radius:10px; background:var(--am-suave); color:var(--am); font-size:16px; font-weight:600 }
+  .copia details.plegado { margin:4px 0 0; border-color:var(--a-linea) }
+  .copia details.plegado > summary { min-height:48px; font-size:17px; color:var(--a-osc) }
+  .copia details.plegado .banco-c { padding:0 8px 8px }
+  .banco-c ul { margin:0 0 12px; padding-left:22px }
+  .banco-c ul li { margin:0 0 6px }
+
+  /* Ingreso */
+  .camino { list-style:none; margin:0 0 16px; padding:0; display:grid; gap:8px }
+  .camino li { display:grid; grid-template-columns:44px minmax(0,1fr); gap:12px; align-items:center; padding:12px 14px; border-radius:16px; background:var(--s) }
+  .camino li > span { display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:var(--a); color:var(--t); font-weight:800 }
+  .camino b { display:block; font-size:19px }
+  .camino small { display:block; color:var(--g); font-size:17px }
+
+  .cierre-zona { margin:8px 0 24px }
+  .pie { max-width:720px; margin:0 auto; padding:24px 16px 48px; color:var(--g); font-size:17px }
+  .destello { animation:destello 1.6s ease }
+  @keyframes destello { 0%,40% { box-shadow:0 0 0 4px var(--a) } 100% { box-shadow:0 0 0 0 transparent } }
+  @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important } }
+  @media (min-width:720px) { .opc label { min-height:68px } }
+
+  @media print {
+    .e-top, .saltos, .copiar, .acciones, #ruta-cierre { display:none !important }
+    .copia pre { max-height:none }
+  }
+</style>
+</head>
+<body data-tarea="contratar-lavadores">
+
+<header class="e-top">
+  <a href="../">← Mapa</a>
+  <span>Contratar lavadores</span>
+  <i aria-hidden="true"></i>
+</header>
+
+<main>
+  <div class="e-hero">
+    <h1>Contratar lavadores</h1>
+    <p class="corto"><b>En corto:</b> publique la vacante, filtre por WhatsApp y revise referencias y antecedentes. En el lavadero, entreviste 30 minutos y enseguida haga la prueba de 20 (cuente una hora). Califique la hoja de puntaje apenas se vaya el candidato.</p>
+    <nav class="saltos" aria-label="Secciones">
+      <a href="#antes">Antes</a><a href="#entrevista">Entrevista</a><a href="#prueba">Prueba</a><a href="#puntaje">Puntaje</a><a href="#banco">Todas las preguntas</a><a href="#ingreso">Si lo contrata</a>
+    </nav>
+  </div>
+
+  <!-- 1 · Antes de la entrevista -->
+  <section class="bloque" id="antes">
+    <span class="num" aria-hidden="true">1</span>
+    <h2>Antes de la entrevista</h2>
+    <p class="lead">Contratar bien es difícil: a veces toca contratar y despedir. Cuando encuentre a la persona indicada, cuídela.</p>
+
+    <h3>Dónde buscar</h3>
+    <ul class="lista">
+      <li><span aria-hidden="true">📣</span><div>Cuéntele a todo el mundo que está contratando.</div></li>
+      <li><span aria-hidden="true">📱</span><div>Redes sociales del lavadero.</div></li>
+      <li><span aria-hidden="true">👥</span><div>Grupos de Facebook y de WhatsApp del barrio o de empleo.</div></li>
+      <li><span aria-hidden="true">🖼️</span><div>Publique un flyer hecho con IA.<small>Copie el texto de abajo, péguelo en ChatGPT o Gemini y cambie solo lo que está entre [corchetes].</small></div></li>
+    </ul>
+    <div class="copia">
+      <div class="cab"><span>Prompt del flyer</span><button class="copiar" type="button" data-copiar="prompt-flyer">Copiar</button></div>
+      <details class="banco plegado"><summary><span>Ver el texto completo</span></summary><div class="banco-c">
+<pre id="prompt-flyer">Diseño de flyer publicitario vertical (formato 1080x1350 px, relación 4:5) para una campaña de CONTRATACIÓN DE PERSONAL de un lavadero de motos llamado "[NOMBRE DEL NEGOCIO]".
+
+Concepto: flyer moderno, energético y profesional que comunique de inmediato "ESTAMOS CONTRATANDO". Estética de detailing automotriz premium, con sensación de limpieza, agua, brillo y movimiento. Estilo publicitario tipo afiche de marketing, alto contraste, composición llamativa que detenga el scroll en redes sociales.
+
+Texto principal (debe leerse grande y claro, jerarquía marcada):
+Titular dominante arriba: "¡ESTAMOS CONTRATANDO!"
+Subtítulo: "Lavador de Motos"
+Datos de la vacante en bloques ordenados y legibles:
+Pago: [VALOR DEL PAGO]
+Horario: [HORARIOS]
+Ubicación: [UBICACIÓN]
+Comunícate: [NÚMERO DE TELÉFONO]
+Nombre del negocio visible como marca: "[NOMBRE DEL NEGOCIO]"
+
+Paleta de colores: colores principales [COLOR 1] y [COLOR 2], con acentos en [COLOR 3]. Fondo sólido o degradado limpio que haga resaltar el texto.
+
+Tipografía: usa una fuente sans-serif gruesa, bold y MUY legible para los titulares (estilo condensado moderno tipo "Anton" o "Bebas Neue"), y una fuente secundaria limpia para los datos. La legibilidad es lo más importante: todo el texto debe entenderse perfectamente, sin letras decorativas difíciles de leer, sin errores de ortografía y bien escrito en español.
+
+Elementos visuales: una motocicleta limpia y brillante como protagonista, gotas de agua, espuma de jabón, salpicaduras dinámicas, esponja o pistola de agua a presión. Iconos simples junto a cada dato (reloj, dinero, pin de ubicación, teléfono). Sombras suaves, reflejos y sensación de "recién lavado".
+
+Composición: márgenes equilibrados, espacio en blanco bien usado, jerarquía visual clara (titular → vacante → datos de contacto → marca). Incluye una zona inferior o lateral despejada para el teléfono de contacto bien grande.
+
+Estilo gráfico: publicidad profesional de alta calidad, render nítido, colores saturados, look de agencia de diseño. Sin texto sobrante, sin marcas de agua, sin logos genéricos. Vertical, alta resolución.</pre>
+      </div></details>
+    </div>
+
+    <h3>Cuando le escriba un candidato</h3>
+    <p>Por WhatsApp, en este orden:</p>
+    <ul class="lista">
+      <li><span>1</span><div>¿Tiene experiencia?<small>Solo como referencia: igual se le capacita.</small></div></li>
+      <li><span>2</span><div>¿Dónde vive?<small>Para saber qué tan lejos le queda. No es impedimento.</small></div></li>
+      <li><span>3</span><div>¿Cuándo puede empezar?</div></li>
+      <li><span>4</span><div>«El trabajo exige mover y levantar motos todo el día. ¿Puedes hacer estas tareas? Si necesitas algún ajuste, dímelo.»</div></li>
+      <li><span>5</span><div>Explíquele que el trabajo es lavar motos y que se le capacita.</div></li>
+      <li><span>6</span><div>Explíquele la forma de pago de su lavadero.<small>Con membresías: base diaria más un pago por moto lavada y por cada adicional vendido. Sin membresías: comisión. Use las cifras de su lavadero.</small></div></li>
+      <li><span>7</span><div>Cuéntele que se le da dotación y a qué hora debe llegar.</div></li>
+      <li><span>8</span><div>Cítelo por WhatsApp con día, hora y dirección.<small>Que traiga la cédula y ropa que se pueda mojar.</small></div></li>
+    </ul>
+    <p class="ojo"><b>Sobre el pago:</b> sea cual sea la forma de pago, al mes debe sumar al menos el mínimo legal para la jornada que trabaja. Y no le descuente daños del pago sin su autorización escrita para ese caso.</p>
+
+    <h3>Primero, su autorización</h3>
+    <p>Antes de llamar a las referencias o consultar antecedentes, mándele esto por WhatsApp y pídale que responda «Sí autorizo».</p>
+    <div class="copia">
+      <div class="cab"><span>Autorización</span><button class="copiar" type="button" data-copiar="autorizacion">Copiar</button></div>
+      <p class="txt" id="autorizacion">Autorizo a [NOMBRE DEL NEGOCIO] a consultar mis antecedentes y llamar a mis referencias, solo para este proceso de selección.</p>
+    </div>
+    <p class="nota">Guarde esa respuesta. Si no lo contrata, borre su hoja de vida.</p>
+
+    <h3>Hoja de vida y referencias</h3>
+    <p>Pídale por WhatsApp la hoja de vida con <b>2 referencias</b>. Si no tiene hoja de vida, pídale nombre y teléfono de 2 jefes anteriores. Llame a cada uno:</p>
+    <ul class="lista">
+      <li><span aria-hidden="true">👋</span><div>Diga quién es, de qué lavadero llama, que la persona lo puso de referencia y si tiene 5 minutos.<small>Si no puede, pregunte cuándo lo puede llamar.</small></div></li>
+      <li><span aria-hidden="true">⏳</span><div>¿Hace cuánto lo conoce?<small>Para saber qué tan cercanos son.</small></div></li>
+      <li><span aria-hidden="true">🔎</span><div>¿Qué debería tener en cuenta al contratarlo?</div></li>
+      <li><span aria-hidden="true">📅</span><div>Por lo que lo ha visto en otros trabajos, ¿cuánto cree que dure como lavador de motos?</div></li>
+    </ul>
+    <p class="nota">No todo el mundo dice la verdad. La única forma de saberlo de verdad es verlo trabajar.</p>
+
+    <h3>Antecedentes en la Policía</h3>
+    <p>Paso obligatorio. Entre a la <a href="https://antecedentes.policia.gov.co:7005/WebJudicial/" target="_blank" rel="noopener">consulta de antecedentes de la Policía Nacional</a>:</p>
+    <ul class="lista">
+      <li><span>1</span><div>Acepte los términos de uso.</div></li>
+      <li><span>2</span><div>Escriba el tipo y el número de documento y resuelva el captcha.</div></li>
+      <li><span>3</span><div>Verifique que diga «NO TIENE ASUNTOS PENDIENTES CON LAS AUTORIDADES JUDICIALES».</div></li>
+    </ul>
+    <p class="nota">Si sale algo distinto, no lo descarte de una: pregúntele qué pasó y piense si tiene que ver con cuidar motos ajenas o manejar plata. La consulta solo muestra antecedentes en Colombia.</p>
+  </section>
+
+  <!-- 2 · Entrevista -->
+  <section class="bloque" id="entrevista">
+    <span class="num" aria-hidden="true">2</span>
+    <h2>La entrevista en 30 minutos</h2>
+    <p class="lead">12 preguntas. Haga la pregunta tal cual, calle y escuche. Anote lo que le llame la atención.</p>
+
+    <span class="tramo">Experiencia · 8 min</span>
+    <ol class="preg">
+      <li><p class="q">¿Cuál ha sido el trabajo en el que más duraste y cuánto tiempo estuviste?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Duró un año o más en algún lado, o explica claro por qué no.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Ningún trabajo le dura más de un par de meses y no sabe decir por qué.</span></p></li>
+      <li><p class="q">¿Por qué saliste de ese trabajo?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Da una razón concreta y acepta su parte.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Le echa la culpa a todos sus jefes o la historia cambia a mitad de camino.</span></p></li>
+      <li><p class="q">¿Cómo era tu relación con tu jefe? ¿Qué diría él de ti si lo llamamos?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Dice algo bueno y algo por mejorar, y le parece bien que llame.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Se pone nervioso con la llamada o no quiere dar el contacto del jefe.</span></p></li>
+    </ol>
+
+    <span class="tramo">Honestidad con las motos · 8 min</span>
+    <ol class="preg" start="4" style="counter-reset:p 3">
+      <li><p class="q">Se te cae una moto de un cliente mientras la mueves y nadie te vio. ¿Qué haces?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Le avisa de una vez al encargado, aunque le dé pena.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>La levanta, la limpia y no dice nada, o dice que depende de si alguien lo vio.</span></p></li>
+      <li><p class="q">Un compañero rayó una moto y te pide que no digas nada. ¿Qué haces?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Le pide al compañero que avise; si no lo hace, avisa él.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>«Yo no me meto en eso» o lo tapa por amistad.</span></p></li>
+      <li><p class="q">Un cliente te ofrece plata por fuera para que le hagas un servicio sin registrarlo. ¿Qué haces?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Lo rechaza y le dice al cliente que todo se registra y se paga en caja.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Lo aceptaría «si es poquito» o se ríe y no contesta.</span></p></li>
+    </ol>
+
+    <span class="tramo">Presión y carácter · 8 min</span>
+    <ol class="preg" style="counter-reset:p 6">
+      <li><p class="q">Un cliente te grita o te trata mal. ¿Qué haces?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Mantiene la calma, escucha y llama al encargado.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>«Le respondo igual» o dice que se iría del puesto.</span></p></li>
+      <li><p class="q">El jefe te corrige delante de los demás. ¿Cómo te sientes y qué haces?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Le incomoda, pero corrige y, si acaso, lo habla después a solas.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Se ofende, discute ahí mismo o dice que renunciaría.</span></p></li>
+      <li><p class="q">Es sábado, llegan muchas motos y estás cansado. ¿Cómo te mantienes?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Habla de organizarse, hidratarse y no bajar la calidad del lavado.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Lavaría más rápido saltándose pasos o se sentaría a esperar.</span></p></li>
+    </ol>
+
+    <span class="tramo">Expectativas · 6 min</span>
+    <p class="nota">Primero explíquele lo que espera usted: puntualidad, honestidad cuando algo sale mal, cuidar cada moto como si fuera propia, seguir el método y tratar bien al cliente. Luego pregunte:</p>
+    <ol class="preg" style="counter-reset:p 9">
+      <li><p class="q">¿Qué esperas de nosotros como jefes?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Pide cosas razonables: respeto, pago a tiempo, que le enseñen.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>No sabe qué decir o solo habla de permisos y de salir temprano.</span></p></li>
+      <li><p class="q">¿Cuánto esperas ganar y qué horario puedes cumplir?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Lo que espera cabe en su forma de pago y puede cumplir el horario, sábados incluidos.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Espera mucho más de lo que usted paga o no puede los días de más trabajo.</span></p></li>
+      <li><p class="q">¿Qué necesitas para sentirte bien trabajando aquí?</p>
+        <p class="senal si"><b>✔ Buena señal</b><span>Pide cosas que usted puede dar: buen trato, que le enseñen, herramientas en orden.</span></p>
+        <p class="senal no"><b>✖ Alerta</b><span>Pone condiciones que chocan con el trabajo: no mojarse, no trabajar sábados, no recibir correcciones.</span></p></li>
+    </ol>
+  </section>
+
+  <!-- 3 · Prueba práctica -->
+  <section class="bloque" id="prueba">
+    <span class="num" aria-hidden="true">3</span>
+    <h2>La prueba práctica (20 min)</h2>
+    <p class="lead">La proactividad se ve mejor trabajando que preguntando. No le explique qué está mirando.</p>
+    <p class="ojo"><b>Importante:</b> use una moto del lavadero o la suya, nunca la de un cliente. 20 minutos, una sola vez y con usted al lado. Si quiere verlo más tiempo, contrátelo primero.</p>
+    <ol class="prueba">
+      <li><h3><span class="paso-n" aria-hidden="true">1</span>Que lave una moto 20 minutos</h3>
+        <p>Sin darle instrucciones. Observe:</p>
+        <ul>
+          <li>¿Pregunta lo que no sabe?</li>
+          <li>¿Organiza sus cosas antes de empezar?</li>
+          <li>¿O se queda quieto esperando que le digan?</li>
+        </ul></li>
+      <li><h3><span class="paso-n" aria-hidden="true">2</span>Deje algo en desorden</h3>
+        <p>Una manguera tirada o un balde en el paso. Observe:</p>
+        <ul>
+          <li>¿Lo arregla sin que se lo pidan?</li>
+          <li>¿O pasa por encima todo el rato?</li>
+        </ul></li>
+      <li><h3><span class="paso-n" aria-hidden="true">3</span>Al final, pregúntele</h3>
+        <p>«¿Qué mejorarías del lavadero?» Observe:</p>
+        <ul>
+          <li>¿Se fijó en algo concreto?</li>
+          <li>¿O dice «todo está bien» sin mirar?</li>
+        </ul></li>
+    </ol>
+  </section>
+
+  <!-- 4 · Hoja de puntaje -->
+  <section class="bloque" id="puntaje">
+    <span class="num" aria-hidden="true">4</span>
+    <h2>Hoja de puntaje</h2>
+    <p class="lead">Califique apenas se vaya el candidato. Por cada tema:</p>
+    <ul class="lista">
+      <li><span>3</span><div>Dio la buena señal en todas las preguntas del tema.</div></li>
+      <li><span>2</span><div>Hubo de todo.</div></li>
+      <li><span>1</span><div>Cayó en alguna alerta.</div></li>
+    </ul>
+    <label class="campo">Nombre del candidato<input type="text" id="p-nombre" autocomplete="off" placeholder="Nombre"></label>
+
+    <div id="criterios">
+      <fieldset class="crit" data-k="exp"><legend>Experiencia y estabilidad</legend>
+        <span class="ayuda">¿Cuánto le duran los trabajos y por qué sale?</span>
+        <div class="opc">
+          <label class="v1"><input type="radio" name="exp" value="1"><span><b>1</b><small>Mal</small></span></label>
+          <label class="v2"><input type="radio" name="exp" value="2"><span><b>2</b><small>Regular</small></span></label>
+          <label class="v3"><input type="radio" name="exp" value="3"><span><b>3</b><small>Bien</small></span></label>
+        </div></fieldset>
+      <fieldset class="crit" data-k="hon"><legend>Honestidad</legend>
+        <span class="ayuda">¿Avisa cuando algo sale mal? Para contratar necesita 3.</span>
+        <div class="opc">
+          <label class="v1"><input type="radio" name="hon" value="1"><span><b>1</b><small>Mal</small></span></label>
+          <label class="v2"><input type="radio" name="hon" value="2"><span><b>2</b><small>Regular</small></span></label>
+          <label class="v3"><input type="radio" name="hon" value="3"><span><b>3</b><small>Bien</small></span></label>
+        </div></fieldset>
+      <fieldset class="crit" data-k="pre"><legend>Manejo de presión</legend>
+        <span class="ayuda">Clientes bravos, correcciones, sábados llenos.</span>
+        <div class="opc">
+          <label class="v1"><input type="radio" name="pre" value="1"><span><b>1</b><small>Mal</small></span></label>
+          <label class="v2"><input type="radio" name="pre" value="2"><span><b>2</b><small>Regular</small></span></label>
+          <label class="v3"><input type="radio" name="pre" value="3"><span><b>3</b><small>Bien</small></span></label>
+        </div></fieldset>
+      <fieldset class="crit" data-k="pro"><legend>Proactividad en la prueba</legend>
+        <span class="ayuda">¿Preguntó, organizó y arregló sin que le dijeran?</span>
+        <div class="opc">
+          <label class="v1"><input type="radio" name="pro" value="1"><span><b>1</b><small>Mal</small></span></label>
+          <label class="v2"><input type="radio" name="pro" value="2"><span><b>2</b><small>Regular</small></span></label>
+          <label class="v3"><input type="radio" name="pro" value="3"><span><b>3</b><small>Bien</small></span></label>
+        </div></fieldset>
+      <fieldset class="crit" data-k="exa"><legend>Expectativas alineadas</legend>
+        <span class="ayuda">¿Lo que espera de pago y horario cabe en lo que usted ofrece?</span>
+        <div class="opc">
+          <label class="v1"><input type="radio" name="exa" value="1"><span><b>1</b><small>Mal</small></span></label>
+          <label class="v2"><input type="radio" name="exa" value="2"><span><b>2</b><small>Regular</small></span></label>
+          <label class="v3"><input type="radio" name="exa" value="3"><span><b>3</b><small>Bien</small></span></label>
+        </div></fieldset>
+    </div>
+
+    <div class="veredicto" id="veredicto" aria-live="polite" aria-atomic="true">
+      <span class="tot" id="v-total">0 de 15</span>
+      <span class="dec" id="v-dec">Califique los 5 criterios</span>
+      <span class="por" id="v-por">13 a 15 con Honestidad en 3: contratar a prueba · 10 a 12: segunda entrevista o más referencias · 9 o menos: no seguir.</span>
+    </div>
+    <div class="acciones"><button class="btn" type="button" id="p-nuevo">Nuevo candidato</button></div>
+    <p class="guardado">Tómele pantallazo al resultado antes: «Nuevo candidato» borra el anterior. Se guarda solo en este celular; no se envía a ningún lado.</p>
+  </section>
+
+  <!-- 5 · Banco completo -->
+  <section class="bloque" id="banco">
+    <span class="num" aria-hidden="true">5</span>
+    <h2>Banco completo de preguntas</h2>
+    <p class="lead">Si quiere ir más a fondo o hacer una segunda entrevista, escoja de aquí.</p>
+
+    <details class="banco"><summary><span>1. Experiencia y trayectoria<small>20 preguntas</small></span></summary><div class="banco-c">
+      <ol>
+        <li>¿En dónde has trabajado antes?</li>
+        <li>¿Cuál ha sido el trabajo en el que más duraste y cuánto tiempo estuviste?</li>
+        <li>¿Por qué saliste de ese trabajo?</li>
+        <li>¿Cuál es tu trabajo soñado? No tiene que ser lavar motos. ¿Cuál es tu meta real?</li>
+        <li>¿Qué hacías en un día normal en tu último trabajo?</li>
+        <li>¿Qué es lo que más te gustó de ese trabajo y qué es lo que menos?</li>
+        <li>¿Cómo era tu relación con tu jefe? ¿Qué diría él de ti si lo llamamos?</li>
+        <li>¿Alguna vez te despidieron? ¿Qué pasó?</li>
+        <li>¿Has trabajado antes con motos, carros o lavado? ¿Qué sabes hacer?</li>
+        <li>¿Tienes moto o la manejas? ¿Tienes licencia?</li>
+        <li>¿Qué haces cuando no estás trabajando?</li>
+        <li>¿Con quién vives y quién depende de ti?<small class="aviso-p">⚠ No la haga en la primera entrevista; sirve para conocerlo ya contratado.</small></li>
+        <li>¿Dónde vives y cuánto te demoras en llegar hasta acá?</li>
+        <li>¿Estás estudiando o piensas estudiar algo?</li>
+        <li>¿Qué has aprendido por tu cuenta, sin que nadie te enseñe?</li>
+        <li>¿Cuál ha sido el logro del que más orgulloso te sientes?</li>
+        <li>¿Cuál es el error más grande que has cometido en un trabajo y qué aprendiste?</li>
+        <li>¿Por qué quieres trabajar aquí y no en otro lado?</li>
+        <li>¿Dónde te ves en un año y en tres años?</li>
+        <li>¿Qué te haría quedarte mucho tiempo en un trabajo?</li>
+      </ol>
+      <p class="ojo"><b>Ojo:</b> preguntas como con quién vive o quién depende de él sirven para conocerlo, pero nunca para decidir. No se descarta a nadie por su familia, embarazo, edad, sexo, orientación, religión, política, origen, salud o discapacidad.</p>
+    </div></details>
+
+    <details class="banco"><summary><span>2. Honestidad y cuidado de las motos<small>20 casos hipotéticos</small></span></summary><div class="banco-c">
+      <ol>
+        <li>Se te cae una moto de un cliente mientras la mueves y nadie te vio. ¿Qué haces?</li>
+        <li>Rayaste una moto con el cepillo o con la hidrolavadora. ¿Qué haces y a quién le avisas?</li>
+        <li>Entregaste una moto mal lavada y el cliente pide que la vuelvas a ingresar. ¿Cómo lo manejas?</li>
+        <li>El cliente se queja de un rayón que tú no hiciste. ¿Qué le dices?</li>
+        <li>Encuentras plata o un objeto de valor dentro de la moto. ¿Qué haces?</li>
+        <li>Un compañero rayó una moto y te pide que no digas nada. ¿Qué haces?</li>
+        <li>Se te mojó una parte eléctrica y la moto no prende. ¿Qué haces?</li>
+        <li>Un cliente te ofrece plata por fuera para que le hagas un servicio sin registrarlo. ¿Qué haces?</li>
+        <li>Se acabó un producto y no hay quién lo compre. ¿Usas otro o avisas?</li>
+        <li>Rompiste una herramienta del lavadero. ¿Cómo lo reportas?</li>
+        <li>Te equivocaste cobrando y el cliente pagó de menos. ¿Qué haces?</li>
+        <li>Un cliente con afán te pide saltarte pasos del lavado. ¿Qué haces?</li>
+        <li>Ves que un compañero se lleva productos del lavadero. ¿Qué haces?</li>
+        <li>Una moto llega con un daño que el cliente no mencionó. ¿Qué haces antes de lavarla?</li>
+        <li>Llegaste tarde y nadie se dio cuenta. ¿Lo dices o no?</li>
+        <li>El encargado no está y te toca decidir algo con un cliente molesto. ¿Qué haces?</li>
+        <li>Te piden quedarte media hora más para terminar una moto. ¿Cómo respondes?</li>
+        <li>Una moto queda bien, pero tú sabes que podría quedar mejor. ¿La entregas o la repasas?</li>
+        <li>Cuéntame una vez en que dijiste la verdad aunque te perjudicara.</li>
+        <li>Cuéntame una vez en que te equivocaste y lo arreglaste sin que te lo pidieran.</li>
+      </ol>
+    </div></details>
+
+    <details class="banco"><summary><span>3. Reacción emocional y presión<small>20 preguntas</small></span></summary><div class="banco-c">
+      <ol>
+        <li>Si mañana te decimos que ya no sigues trabajando aquí, ¿cómo reaccionas?</li>
+        <li>Si te sale un trabajo con más sueldo, ¿qué haces? ¿Cómo nos avisas?</li>
+        <li>Un cliente te grita o te trata mal. ¿Qué haces?</li>
+        <li>El jefe te corrige delante de los demás. ¿Cómo te sientes y qué haces?</li>
+        <li>Tienes un problema personal fuerte y te toca venir a trabajar. ¿Cómo lo manejas?</li>
+        <li>Un compañero no trabaja y tú haces todo. ¿Qué haces?</li>
+        <li>Es sábado, llegan muchas motos y estás cansado. ¿Cómo te mantienes?</li>
+        <li>No te pagan una hora extra que tú sabes que trabajaste. ¿Cómo lo reclamas?</li>
+        <li>Te asignan una tarea que no te gusta. ¿Qué haces?</li>
+        <li>Te equivocas varias veces el mismo día. ¿Cómo reaccionas?</li>
+        <li>¿Qué te pone de mal genio en un trabajo?</li>
+        <li>¿Cómo eres cuando estás estresado? ¿Cómo te diría tu familia que eres?<small class="aviso-p">⚠ No la haga en la primera entrevista; sirve para conocerlo ya contratado.</small></li>
+        <li>Un compañero te cae mal. ¿Cómo trabajas con él?</li>
+        <li>Te dan una felicitación y a otro compañero no. ¿Qué haces?</li>
+        <li>¿Qué haces si sientes que no te valoran?</li>
+        <li>Si no estás de acuerdo con una decisión de los dueños, ¿cómo lo dices?</li>
+        <li>¿Qué te motiva a dar más de lo que te piden?</li>
+        <li>¿Qué te haría renunciar de un día para otro?</li>
+        <li>Te ofrecen irte con un cliente que pone su propio lavadero. ¿Qué haces?</li>
+        <li>¿Cómo te gustaría que te corrijan cuando haces algo mal?</li>
+      </ol>
+    </div></details>
+
+    <details class="banco"><summary><span>4. Proactividad<small>3 pruebas y 5 preguntas</small></span></summary><div class="banco-c">
+      <p>Se ve mejor con una prueba práctica que preguntando (con una moto del lavadero o la suya, nunca la de un cliente):</p>
+      <ul>
+        <li>Póngalo a lavar una moto 20 minutos sin darle instrucciones y mire si pregunta, si organiza o si se queda quieto.</li>
+        <li>Deje algo desordenado o una manguera tirada y mire si lo arregla sin que se lo pidan.</li>
+        <li>Al final, pregúntele qué mejoraría del lavadero.</li>
+      </ul>
+      <p>Preguntas para complementar:</p>
+      <ol>
+        <li>Cuéntame una vez en que hiciste algo que nadie te pidió.</li>
+        <li>Si terminas antes y no hay motos, ¿qué haces?</li>
+        <li>¿Qué harías para que un cliente vuelva?</li>
+        <li>¿Qué viste de este lavadero que mejorarías?</li>
+        <li>¿Cómo aprendes algo nuevo cuando nadie te enseña?</li>
+      </ol>
+    </div></details>
+
+    <details class="banco"><summary><span>5. Expectativas de las dos partes<small>5 preguntas</small></span></summary><div class="banco-c">
+      <p>Primero explíquele lo que espera usted: puntualidad, honestidad cuando algo sale mal, cuidar cada moto como si fuera propia, seguir el método y tratar bien al cliente. Luego pregúntele:</p>
+      <ol>
+        <li>¿Qué esperas de nosotros como jefes?</li>
+        <li>¿Cuánto esperas ganar y qué horario puedes cumplir?</li>
+        <li>¿Qué necesitas para sentirte bien trabajando aquí?</li>
+        <li>¿Qué te haría recomendar este trabajo a un amigo?</li>
+        <li>¿Hay algo que debamos saber de ti antes de empezar?<small class="aviso-p">Nadie está obligado a contarle temas de salud o embarazo.</small></li>
+      </ol>
+    </div></details>
+  </section>
+
+  <!-- 6 · Si lo contrata -->
+  <section class="bloque" id="ingreso">
+    <span class="num" aria-hidden="true">6</span>
+    <h2>Si lo contrata</h2>
+    <p class="lead">Escríbale por WhatsApp y cítelo a la capacitación.</p>
+    <ol class="camino">
+      <li><span aria-hidden="true">1</span><div><b>Contrato por escrito desde el primer día</b><small>También el día de la capacitación. El periodo de prueba va escrito en el contrato: máximo 2 meses. Ese mismo día afílielo a salud, pensión y ARL.</small></div></li>
+      <li><span aria-hidden="true">2</span><div><b>La capacitación es trabajo y se paga</b><small>Se le enseña el método del lavadero.</small></div></li>
+      <li><span aria-hidden="true">3</span><div><b>Durante la prueba</b><small>Cualquiera de los dos puede terminar sin indemnización. Revise su desempeño a la semana y al mes.</small></div></li>
+      <li><span aria-hidden="true">4</span><div><b>Después de la prueba</b><small>Si lo despide sin justa causa, le toca indemnizarlo.</small></div></li>
+    </ol>
+
+    <div class="copia">
+      <div class="cab"><span>Mensaje de bienvenida</span><button class="copiar" type="button" data-copiar="bienvenida">Copiar</button></div>
+<p class="txt" id="bienvenida">[NOMBRE], antes que nada… ¡felicitaciones y bienvenido(a)!
+En [NOMBRE DEL NEGOCIO] no buscamos a alguien que solo lave motos. Buscamos personas que cuiden cada detalle como si la moto fuera propia, y por eso te elegimos a ti.
+Tu primer día es el [DÍA] a las [HORA]. Nos vemos en [DIRECCIÓN] ([LINK DE UBICACIÓN]).
+Ese día empezarás a dominar las técnicas que nos hacen diferentes: el lavado profesional, el manejo de la maquinaria, el uso correcto de los productos y los estándares que nos distinguen.
+¿Que si necesitas experiencia? Para nada. Solo trae compromiso y ganas de aprender, que nosotros te enseñamos todo lo demás.
+Esto apenas comienza. ¡Bienvenido(a) a la familia!
+— Equipo [NOMBRE DEL NEGOCIO]</p>
+    </div>
+    <p class="ojo"><b>Ojo:</b> su contador le dice qué contrato le conviene. Confirme con él o con su asesor laboral el periodo de prueba y el contrato antes de contratar.</p>
+  </section>
+
+  <div id="ruta-cierre" class="cierre-zona"></div>
+</main>
+
+<footer class="pie"><p>Mónaco · Moto Detailing · Contratar lavadores · noviembre de 2026</p></footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- Copiar ---------- */
+  function copiar(texto, boton) {
+    var listo = function () { var t = boton.textContent; boton.textContent = "Copiado ✔"; setTimeout(function () { boton.textContent = t; }, 1500); };
+    function respaldo() {
+      var a = document.createElement("textarea"); a.value = texto; a.setAttribute("readonly", ""); a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      try { document.execCommand("copy"); listo(); } catch (e) {}
+      document.body.removeChild(a);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(listo, respaldo);
+    else respaldo();
+  }
+  $$(".copiar").forEach(function (b) {
+    b.addEventListener("click", function () { var d = document.getElementById(b.dataset.copiar); if (d) copiar(d.textContent.trim(), b); });
+  });
+
+  /* ---------- Hoja de puntaje ----------
+     Se guarda solo en este celular (localStorage), nunca se envía. */
+  var CLAVE = "monaco-entrevista-v1";
+  var KS = ["exp", "hon", "pre", "pro", "exa"];
+  function vacio() { return { nombre: "", p: {} }; }
+  function leer() {
+    try { var d = JSON.parse(localStorage.getItem(CLAVE)); if (d && typeof d === "object" && d.p) return d; } catch (e) {}
+    return vacio();
+  }
+  function guardar() {
+    try {
+      if (!estado.nombre && !Object.keys(estado.p).length) localStorage.removeItem(CLAVE);
+      else localStorage.setItem(CLAVE, JSON.stringify(estado));
+    } catch (e) {}
+  }
+  var estado = leer();
+  var nombre = $("#p-nombre");
+
+  function pintar() {
+    nombre.value = estado.nombre || "";
+    KS.forEach(function (k) {
+      $$('input[name="' + k + '"]').forEach(function (r) { r.checked = String(estado.p[k]) === r.value; });
+    });
+    var hechos = KS.filter(function (k) { return estado.p[k]; });
+    var total = hechos.reduce(function (s, k) { return s + Number(estado.p[k]); }, 0);
+    var quien = (estado.nombre || "").trim() || "Este candidato";
+    var caja = $("#veredicto"), dec = $("#v-dec"), por = $("#v-por");
+    $("#v-total").textContent = total + " de 15" + (hechos.length < 5 ? " · faltan " + (5 - hechos.length) : "");
+    if (Number(estado.p.hon) === 1) {
+      caja.className = "veredicto mal"; dec.textContent = "✖ No seguir";
+      por.textContent = "Honestidad en 1: no se sigue, sin importar el total.";
+    } else if (hechos.length < 5) {
+      caja.className = "veredicto";
+      dec.textContent = hechos.length ? "Faltan " + (5 - hechos.length) + (5 - hechos.length === 1 ? " criterio" : " criterios") : "Califique los 5 criterios";
+      por.textContent = "13 a 15 con Honestidad en 3: contratar a prueba · 10 a 12: segunda entrevista o más referencias · 9 o menos: no seguir.";
+    } else if (total >= 13 && Number(estado.p.hon) === 3) {
+      caja.className = "veredicto ok"; dec.textContent = "✔ Contratar a prueba";
+      por.textContent = quien + " pasa: contrato por escrito desde el primer día y luego la capacitación.";
+    } else if (total >= 13) {
+      caja.className = "veredicto medio"; dec.textContent = "Segunda entrevista";
+      por.textContent = "Buen puntaje, pero Honestidad en 2. Haga más casos del bloque 2 antes de decidir.";
+    } else if (total >= 10) {
+      caja.className = "veredicto medio"; dec.textContent = "Segunda entrevista o más referencias";
+      por.textContent = "Todavía no decida. Use el banco de preguntas o llame a otra referencia.";
+    } else {
+      caja.className = "veredicto mal"; dec.textContent = "✖ No seguir";
+      por.textContent = "Con " + total + " puntos es mejor seguir buscando.";
+    }
+  }
+
+  $$("#criterios input[type=radio]").forEach(function (r) {
+    r.addEventListener("change", function () { estado.p[r.name] = Number(r.value); guardar(); pintar(); });
+  });
+  nombre.addEventListener("input", function () { estado.nombre = nombre.value; guardar(); pintar(); });
+  $("#p-nuevo").addEventListener("click", function () {
+    var hay = estado.nombre || Object.keys(estado.p).length;
+    if (hay && !confirm("¿Borrar este puntaje y empezar con otro candidato?")) return;
+    estado = vacio(); guardar(); pintar(); nombre.focus();
+  });
+  addEventListener("storage", function (e) { if (e.key === CLAVE || e.key === null) { estado = leer(); pintar(); } });
+  pintar();
+
+  /* Al saltar a una sección, un destello suave */
+  $$(".saltos a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var s = document.querySelector(a.getAttribute("href")); if (!s) return;
+      s.classList.remove("destello"); void s.offsetWidth; s.classList.add("destello");
+    });
+  });
+})();
+</script>
+</body>
+</html>

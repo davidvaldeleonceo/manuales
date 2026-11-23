@@ -78,6 +78,9 @@
     { id: "proveedores", paso: 3, url: "proveedores/",
       title: "Proveedores", verb: "A quién comprarle todo, en un solo lugar",
       keywords: ["proveedores", "dónde comprar", "contacto", "tienda"] },
+    { id: "contratar-lavadores", paso: 3, url: "contratar-lavadores/",
+      title: "Contratar lavadores", verb: "Dónde buscar, qué preguntar en la entrevista y cómo decidir",
+      keywords: ["contratar", "contratación", "personal", "lavador", "lavadores", "entrevista", "preguntas", "empleado", "trabajador", "referencias", "antecedentes", "hoja de vida", "prueba", "flyer", "equipo"] },
 
     { id: "atencion-al-cliente", paso: 4, url: "atencion-al-cliente/",
       title: "Atender al cliente", verb: "Las 5 frases para recibir, ofrecer, entregar y despedir",
