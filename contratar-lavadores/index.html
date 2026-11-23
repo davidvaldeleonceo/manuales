@@ -164,6 +164,18 @@
     .e-top, .saltos, .copiar, .acciones, #ruta-cierre { display:none !important }
     .copia pre { max-height:none }
   }
+  /* Video con carga diferida */
+  .video { position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#2a2418; margin:0 0 12px; scroll-margin-top:60px }
+  .video iframe { position:absolute; inset:0; width:100%; height:100%; border:0 }
+  .portada { all:unset; box-sizing:border-box; position:absolute; inset:0; cursor:pointer; display:block;
+    background:linear-gradient(135deg, #2a2418, #5a4714) center/cover }
+  .portada img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.85 }
+  .portada .play { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:76px; height:76px; border-radius:50%;
+    background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.3) }
+  .portada .play svg { width:30px; height:30px; fill:var(--a-osc); margin-left:5px }
+  .portada .rotulo { position:absolute; left:0; right:0; bottom:0; padding:28px 16px 12px; color:#fff; font-weight:800; font-size:18px;
+    background:linear-gradient(transparent, rgba(0,0,0,.7)) }
+  .portada:focus-visible { outline:3px solid var(--a); outline-offset:-3px }
 </style>
 </head>
 <body data-tarea="contratar-lavadores">
@@ -190,11 +202,21 @@
     <p class="lead">Contratar bien es difícil: a veces toca contratar y despedir. Cuando encuentre a la persona indicada, cuídela.</p>
 
     <h3>Dónde buscar</h3>
+    <p>Mire en este video cómo lo hacemos (4 minutos):</p>
+    <div class="video" id="video">
+      <button class="portada" type="button" aria-label="Ver el video de cómo buscar lavadores en Facebook">
+        <img src="https://i.ytimg.com/vi/fTWhOmKqADM/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span>
+        <span class="rotulo">Cómo buscar lavadores en Facebook</span>
+      </button>
+    </div>
     <ul class="lista">
-      <li><span aria-hidden="true">📣</span><div>Cuéntele a todo el mundo que está contratando.</div></li>
+      <li><span aria-hidden="true">📣</span><div>Primero, la gente conocida: cuéntele a todo el mundo y publíquelo en sus estados de WhatsApp.</div></li>
       <li><span aria-hidden="true">📱</span><div>Redes sociales del lavadero.</div></li>
-      <li><span aria-hidden="true">👥</span><div>Grupos de Facebook y de WhatsApp del barrio o de empleo.</div></li>
-      <li><span aria-hidden="true">🖼️</span><div>Publique un flyer hecho con IA.<small>Copie el texto de abajo, péguelo en ChatGPT o Gemini y cambie solo lo que está entre [corchetes].</small></div></li>
+      <li><span aria-hidden="true">👥</span><div>Grupos de Facebook de lavado de motos, de autolavado y de empleo de su zona.<small>Ahí está la gente que ya trabaja en lavaderos. Únase a todos los que pueda.</small></div></li>
+      <li><span aria-hidden="true">⬛</span><div>Lo que mejor funciona: una publicación de solo texto con fondo negro.<small>Ejemplo: «Se buscan lavadores de motos con experiencia para lavar motos en [BARRIO], sueldo fijo más comisiones. Escribir al [WHATSAPP]». Si quiere formar gente desde cero, ponga «con o sin experiencia».</small></div></li>
+      <li><span aria-hidden="true">🔁</span><div>Publíquela en unos 10 grupos y busque grupos nuevos cada día hasta que le escriban.<small>Algunos grupos piden aprobación del administrador: toca esperar.</small></div></li>
+      <li><span aria-hidden="true">🖼️</span><div>Otra opción: un flyer hecho con IA.<small>Copie el texto de abajo, péguelo en ChatGPT o Gemini y cambie solo lo que está entre [corchetes].</small></div></li>
     </ul>
     <div class="copia">
       <div class="cab"><span>Prompt del flyer</span><button class="copiar" type="button" data-copiar="prompt-flyer">Copiar</button></div>
@@ -647,6 +669,21 @@ Esto apenas comienza. ¡Bienvenido(a) a la familia!
       s.classList.remove("destello"); void s.offsetWidth; s.classList.add("destello");
     });
   });
+})();
+</script>
+<script>
+(function () {
+  var caja = document.getElementById("video");
+  if (!caja) return;
+  caja.addEventListener("click", function () {
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/fTWhOmKqADM?autoplay=1&rel=0&playsinline=1&cc_load_policy=1&cc_lang_pref=es";
+    f.title = "Cómo buscar lavadores en Facebook";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    f.setAttribute("allowfullscreen", "");
+    f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    caja.innerHTML = ""; caja.appendChild(f);
+  }, { once: true });
 })();
 </script>
 </body>
