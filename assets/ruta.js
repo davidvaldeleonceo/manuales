@@ -120,8 +120,9 @@
     { id: "maquinaria", label: "Qué máquinas compro" }
   ];
 
-  /* TODO: poner el link real de WhatsApp (ej. https://wa.me/57XXXXXXXXXX). Se cambia solo aquí. */
-  var WHATSAPP = "#whatsapp";
+  /* WhatsApp: el botón "¿Te trabaste?" abre WhatsApp SIN número fijo (la persona escoge a quién
+     se lo manda) y adjunta un .md con lo que lleva. Ya no hace falta poner un número aquí. */
+  var WA = "https://wa.me/?text=";
 
   var CLAVE = "monaco-ruta-v1";
 
@@ -383,7 +384,10 @@
   /* ---------- Arranque ---------- */
   function iniciar() {
     Array.prototype.forEach.call(document.querySelectorAll("a[data-whatsapp]"), function (a) {
-      a.href = WHATSAPP;
+      a.href = WA + encodeURIComponent(textoTrabe());
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.addEventListener("click", trabe);
     });
     // Al imprimir, abre los plegables para que salga todo en papel
     window.addEventListener("beforeprint", function () {
@@ -453,8 +457,148 @@
     document.body.insertBefore(barra, document.body.firstChild);
   }
 
+  /* ---------- "¿Te trabaste?": WhatsApp + .md con lo que lleva ---------- */
+  function ahoraBogota() {
+    var p = {};
+    try {
+      new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date())
+        .forEach(function (x) { p[x.type] = x.value; });
+    } catch (e) {}
+    if (!p.year) {
+      var d = new Date(Date.now() - 5 * 3600 * 1000);
+      var dos = function (n) { return (n < 10 ? "0" : "") + n; };
+      p = { year: d.getUTCFullYear(), month: dos(d.getUTCMonth() + 1), day: dos(d.getUTCDate()), hour: dos(d.getUTCHours()), minute: dos(d.getUTCMinutes()) };
+    }
+    return { fecha: p.year + "-" + p.month + "-" + p.day, hora: p.hour + ":" + p.minute };
+  }
+  function urlPagina() { return location.origin + location.pathname; }
+  function tituloPagina() {
+    var t = document.getElementById("ruta-mapa") ? null : tareaActual();
+    if (t) return t.title;
+    var h1 = document.querySelector("h1");
+    var titulo = (document.title || "").split(" · ")[0].trim();
+    return titulo || (h1 ? h1.textContent.trim() : "El mapa MONACO");
+  }
+  function textoTrabe() {
+    return "Hola, me trabé en este punto: " + tituloPagina() + " (" + urlPagina() + "). Te envío el resumen de lo que llevo en un archivo .md";
+  }
+  function una(s) { return String(s || "").replace(/\s+/g, " ").trim(); }
+
+  /* Lo que la persona llenó en esta página: casillas, campos de texto y opciones marcadas */
+  function llenadoPagina() {
+    var L = [];
+    var raiz = document.querySelector("main") || document.body;
+    var fuera = ".rm-barra, .rm-auto, .pie, #ruta-hice, #ruta-siguiente, #ruta-cierre, #ruta-mapa, .buscador";
+    function etiqueta(n) {
+      var lab = n.id && document.querySelector('label[for="' + n.id + '"]');
+      lab = lab || n.closest("label");
+      var t = lab ? lab.textContent : (n.getAttribute("aria-label") || n.placeholder || n.name || "");
+      return una(t);
+    }
+    Array.prototype.forEach.call(raiz.querySelectorAll("input, textarea, select, button[aria-pressed='true']"), function (n) {
+      if (n.closest(fuera)) return;
+      var tipo = (n.type || "").toLowerCase();
+      if (n.tagName === "BUTTON") {
+        var g = n.closest("[role=group][aria-label]") || n.parentNode;
+        var de = g && g.getAttribute && g.getAttribute("aria-label");
+        L.push("- " + (de ? una(de) + ": " : "Opción marcada: ") + una(n.textContent));
+      } else if (tipo === "checkbox" || tipo === "radio") {
+        if (tipo === "radio" && !n.checked) return;
+        L.push("- [" + (n.checked ? "x" : " ") + "] " + (etiqueta(n) || n.value));
+      } else if (tipo !== "hidden" && tipo !== "button" && tipo !== "submit" && tipo !== "search" && una(n.value)) {
+        L.push("- " + (etiqueta(n) || "Campo") + ": " + una(n.value));
+      }
+    });
+    return L;
+  }
+
+  function mdTrabe() {
+    var t = ahoraBogota();
+    var L = [];
+    L.push("# Me trabé en este punto · MONACO");
+    L.push("");
+    L.push("- **Página:** " + tituloPagina());
+    L.push("- **Enlace:** " + urlPagina());
+    var tarea = document.getElementById("ruta-mapa") ? null : tareaActual() || tareaPadre();
+    if (tarea) L.push("- **Paso de la ruta:** " + tarea.paso + " · " + paso(tarea.paso).title);
+    L.push("- **Generado:** " + t.fecha + " " + t.hora + " (hora de Colombia, UTC−5)");
+    L.push("");
+    L.push("## Avance de la ruta");
+    L.push("");
+    var total = disponibles.length, listos = disponibles.filter(function (x) { return hecho(x.id); }).length;
+    L.push("Marcó " + listos + " de " + total + " tareas disponibles como hechas (✔).");
+    L.push("");
+    PASOS.forEach(function (p) {
+      var del = ROUTE.filter(function (x) { return x.paso === p.n; });
+      var ok = del.filter(function (x) { return x.url && hecho(x.id); }).length;
+      var disp = del.filter(function (x) { return x.url; }).length;
+      L.push("### Paso " + p.n + " · " + p.title + " (" + ok + " de " + disp + " hechas)");
+      L.push("");
+      del.forEach(function (x) {
+        L.push("- [" + (x.url && hecho(x.id) ? "x" : " ") + "] " + x.title +
+          (x.url ? "" : " (próximamente)") + (tarea && x.id === tarea.id ? " ← aquí se trabó" : ""));
+      });
+      L.push("");
+    });
+    L.push("## Lo que llenó en esta página");
+    L.push("");
+    var ll = llenadoPagina();
+    if (ll.length) ll.forEach(function (x) { L.push(x); });
+    else L.push("Esta página no tiene nada llenado.");
+    L.push("");
+    L.push("---");
+    L.push("");
+    L.push("> Nota para la IA: Este resumen lo generó el mapa de MONACO cuando el asesorado tocó \"¿Te trabaste?\". Úsalo para entender en qué punto va y ayudarle a seguir.");
+    L.push("");
+    return L.join("\n");
+  }
+
+  function archivoTrabe() {
+    if (window.MonacoChecklist && document.getElementById("cl-secciones")) return window.MonacoChecklist.nombreArchivo();
+    var slug = normal(tituloPagina()).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "pagina";
+    return "me-trabe-" + slug + "-" + ahoraBogota().fecha + ".md";
+  }
+  function contenidoTrabe() {
+    if (window.MonacoChecklist && document.getElementById("cl-secciones")) return window.MonacoChecklist.resumenMd();
+    return mdTrabe();
+  }
+  function descargar(md, nombre) {
+    var url = URL.createObjectURL(new Blob([md], { type: "text/markdown;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = url; a.download = nombre; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); document.body.removeChild(a); }, 1000);
+  }
+
+  function trabe(ev) {
+    var a = ev.currentTarget;
+    var texto = textoTrabe();
+    a.href = WA + encodeURIComponent(texto);
+    var md, nombre;
+    try { md = contenidoTrabe(); nombre = archivoTrabe(); } catch (e) { return; } // si algo falla, abre WhatsApp igual
+    var archivos = null;
+    if (navigator.canShare && navigator.share && typeof File === "function") {
+      ["text/markdown", "text/plain"].some(function (tipo) {
+        try {
+          var f = [new File([md], nombre, { type: tipo })];
+          if (navigator.canShare({ files: f })) { archivos = f; return true; }
+        } catch (e) {}
+        return false;
+      });
+    }
+    if (!archivos) { descargar(md, nombre); return; } // el enlace sigue y abre wa.me/?text=… para adjuntarlo
+    ev.preventDefault();
+    navigator.share({ files: archivos, text: texto }).catch(function (err) {
+      if (err && err.name === "AbortError") return;
+      descargar(md, nombre);
+      window.open(a.href, "_blank", "noopener");
+    });
+  }
+
   // Disponible para otras páginas o pruebas: window.RutaMonaco.ROUTE
-  window.RutaMonaco = { PASOS: PASOS, ROUTE: ROUTE, ACCESOS: ACCESOS, enlace: enlace, hecho: hecho };
+  window.RutaMonaco = { PASOS: PASOS, ROUTE: ROUTE, ACCESOS: ACCESOS, enlace: enlace, hecho: hecho,
+    mdTrabe: mdTrabe, textoTrabe: textoTrabe, archivoTrabe: archivoTrabe };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
