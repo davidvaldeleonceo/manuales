@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Capacitación: qué tener listo · Mónaco</title>
+<style>
+/* Mónaco Claro: fondo blanco, Helvetica, azul #007AFF para pintar y #0066D6 para escribir */
+:root{
+  --bg:#FFFFFF; --tinta:#1D1D1F; --tinta2:#494950; --tinta3:#6E6E73;
+  --linea:#E5E5EA; --linea2:#D2D2D7; --suave:#F5F5F7;
+  --azul:#007AFF; --azul-texto:#0066D6; --azul-suave:#EEF5FF;
+  --bien:#137A33; --alerta:#9A6700; --grave:#B4501E;
+  --f:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tinta);font:16px/1.55 var(--f)}
+.hoja{max-width:760px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-right,0px)) 72px max(16px,env(safe-area-inset-left,0px))}
+.migas{display:inline-block;color:var(--azul-texto);text-decoration:none;font-weight:600;padding:10px 0;min-height:44px}
+.sello{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--azul-texto);margin:8px 0 0}
+h1{font-size:clamp(28px,6.5vw,40px);line-height:1.1;letter-spacing:-.035em;margin:6px 0 12px;text-wrap:balance}
+h2{font-size:22px;line-height:1.2;letter-spacing:-.035em;margin:0 0 4px}
+h3{font-size:17px;letter-spacing:-.02em;margin:0 0 6px}
+p{margin:0}
+.bajada{color:var(--tinta2);font-size:18px;max-width:62ch}
+.meta{color:var(--tinta3);font-size:14px;margin-top:10px}
+a{color:var(--azul-texto)}
+.acciones{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 8px}
+.boton{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:10px;font:600 15px var(--f);text-decoration:none;cursor:pointer;border:1.5px solid var(--azul-texto)}
+.boton.prim{background:var(--azul-texto);color:#fff}
+.boton.sec{background:#fff;color:var(--azul-texto)}
+.boton:focus-visible,.item input:focus-visible+span{outline:3px solid var(--azul);outline-offset:2px}
+
+.resumen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linea);border:1px solid var(--linea);border-radius:12px;overflow:hidden;margin:24px 0 8px}
+.resumen div{background:#fff;padding:14px 16px}
+.resumen small{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta3);margin-bottom:4px}
+.resumen b{display:block;font-size:17px;letter-spacing:-.02em}
+.resumen span{display:block;color:var(--tinta2);font-size:14px;margin-top:2px}
+
+.progreso{position:sticky;top:0;z-index:2;background:rgba(255,255,255,.96);border-bottom:1px solid var(--linea);margin:24px -16px 0;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.barra{flex:1;height:8px;border-radius:8px;background:var(--linea);overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--azul);transition:width .2s}
+.progreso-texto{font-size:14px;font-weight:600;color:var(--tinta2);white-space:nowrap}
+.progreso button{font:600 14px var(--f);color:var(--azul-texto);background:none;border:0;padding:10px 0;min-height:44px;cursor:pointer}
+
+section.bloque{margin-top:36px}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--azul);color:var(--azul-texto);font-weight:700;font-size:14px;margin-right:8px;vertical-align:2px}
+.porque{color:var(--tinta2);margin:4px 0 12px;max-width:62ch}
+@media screen{.porque a{padding:13px 0}}
+ul.lista{list-style:none;margin:0;padding:0;border-top:1px solid var(--linea)}
+.item{border-bottom:1px solid var(--linea)}
+.item label{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;padding:12px 0;min-height:44px;cursor:pointer}
+.item input{position:absolute;opacity:0;width:1px;height:1px}
+.item .caja{width:24px;height:24px;margin-top:1px;border:1.5px solid var(--linea2);border-radius:6px;display:grid;place-items:center;background:#fff}
+.item input:checked+.caja{background:var(--azul);border-color:var(--azul)}
+.item input:checked+.caja::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item b{font-weight:700}
+.item .det{display:block;color:var(--tinta2);font-size:15px;margin-top:2px}
+.item input:checked~.txt{color:var(--tinta3)}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;margin-left:6px;vertical-align:1px}
+.tag.clave{color:var(--grave);border:1px solid var(--grave)}
+
+.caja-info{border:1px solid var(--linea2);border-radius:12px;padding:16px 18px;margin-top:36px}
+.caja-info.alerta{border-color:var(--alerta);border-left-width:4px}
+.caja-info.alerta h3{color:var(--alerta)}
+.caja-info ul{margin:6px 0 0;padding-left:20px}
+.caja-info li{margin:4px 0}
+.manuales{display:grid;gap:8px;margin-top:10px}
+.manuales a{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;padding:10px 14px;border:1px solid var(--linea2);border-radius:10px;text-decoration:none;font-weight:600}
+.manuales a span{color:var(--tinta3);font-weight:400;font-size:14px}
+.pie{margin-top:48px;padding-top:16px;border-top:1px solid var(--linea);color:var(--tinta3);font-size:13px}
+
+@media (max-width:560px){
+  .resumen{grid-template-columns:1fr}
+  .bajada{font-size:17px}
+}
+@media print{
+  @page{size:Letter;margin:14mm 14mm 16mm}
+  body{font-size:10.5pt;line-height:1.4}
+  .hoja{max-width:none;padding:0}
+  .migas,.acciones,.progreso,.solo-web{display:none!important}
+  h1{font-size:22pt}
+  .bajada{font-size:12pt;max-width:none}
+  .porque{max-width:none;margin:2pt 0 6pt}
+  .item .det{font-size:10pt}
+  .resumen{margin:12pt 0 0}
+  section.bloque{margin-top:14pt;break-inside:auto}
+  h2,.porque{break-after:avoid}
+  .item{break-inside:avoid}
+  .item label{padding:4pt 0;min-height:0}
+  .caja-info{margin-top:14pt;padding:10pt 12pt}
+  .pie{margin-top:18pt}
+  .item .caja{width:13pt;height:13pt;border-color:#6E6E73}
+  .caja-info,.resumen{break-inside:avoid}
+  .manuales a{min-height:0;padding:6pt 10pt}
+  .manuales a::after{content:" " attr(data-url);color:#6E6E73;font-weight:400;font-size:9pt}
+  .manuales a span{display:none}
+  a{color:var(--azul-texto)}
+}
+</style>
+</head>
+<body>
+<main class="hoja">
+  <a class="migas" href="../">← Mapa</a>
+  <p class="sello">MONACO · Capacitación de apertura</p>
+  <h1>Lo que tienes que tener listo para la capacitación</h1>
+  <p class="bajada">Son <strong>3 días seguidos en tu local, justo antes de inaugurar</strong>. Lavamos motos reales, practicamos la atención y dejamos MONACO PRO funcionando. Si algo de esta lista falta, se pierde parte del día: revísala completa <strong>la víspera</strong>.</p>
+  <p class="meta">Versión del 24 de noviembre de 2026.</p>
+
+  <div class="acciones">
+    <a class="boton prim" href="capacitacion-que-tener-listo.pdf" download>Descargar PDF</a>
+    <button class="boton sec" type="button" onclick="window.print()">Imprimir</button>
+  </div>
+
+  <div class="resumen" aria-label="Resumen">
+    <div><small>Cuándo</small><b>3 días seguidos</b><span>Antes de la inauguración</span></div>
+    <div><small>Quiénes</small><b>Todo el equipo</b><span>Lavadores, caja, encargado y un socio</span></div>
+    <div><small>Lo que más falla</small><b>Motos y máquinas</b><span>Sin motos sucias no hay práctica</span></div>
+  </div>
+
+  <div class="progreso solo-web" role="status" aria-live="polite">
+    <div class="barra" aria-hidden="true"><i id="barra"></i></div>
+    <span class="progreso-texto" id="cuenta">0 de 0 listos</span>
+    <button type="button" id="limpiar">Desmarcar</button>
+  </div>
+
+  <section class="bloque">
+    <h2><span class="num">1</span>Las personas</h2>
+    <p class="porque">La capacitación es para quienes van a trabajar desde el primer día. Si alguien falta, llega a la inauguración sin saber.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Los lavadores escogidos, más uno de reserva</b><span class="tag clave">clave</span><span class="det">Los 3 días completos. Confírmales la víspera y otra vez en la mañana: a veces no llegan.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Quien atiende y cobra, y el encargado o administrador</b><span class="det">Ellos practican el recibo de la moto, la venta y la caja en la app.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Al menos un socio todo el tiempo</b><span class="det">Para decidir en el momento precios, horarios y reglas del equipo.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Cada persona con su celular cargado y con datos</b><span class="det">Ahí quedan los manuales y la app de MONACO PRO.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Dotación puesta</b><span class="det">Ropa de trabajo, botas de caucho y guantes largos por persona, más una de repuesto.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>La cédula de cada uno</b><span class="det">Al final firman la constancia de capacitación.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">2</span>Motos para practicar</h2>
+    <p class="porque">Es lo que más se olvida. Se aprende lavando motos de verdad, no mirando.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Motos sucias citadas para cada día</b><span class="tag clave">clave</span><span class="det">Te recomendamos unas 2 por lavador cada día. Familiares, amigos, vecinos o domiciliarios: ofréceles el lavado gratis como cortesía.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Motos de varios tipos</b><span class="det">Una de cadena, un scooter y, si se puede, una de alto cilindraje.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Citadas por horas</b><span class="det">Para que no lleguen todas juntas y cada lavador tenga moto toda la jornada.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">3</span>El local funcionando</h2>
+    <p class="porque">Pruébalo todo un día antes, con todas las máquinas prendidas a la vez. En otros lavaderos fallaron la bomba y los breakers la semana de abrir.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Agua</b><span class="det">Tanques llenos y la bomba con su control de presión enviando agua a las hidrolavadoras.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Luz</b><span class="det">Tomas de 110 V y 220 V probadas con todo prendido. Buena iluminación en los puestos y en la caja.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Máquinas instaladas y probadas</b><span class="tag clave">clave</span><span class="det">Hidrolavadoras, compresor, espumadora, aspiradora y el kit de aire de cada puesto.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Desagües y trampa de lodos</b><span class="det">Limpios y recibiendo el agua sin encharcar.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Extintor y botiquín</b><span class="det">El extintor instalado y cargado: en la capacitación se enseña a usarlo.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Internet en el local</b><span class="det">Wifi o datos que alcancen para la app y los videos de los manuales.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">4</span>Insumos y herramientas</h2>
+    <p class="porque">Con lo mismo que vas a usar al abrir. Las cantidades y dónde comprarlos están en <a href="../insumos-lavadero/">Insumos del lavadero</a> y <a href="../herramientas-kit-arrastre/">Herramientas del kit de arrastre</a>.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Los 7 químicos en el local</b><span class="tag clave">clave</span><span class="det">Champú pH neutro, desengrasante, cera, restaurador de partes negras, restaurador de motores, lubricante de cadena y cloro. Rotulados y con su ficha de seguridad.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Lo de cada lavador</b><span class="det">Microfibras (una solo para la cadena, una para el champú y las de secar), brochas, cepillo grueso de llantas, aplicadores, guantes, caneca y atomizador.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Lo de cada puesto</b><span class="det">Caballete, destornillador de pala, llaves T de 8 y 10 mm y el juego de herramientas para la tapa del piñón.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Lo de todo el local</b><span class="det">Bolsas para tapar tablero y cables, aerógrafo y, si vas a vender pulido, el kit, la pulidora y los pads.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">5</span>Atención y caja</h2>
+    <p class="porque">Se practica con cada moto que llega, como si fuera un cliente de verdad.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Precios decididos por los socios, por escrito</b><span class="tag clave">clave</span><span class="det">La básica, la de brillo o cadena, la full y la membresía. Sin precios no se puede practicar la venta ni cargar la app.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Lista de precios a la vista y lugar para los cascos</b></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Punto de caja</b><span class="det">Una mesa para recibir al cliente y cobrar.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Medios de pago funcionando</b><span class="det">Efectivo con base para dar cambio, transferencia y QR o datáfono. Hagan un pago de prueba.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">6</span>MONACO PRO</h2>
+    <p class="porque">La app del lavadero se activa en la capacitación. Desde ahí registran cada lavada, la plata y lo que se le paga a cada trabajador.</p>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>El correo del negocio y su contraseña</b><span class="det">Los escribe el dueño en su celular. Nunca se los pases a nadie por chat.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Quién es administrador y quiénes trabajadores</b><span class="det">Nombre y celular de cada uno.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Cómo se le paga a cada uno</b><span class="det">El porcentaje o el valor por lavada que acordaron, para que la app lo calcule sola.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Un celular o una tablet para la caja</b><span class="det">Con datos o wifi. Ahí queda la app en la pantalla de inicio.</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2><span class="num">7</span>Reglas y logística</h2>
+    <ul class="lista">
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Las políticas del negocio leídas y pensadas</b><span class="det">Jornada, presentación personal, cuidado de la moto, trato al cliente y qué pasa con las faltas.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>El horario de atención del lavadero decidido</b></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Hora de llegada y de salida avisada a todo el equipo</b><span class="det">La misma que acordaste con MONACO.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Agua para tomar y el almuerzo resuelto</b><span class="det">Son jornadas largas y de pie.</span></span></label></li>
+      <li class="item"><label><input type="checkbox"><span class="caja"></span><span class="txt"><b>Si alguien está a prueba, el pago del día listo</b><span class="det">El que acordaron con esa persona.</span></span></label></li>
+    </ul>
+  </section>
+
+  <div class="caja-info">
+    <h3>Ábranlos en el celular antes de llegar</h3>
+    <p>Son los manuales con los que vamos a trabajar los 3 días.</p>
+    <div class="manuales">
+      <a href="../lavado/" data-url="davidvaldeleonceo.github.io/manuales/lavado/">Cómo lavar una moto <span>Para los lavadores →</span></a>
+      <a href="../atencion-al-cliente/" data-url="davidvaldeleonceo.github.io/manuales/atencion-al-cliente/">Atender al cliente <span>Para quien atiende →</span></a>
+      <a href="../encargado/" data-url="davidvaldeleonceo.github.io/manuales/encargado/">Para el encargado <span>Revisión, quejas y precios →</span></a>
+    </div>
+  </div>
+
+  <div class="caja-info">
+    <h3>Qué lleva MONACO</h3>
+    <ul>
+      <li>Quien dicta la capacitación: lavado y detallado, máquinas, insumos, atención y venta, y MONACO PRO.</li>
+      <li>Los manuales digitales para el equipo.</li>
+      <li>La activación de MONACO PRO.</li>
+      <li>La constancia de capacitación para firmar.</li>
+    </ul>
+  </div>
+
+  <div class="caja-info alerta">
+    <h3>Alerta · lo que más falla</h3>
+    <ul>
+      <li>No hay motos para practicar y el equipo se queda mirando.</li>
+      <li>Faltan insumos el día de la capacitación.</li>
+      <li>Un lavador no llega: por eso va uno de reserva.</li>
+      <li>La máquina no se probó antes y falla la bomba o salta el breaker.</li>
+      <li>Los precios no están decididos y no se puede practicar la venta.</li>
+    </ul>
+  </div>
+
+  <p class="pie">Mónaco · Moto Detailing · Capacitación de apertura · noviembre de 2026</p>
+</main>
+<script>
+(function(){
+  var KEY='monaco-capacitacion-v1';
+  var cajas=[].slice.call(document.querySelectorAll('.item input'));
+  var cuenta=document.getElementById('cuenta'), barra=document.getElementById('barra');
+  var guardado={};
+  try{guardado=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+  cajas.forEach(function(c,i){ c.checked=!!guardado[i]; c.addEventListener('change',function(){guardado[i]=c.checked;guardar();pintar()}); });
+  function guardar(){try{localStorage.setItem(KEY,JSON.stringify(guardado))}catch(e){}}
+  function pintar(){
+    var n=cajas.filter(function(c){return c.checked}).length;
+    cuenta.textContent=n+' de '+cajas.length+' listos';
+    barra.style.width=(cajas.length?100*n/cajas.length:0)+'%';
+  }
+  document.getElementById('limpiar').addEventListener('click',function(){cajas.forEach(function(c){c.checked=false});guardado={};guardar();pintar()});
+  pintar();
+})();
+</script>
+</body>
+</html>
