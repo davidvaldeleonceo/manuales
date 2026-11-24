@@ -52,21 +52,11 @@ th{background:var(--soft);border-top:0;font-size:13px;text-transform:uppercase;l
 .leaflet-popup-content b.t{display:block;font-size:15px;margin-bottom:4px}
 .sec{margin-top:16px}
 </style>
+<script src="../assets/ruta.js" defer></script>
 </head>
 <body>
 <div class="wrap">
-  <a class="atras" id="btn-atras" href="../checklist-local/">← Atrás</a>
-<style>
-.atras{display:inline-flex;align-items:center;gap:6px;margin:0 0 14px;padding:10px 16px;border-radius:8px;background:#0066D6;color:#fff;font:600 15px 'Helvetica Neue',Helvetica,Arial,sans-serif;text-decoration:none}
-.atras:hover{background:#0055B3}
-.atras:focus-visible{outline:3px solid #0066D6;outline-offset:2px}
-</style>
-<script>
-document.getElementById('btn-atras').addEventListener('click',function(e){
-  try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); history.back(); } }catch(_){}
-});
-</script>
-  <div class="sello">MONACO</div>
+    <div class="sello">MONACO</div>
   <h1>Dónde buscar local para el lavadero de motos en Bogotá</h1>
   <p class="sub">Mapa de las áreas de actividad del POT de Bogotá (Decreto 555 de 2021), coloreadas según si permiten un lavadero de motos. Toca cualquier zona para ver qué dice la norma.</p>
   <p class="aviso"><b>Ojo:</b> Mapa de orientación. Lo que manda es la consulta oficial del predio en <a href="https://sinu.sdp.gov.co/" target="_blank" rel="noopener">SINUPOT</a> y la curaduría.</p>
